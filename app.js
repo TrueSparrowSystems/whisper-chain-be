@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
+var cors = require('cors');
+
+app.use(cors());
 
 const FileIo = require('./FileIo');
 const Ipfs = require('./Ipfs');
