@@ -16,7 +16,7 @@ app.get('/', async function (req, res) {
 app.get('/whisper/suggestions', urlencodedParser, async function (req, res) {
   try {
     const GenerateAndUploadImages = require('./GenerateAndUploadImages');
-    const s3Urls = await new GenerateAndUploadImages({prompt: req.body.prompt, artStyle: req.body.art_style || null}).perform();
+    const s3Urls = await new GenerateAndUploadImages({prompt: req.query.prompt, artStyle: req.query.art_style || null}).perform();
 
     res.json({success: true, data: {s3_urls: s3Urls}});
   } catch(error) {
@@ -26,7 +26,7 @@ app.get('/whisper/suggestions', urlencodedParser, async function (req, res) {
 
 app.get('/whisper', urlencodedParser, async function (req, res) {
   try {
-    const s3Url = req.body.s3_url;
+    const s3Url = req.query.s3_url;
     const downloadFilePath = await new FileIo().download(s3Url, 'png');
 
     console.log('* Downloading file from S3');
