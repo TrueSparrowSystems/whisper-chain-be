@@ -6,6 +6,10 @@ const fs = require('fs');
 const FileIo = require('./FileIo');
 const Ipfs = require('./Ipfs');
 
+var cors = require('cors');
+
+app.use(cors());
+
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
