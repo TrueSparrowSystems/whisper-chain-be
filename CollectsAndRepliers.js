@@ -30,6 +30,8 @@ class CollectsAndRepliers {
       cache: new InMemoryCache(fragmentMatcher)
     });
 
+    console.log('* Fetching post data from lens.');
+
     const publicationQuery = oThis._getPublicationQuery();
 
     const publicationData = await client.query({
@@ -38,47 +40,44 @@ class CollectsAndRepliers {
       },
     });
 
+    console.log('** Completed fetching post data from lens.');
+
     if (publicationData.data.publications.items.length < 3) {
       return result;
     }
 
-    console.log('publicationData.data.publications.items', publicationData.data.publications.items);
-
     const publication = publicationData.data.publications.items[5];
-    console.log('publication ++++++++++++',publication);
 
     const publicationId = publication.id;
     let totalCollects = publication.stats.totalAmountOfCollects;
 
-    console.log('publicationId ++++++++++ ',publicationId);
+    console.log('* Fetching comments data from lens.');
     const commentQuery = oThis._getCommentsQuery(publicationId);
 
-    console.log('commentQuery ++++++++++ ',commentQuery);
     const commentData = await client.query({
       query: gql(commentQuery),
       variables: {
       },
     });
+    console.log('** Completed fetching comments data from lens.');
 
     const commentItems = commentData.data.publications.items;
-    console.log('commentItems ++++++++++ ',commentItems);
 
-    let walletAddresses = new Set();
+    let walletAddressSet = new Set();
 
-    console.log('commentItem LENGTH ++++++++++ ',commentItems.length);
     for(const commentItem of commentItems) {
-      walletAddresses.add(commentItem.profile.ownedBy);
+      walletAddressSet.add(commentItem.profile.ownedBy);
       totalCollects += commentItem.stats.totalAmountOfCollects;
     }
 
-    console.log('totalCollects ++++++++++++ ',totalCollects);
-    console.log('walletAddresses ++++++++++++ ',walletAddresses);
-    const walletAddressArray = Array.from(walletAddresses);
+    const walletAddressArray = Array.from(walletAddressSet);
 
     result = {
       totalCollects: totalCollects,
       walletAddresses: walletAddressArray
     };
+
+    console.log('Total collects:', totalCollects, 'Wallet addresses:', walletAddressArray);
 
     return result
   }

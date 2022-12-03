@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@pushprotocol/restapi": "^0.2.2",
     "api": "^5.0.4",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",

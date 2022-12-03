@@ -1,5 +1,6 @@
 const CollectsAndRepliers = require('./CollectsAndRepliers');
 const ApproveAndDisperse = require('./ApproveAndDisperse');
+const SendNotification = require('./SendNotification');
 
 async function perform() {
   const fetchResponse = await new CollectsAndRepliers().fetch();
@@ -9,7 +10,13 @@ async function perform() {
     return;
   }
 
-  await new ApproveAndDisperse(fetchResponse.walletAddresses, fetchResponse.totalCollects).perform()
+  const walletAddresses = fetchResponse.walletAddresses;
+
+  await new ApproveAndDisperse(fetchResponse.walletAddresses, fetchResponse.totalCollects).perform();
+
+  for(const walletAddress of walletAddresses) {
+    await new SendNotification().perform(walletAddress);
+  }
 }
 
 perform();
