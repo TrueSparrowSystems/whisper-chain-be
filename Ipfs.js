@@ -72,6 +72,39 @@ class Ipfs {
 
     return client;
   }
+
+  async _uploadMetadataToIpfsNftport() {
+    const sdk = require('api')('@nftport/v0#1llv231shlb6micbd');
+
+    const imageLink = `ipfs://bafkreiexxfrveuxwlvqtmytwoywczbnxihbi4lmbelifbkwc7tx4djyj7m`;
+
+    sdk.auth('95b7af04-7238-4662-b6cf-168837dcc006');
+    sdk.uploadMetadataToIpfs({
+      name: 'image',
+      description: "Description",
+      file_url: 'https://ipfs.io/ipfs/bafkreiexxfrveuxwlvqtmytwoywczbnxihbi4lmbelifbkwc7tx4djyj7m',
+      custom_fields: {
+        "version": "2.0.0",
+        "mainContentFocus": "IMAGE",
+        "metadata_id": uuid(),
+        "locale": "en-US",
+        "content": "Image",
+        "image": imageLink,
+        "imageMimeType": 'image/png',
+        "attributes": [],
+        "media": [
+          {
+            item: imageLink,
+            type: 'image/png',
+          },
+        ],
+        "tags": ["whisper.lens"],
+        "appId": "react_lens",
+      }
+    })
+      .then(({ data }) => console.log(data))
+      .catch(err => console.error(err));
+  }
 }
 
 module.exports = Ipfs;
