@@ -2,9 +2,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
-var cors = require('cors');
-
-app.use(cors());
 
 const FileIo = require('./FileIo');
 const Ipfs = require('./Ipfs');
@@ -12,7 +9,11 @@ const Ipfs = require('./Ipfs');
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.post('/whisper/suggestions', urlencodedParser, async function (req, res) {
+app.get('/', async function (req, res) {
+  res.send(new Date());
+});
+
+app.get('/whisper/suggestions', urlencodedParser, async function (req, res) {
   try {
     const GenerateAndUploadImages = require('./GenerateAndUploadImages');
     const s3Urls = await new GenerateAndUploadImages({prompt: req.body.prompt, artStyle: req.body.art_style || null}).perform();
@@ -23,7 +24,7 @@ app.post('/whisper/suggestions', urlencodedParser, async function (req, res) {
   }
 });
 
-app.post('/whisper', urlencodedParser, async function (req, res) {
+app.get('/whisper', urlencodedParser, async function (req, res) {
   try {
     const s3Url = req.body.s3_url;
     const downloadFilePath = await new FileIo().download(s3Url, 'png');
