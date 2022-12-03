@@ -32,7 +32,7 @@ class ApproveAndDisperse {
     const provider = new ethers.providers.InfuraProvider('maticmum');
     const signer = new ethers.Wallet(process.env.TX_SIGNER, provider);
     const erc20Contract = new ethers.Contract(wmaticContractAddress, erc20ContractAbi, signer);
-    const approveTx = await erc20Contract.approve(disperseContractAddress, ethers.utils.parseUnits(String(1)));
+    const approveTx = await erc20Contract.approve(disperseContractAddress, ethers.utils.parseUnits(String(oThis.amountInMatics)));
     const receipt = await approveTx.wait();
 
     console.log('** Transaction hash for approval:', receipt.transactionHash);
