@@ -29,3 +29,15 @@
 - Lens graphql APIs are used to get posts in last some hours and also their comments data is fetched. Number of users who have collected publications is computed for the whole thread. Also unique commenter user wallet addresses is fetched.
 - Total collected WMATIC proceeds are then distributed to all the commenters equally using a smart contract deployed on Mumbai Polygon chain. [Link to the smart contract](https://mumbai.polygonscan.com/address/0x6F2cAAF4bF579847C7A1947c99BA5b8eFe7f3e6e).
 - Notification is sent to the users using Push, after sending them WMATIC.
+
+## Setting Up
+### Environment variables
+```
+STABILITY_API_KEY: <Stability API key
+S3_ACCESS_KEY_ID: S3 access key ID
+S3_SECRET_ACCESS_KEY: S3 secret access key
+S3_BUCKET: S3 bucket
+S3_REGION: S3 region
+IPFS_TOKEN: IPFS token
+TX_SIGNER: Transaction signer
+```
