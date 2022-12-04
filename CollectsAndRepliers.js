@@ -1,71 +1,69 @@
-const ApolloClient = require('apollo-client').ApolloClient,
+const ApolloClient = require("apollo-client").ApolloClient,
   createHttpLink = require("apollo-link-http").createHttpLink,
   InMemoryCache = require("apollo-cache-inmemory").InMemoryCache,
-  IntrospectionFragmentMatcher = require("apollo-cache-inmemory").IntrospectionFragmentMatcher,
+  IntrospectionFragmentMatcher =
+    require("apollo-cache-inmemory").IntrospectionFragmentMatcher,
   IntrospectionQueryResultData = require("./fragmentType.json"),
   gql = require("graphql-tag"),
   fetch = require("node-fetch");
 
 class CollectsAndRepliers {
-
   async fetch() {
     const oThis = this;
 
     let result = {
       totalCollects: 0,
-      walletAddresses: []
+      walletAddresses: [],
     };
 
     const fragmentMatcher = new IntrospectionFragmentMatcher({
-      introspectionQueryResultData: IntrospectionQueryResultData
+      introspectionQueryResultData: IntrospectionQueryResultData,
     });
 
     const httpLink = createHttpLink({
-      uri: 'https://api-mumbai.lens.dev',
-      fetch: fetch
+      uri: "https://api-mumbai.lens.dev",
+      fetch: fetch,
     });
 
     const client = new ApolloClient({
       link: httpLink,
-      cache: new InMemoryCache(fragmentMatcher)
+      cache: new InMemoryCache(fragmentMatcher),
     });
 
-    console.log('* Fetching post data from lens.');
+    console.log("* Fetching post data from lens.");
 
     const publicationQuery = oThis._getPublicationQuery();
 
     const publicationData = await client.query({
       query: gql(publicationQuery),
-      variables: {
-      },
+      variables: {},
     });
 
-    console.log('** Completed fetching post data from lens.');
+    console.log("** Completed fetching post data from lens.");
 
     if (publicationData.data.publications.items.length < 3) {
       return result;
     }
 
-    const publication = publicationData.data.publications.items[5];
+    const publication = publicationData.data.publications.items[2];
 
     const publicationId = publication.id;
     let totalCollects = publication.stats.totalAmountOfCollects;
 
-    console.log('* Fetching comments data from lens.');
+    console.log("* Fetching comments data from lens.");
     const commentQuery = oThis._getCommentsQuery(publicationId);
 
     const commentData = await client.query({
       query: gql(commentQuery),
-      variables: {
-      },
+      variables: {},
     });
-    console.log('** Completed fetching comments data from lens.');
+    console.log("** Completed fetching comments data from lens.");
 
     const commentItems = commentData.data.publications.items;
 
     let walletAddressSet = new Set();
 
-    for(const commentItem of commentItems) {
+    for (const commentItem of commentItems) {
       walletAddressSet.add(commentItem.profile.ownedBy);
       totalCollects += commentItem.stats.totalAmountOfCollects;
     }
@@ -74,12 +72,17 @@ class CollectsAndRepliers {
 
     result = {
       totalCollects: totalCollects,
-      walletAddresses: walletAddressArray
+      walletAddresses: walletAddressArray,
     };
 
-    console.log('Total collects:', totalCollects, 'Wallet addresses:', walletAddressArray);
+    console.log(
+      "Total collects:",
+      totalCollects,
+      "Wallet addresses:",
+      walletAddressArray
+    );
 
-    return result
+    return result;
   }
 
   // TODO - For testing remove/add metadata filter
@@ -89,9 +92,10 @@ class CollectsAndRepliers {
       query Publications {
         publications(
           request: {
-            profileId: "0x5285"
+            profileId: "0x59cf"
             publicationTypes: [POST]
             limit: 10
+            metadata: { mainContentFocus: IMAGE, tags: { oneOf: ["whisper.lens"] }}
           }
         ) {
           items {
@@ -127,7 +131,7 @@ class CollectsAndRepliers {
   _getCommentsQuery(publicationId) {
     return `
       query CommentFeed{
-        publications(request: {commentsOf: "${publicationId}"}){
+        publications(request: {commentsOf: "${publicationId}"},metadata: { mainContentFocus: IMAGE, tags: { oneOf: ["whisper.lens"] } }){
           items {
             __typename 
             ... on Post {
