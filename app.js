@@ -13,7 +13,7 @@ app.use(cors());
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.get('/', async function (req, res) {
+app.get('/api/health-check', async function (req, res) {
   res.send(new Date());
 });
 
