@@ -41,11 +41,7 @@ class CollectsAndRepliers {
 
     console.log("** Completed fetching post data from lens.");
 
-    if (publicationData.data.publications.items.length < 3) {
-      return result;
-    }
-
-    const publication = publicationData.data.publications.items[2];
+    const publication = publicationData.data.publications.items[0];
 
     const publicationId = publication.id;
     let totalCollects = publication.stats.totalAmountOfCollects;
