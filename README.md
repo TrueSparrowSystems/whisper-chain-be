@@ -7,7 +7,7 @@
 - After the wallet is selected, the corresponding *wallet address* is obtained.
 - For *authenticating with Lens*, a challenge text is signed and sent to Lens using the selected wallet. Lens provides an access token, which helps in further API calls.
 - Using the *access token*, we fetch the Lens profile, if exists, OR take the user to the Lens profile creation flow.
-- Optionally, if time permits for the hackathon, the user will be able to set a dispatcher for help in not requiring the signing of every interaction.
+- Optionally, if time permits for the hackathon, the user will be able to set a dispatcher for help in not requiring the signing of all interactions.
 
 ### Home page flow (Lens)
 - The frontend browser fetches a list of publications using *Lens GraphQL APIs*.
