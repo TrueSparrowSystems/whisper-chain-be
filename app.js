@@ -17,7 +17,7 @@ app.get('/', async function (req, res) {
   res.send(new Date());
 });
 
-app.get('/whisper/suggestions', urlencodedParser, async function (req, res) {
+app.get('/api/whisper/suggestions', urlencodedParser, async function (req, res) {
   try {
     const GenerateAndUploadImages = require('./GenerateAndUploadImages');
     const s3Urls = await new GenerateAndUploadImages({prompt: req.query.prompt, artStyle: req.query.art_style || null}).perform();
@@ -28,7 +28,7 @@ app.get('/whisper/suggestions', urlencodedParser, async function (req, res) {
   }
 });
 
-app.get('/whisper', urlencodedParser, async function (req, res) {
+app.get('/api/whisper', urlencodedParser, async function (req, res) {
   try {
     const s3Url = req.query.s3_url;
     const downloadFilePath = await new FileIo().download(s3Url, 'png');
