@@ -91,7 +91,6 @@ class CollectsAndRepliers {
             profileId: "0x59cf"
             publicationTypes: [POST]
             limit: 10
-            metadata: { mainContentFocus: IMAGE }
           }
         ) {
           items {
@@ -127,7 +126,7 @@ class CollectsAndRepliers {
   _getCommentsQuery(publicationId) {
     return `
       query CommentFeed{
-        publications(request: {commentsOf: "${publicationId}"},metadata: { mainContentFocus: IMAGE }){
+        publications(request: {commentsOf: "${publicationId}"}){
           items {
             __typename 
             ... on Post {
