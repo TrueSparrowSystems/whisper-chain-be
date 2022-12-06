@@ -14,6 +14,7 @@ app.use(cors());
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.get('/api/health-check', async function (req, res) {
+  console.log('** Health check success.');
   res.send(new Date());
 });
 
