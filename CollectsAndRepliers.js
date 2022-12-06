@@ -91,7 +91,7 @@ class CollectsAndRepliers {
             profileId: "0x59cf"
             publicationTypes: [POST]
             limit: 10
-            metadata: { mainContentFocus: IMAGE, tags: { oneOf: ["whisper.lens"] }}
+            metadata: { mainContentFocus: IMAGE }
           }
         ) {
           items {
@@ -127,7 +127,7 @@ class CollectsAndRepliers {
   _getCommentsQuery(publicationId) {
     return `
       query CommentFeed{
-        publications(request: {commentsOf: "${publicationId}"},metadata: { mainContentFocus: IMAGE, tags: { oneOf: ["whisper.lens"] } }){
+        publications(request: {commentsOf: "${publicationId}"},metadata: { mainContentFocus: IMAGE }){
           items {
             __typename 
             ... on Post {
