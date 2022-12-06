@@ -39,4 +39,7 @@ jobs:
           script: |
             cd whisper-chain-be/
             git pull --rebase
-            bash -c 'source SET_ENV_VARS.sh && pm2 restart app.js'
+            pm2 kill
+            source .env
+            pm2 start app.js --update-env
+            
