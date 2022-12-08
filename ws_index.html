@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+    </style>
+</head>
+<body>
+<ul id="messages"></ul>
+<form action="">
+    <input id="m" autocomplete="off" /><button>Send</button>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+
+    var urlParams=[];
+    var s=location.toString().split('?');
+    s=(s[1] || '').split('&');
+    for(var i=0;i<s.length;i++){
+      var u=s[i].split('=');
+      urlParams[u[0]]=u[1];
+    }
+    console.log('urlParams -- ', urlParams);
+    var userId = urlParams['uid'];
+      console.log('userId ---- ', userId);
+    var payloads = {
+      '1001': 'YmNhNzc0MzJkYTMxMDUxNDY0MWVmNmI0NDQ4ZWU3NDJjYzA5ODNiN2ZkMzkwYzZkYmU4MGQzMzcxYjBjMWM0YzViZTI4MzE4MWNjYjc0NTI3NGE2NTQxOGNhOTllMzA4YzhmZDcyYzUyOGJmOTZhNTcyOTc3OTgyZWE5NzJhMzI1YzhlZDg0YTRiZDUwZWUxZTNmMDI0NzVkYzRkN2U5MzdhMjM3YmI0OWYwMGMzM2VjMDNhNDQzY2FkODU1NjhlM2UxZGUyMmRlN2Y0NWVlMWQ0ZjRjNjdmODQ4NTc3ZTViZDFlYjNhZDU4NWI1NmU5NWEwOTZiMWI0YmVkY2ZiMg=='
+      , '1007': 'NjNkZDNhNjc3NmQ4ZWVlMWE2YzYwNzY4MjdhNzVkODI2M2FhZjNkZmM4ZWFlMDg0ZWU4NmYxMjk0ZGVjZjMxN2ZiNzJiZmExOGZjODcyYjNlOGVjOWZlZjBhMzFmNjkxMDMzMzY4MDhjN2RhOGQwNzdmZGYzYzIzNWU0ZjZmYTJjNTQxMzI5NjYwNTY5MmIzMGQ1NTg5ZWY0ZTg3MTQ0MWY0ZGU0MmJhNzc2NmQ4ZmMzNTc1ZmM1OGZlZDNlYWE5N2FmZTg4ZjYyNTBkMDk4ZThjNmU5ZDhkNDVmNjAwZjYxNzc2MTQ2MWM1Mjg5YzVkYTU4NGJhYjE2M2U2NjY5MA=='
+      , '1010': 'ZjVkOTJjZmExMTJmOTEyYThkOTRiMGZiNTMwZTlmZWY2MDY3MmYzMDU0NzMyYzU2MGI4NTI0YzZhYWI3Mzk1ZTMzOTM5NzBkNWRkOWMyYjdmNTQ4NWZmZjU4NzEwOWZiM2Q4NWUxOTlmMTgzZGRiYzhkMGVmOWQwNWMxZGJlMTY2MTE2YmEyMjgyOGUwNWY4OTNkMWVkYjJhMzljM2EzZDA2YjVhOThhNzRiODFmMmY3NGFiY2FjNTEzNWE4MjM0MWM0MDQxZWIyM2Q3YjczMDI5NTY3MmZmNjRiNjAxNTYwZTMxNmIzNTEzZGVmZWMyYmMzYmE3OGI3MDk0ZmEwZg=='
+    };
+
+    var authKeyExpiry = '1999644246';
+    var payload = payloads[userId];
+    console.log('payload --- ', payload);
+      console.log('payloads --- ', payloads);
+    var socket = io('http://ws.localhost:4000?auth_key_expiry_at='+authKeyExpiry+'&payload='+payload);
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      socket.emit('event_meeting.15001', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+    socket.on('test.15001.chat', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+    socket.on('test.15001', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+    socket.on('chat-stream', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+  });
+</script>
+</body>
+</html>

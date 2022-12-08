@@ -1,0 +1,50 @@
+{
+  "name": "node-js-api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "generate-openapi-docs": "node ./documentation/openapi/generate.js",
+    "start-dev": "source ./set_env_vars.sh ; npm start",
+    "pre-commit": "lint-staged"
+  },
+  "dependencies": {
+    "@moxiedotxyz/base": "1.0.0",
+    "@moxiedotxyz/cache": "1.0.0",
+    "@moxiedotxyz/queue": "1.0.0",
+    "aws-sdk": "2.849.0",
+    "cassandra-driver": "4.6.1",
+    "commander": "7.1.0",
+    "continuation-local-storage": "3.2.1",
+    "cookie-parser": "1.4.5",
+    "express": "4.17.1",
+    "google-libphonenumber": "3.2.22",
+    "helmet": "4.4.1",
+    "html-entities": "2.1.0",
+    "js-base64": "3.7.2",
+    "moment-timezone": "0.5.33",
+    "morgan": "1.10.0",
+    "mysql": "2.18.1",
+    "sanitize-html": "2.3.2",
+    "socket.io": "3.1.1",
+    "uuid": "8.3.2",
+    "swagger-jsdoc": "6.2.1",
+    "swagger-ui-express": "4.3.0"
+  },
+  "devDependencies": {
+    "eslint": "7.20.0",
+    "lint-staged": "10.5.4",
+    "parse-function": "^5.6.10",
+    "pre-commit": "1.2.2",
+    "prettier": "1.13.7"
+  },
+  "pre-commit": [
+    "pre-commit"
+  ],
+  "lint-staged": {
+    "*.js": [
+      "prettier --write --config .prettierrc.json",
+      "git add"
+    ]
+  }
+}
