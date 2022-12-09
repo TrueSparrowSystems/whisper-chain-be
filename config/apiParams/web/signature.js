@@ -74,6 +74,23 @@ const webSignature = {
         type: 'array'
       }
     ]
+  },
+
+  [apiNameConstants.suggestions]: {
+    mandatory: [
+      {
+        parameter: 'prompt',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      }
+    ],
+    optional: [
+      {
+        parameter: 'art_style',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      }
+    ]
   }
 };
 module.exports = webSignature;
