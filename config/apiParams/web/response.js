@@ -25,10 +25,10 @@ const webResponse = {
   },
 
   [apiNameConstants.suggestions]: {
-    resultType: responseEntityKey.s3Urls,
-    resultTypeLookup: responseEntityKey.s3Urls,
+    resultType: responseEntityKey.s3,
+    resultTypeLookup: responseEntityKey.s3,
     entityKindToResponseKeyMap: {
-      [entityTypeConstants.s3Urls]: responseEntityKey.s3Urls
+      [entityTypeConstants.s3]: responseEntityKey.s3
     }
   }
 };
