@@ -1,0 +1,45 @@
+name: [Staging] Whisper Chain Backend Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Enter github branch name to be deployed'
+        required: true
+        default: 'main'
+      description:
+        description: 'Enter description about deployment'
+        required: true
+        default: 'New feature release'
+
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Logging
+        run: |
+          echo "Deploying Branch : ${{ github.event.inputs.branch }}"
+          echo "Deployment Description: ${{ github.event.inputs.description }}"
+          echo "PWD: $(pwd)"
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.branch }}
+          path: whisper-chain-be
+
+      - name: Run Script
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.220.87.60
+          username: ubuntu
+          key: ${{ secrets.WHISPER_CHAIN__STAGING_PRIVATE_KEY }}
+          port: ${{ secrets.WHISPER_CHAIN_SSH_PORT }}
+          script: |
+            cd whisper-chain-be/
+            git pull --rebase
+            pm2 kill
+            source .env
+            pm2 start app.js --update-env
+            
