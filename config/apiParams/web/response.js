@@ -30,6 +30,14 @@ const webResponse = {
     entityKindToResponseKeyMap: {
       [entityTypeConstants.s3]: responseEntityKey.s3
     }
+  },
+
+  [apiNameConstants.ipfsMetaData]: {
+    resultType: responseEntityKey.ipfsMetadata,
+    resultTypeLookup: responseEntityKey.ipfsMetadata,
+    entityKindToResponseKeyMap: {
+      [entityTypeConstants.ipfsMetadata]: responseEntityKey.ipfsMetadata
+    }
   }
 };
 

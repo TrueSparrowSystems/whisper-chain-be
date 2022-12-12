@@ -91,6 +91,17 @@ const webSignature = {
         type: 'string'
       }
     ]
+  },
+
+  [apiNameConstants.ipfsMetaData]: {
+    mandatory: [
+      {
+        parameter: 's3_url',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      }
+    ],
+    optional: []
   }
 };
 module.exports = webSignature;

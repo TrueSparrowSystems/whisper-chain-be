@@ -1,5 +1,4 @@
 const express = require('express'),
-  cookieParser = require('cookie-parser'),
   router = express.Router();
 
 const rootPrefix = '../../..',
@@ -41,6 +40,22 @@ router.get('/suggestions', sanitizer.sanitizeDynamicUrlParams, function(req, res
 
   Promise.resolve(
     routeHelper.perform(req, res, next, '/app/services/whisper/GetSuggestions', 'r_a_w_1', null, dataFormatterFunc)
+  );
+});
+
+/* GET IPFS Metadata */
+router.get('/ipfs-metadata', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  const apiName = apiNameConstants.ipfsMetaData;
+  req.internalDecodedParams.apiName = apiName;
+
+  const dataFormatterFunc = async function(serviceResponse) {
+    const formatterParams = Object.assign({}, webResponse[apiName], { serviceData: serviceResponse.data });
+    const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
+    serviceResponse.data = wrapperFormatterRsp.data;
+  };
+
+  Promise.resolve(
+    routeHelper.perform(req, res, next, '/app/services/whisper/GetIPFSMetadata', 'r_a_w_2', null, dataFormatterFunc)
   );
 });
 
