@@ -34,7 +34,7 @@ jobs:
         with:
           host: 3.220.87.60
           username: ubuntu
-          key: ${{ secrets.WHISPER_CHAIN__STAGING_PRIVATE_KEY }}
+          key: ${{ secrets.WHISPER_CHAIN_STAGING_PRIVATE_KEY }}
           port: ${{ secrets.WHISPER_CHAIN_SSH_PORT }}
           script: |
             cd whisper-chain-be/
