@@ -1,4 +1,4 @@
-name: Whisper Chain Backend Deployment[Staging]
+name: Whisper Chain Staging Backend Deployment
 
 on:
   workflow_dispatch:
