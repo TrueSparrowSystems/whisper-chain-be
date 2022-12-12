@@ -24,58 +24,6 @@ const rootPrefix = '../../..',
  */
 
 const webSignature = {
-  [apiNameConstants.emailSignUp]: {
-    mandatory: [
-      {
-        parameter: 'email',
-        validatorMethods: [{ validateString: null }, { isValidEmail: null }],
-        type: 'string',
-        description: 'elaborated description if needed.'
-      },
-      {
-        parameter: 'password',
-        validatorMethods: [{ validateString: null }],
-        type: 'string'
-      },
-      {
-        parameter: 'api_source',
-        validatorMethods: [{ validateString: null }],
-        kind: 'internal',
-        type: 'string'
-      }
-    ],
-    optional: []
-  },
-
-  [apiNameConstants.getAllUsers]: {
-    mandatory: [
-      {
-        parameter: 'api_source',
-        validatorMethods: [{ validateString: null }],
-        kind: 'internal',
-        type: 'string'
-      }
-    ],
-    optional: [
-      {
-        parameter: paginationConstants.paginationIdentifierKey, // Pagination identifier.
-        validatorMethods: [{ validateString: null }, { validatePaginationIdentifier: null }],
-        type: 'string'
-      }
-    ]
-  },
-
-  [apiNameConstants.uploadParams]: {
-    mandatory: [],
-    optional: [
-      {
-        parameter: 'user_images',
-        validatorMethods: [{ validateNonBlankStringArray: 'invalid_images' }],
-        type: 'array'
-      }
-    ]
-  },
-
   [apiNameConstants.suggestions]: {
     mandatory: [
       {

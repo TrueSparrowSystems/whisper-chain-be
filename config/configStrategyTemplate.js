@@ -38,15 +38,6 @@ class ConfigStrategyTemplate {
           clusterNodes: 'clusterNodesEntity'
         }
       },
-      cassandraEntity: {
-        entityType: 'object',
-        entitiesPresent: {
-          username: 'usernameEntity',
-          password: 'passwordEntity',
-          contactPoints: 'contactPointsEntity',
-          localDataCenter: 'localDataCenterEntity'
-        }
-      },
       rabbitmqListEntity: {
         // For socketRabbitmq config
         entityType: 'object',
@@ -146,7 +137,6 @@ class ConfigStrategyTemplate {
     return {
       [configStrategyConstants.memcached]: 'memcachedEntity',
       [configStrategyConstants.bgJobRabbitmq]: 'rabbitmqEntity',
-      [configStrategyConstants.cassandra]: 'cassandraEntity',
       [configStrategyConstants.socketRabbitmq]: 'rabbitmqListEntity',
       [configStrategyConstants.websocket]: 'websocketEntity'
     };

@@ -20,47 +20,6 @@
       "clusterNodes": [
         "127.0.0.1"
       ]
-    },
-
-    "cassandra": {
-      "last_modified_at": 1,
-      "username": "cassandra",
-      "password": "cassandra",
-      "contactPoints": ["127.0.0.1:9042"],
-      "localDataCenter": "datacenter1"
-    },
-
-    "socketRabbitmq": {
-      "last_modified_at": 1,
-      "username": "guest",
-      "password": "guest",
-      "heartbeats": "30",
-      "clusters": [
-        {
-          "id": "r1",
-          "host": "127.0.0.1",
-          "port": "5672",
-          "clusterNodes": [
-            "127.0.0.1"
-          ]
-        },
-        {
-          "id": "r2",
-          "host": "127.0.0.1",
-          "port": "5672",
-          "clusterNodes": [
-            "127.0.0.1"
-          ]
-        }
-      ]
-    },
-
-    "websocket": {
-      "last_modified_at": 1,
-      "wsAuthSalt": "asdfghjklqwertyuiop",
-      "endpoint": "127.0.0.1",
-      "port": "4000",
-      "protocol": "https"
     }
   }
 }

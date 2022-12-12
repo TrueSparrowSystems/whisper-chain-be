@@ -11,7 +11,6 @@ program
 
 const rootPrefix = '..',
   ExecuteMysqlQuery = require(rootPrefix + '/db/ExecuteMysqlQuery'),
-  ExecuteCassandraQuery = require(rootPrefix + '/db/ExecuteCassandraQuery'),
   database = require(rootPrefix + '/lib/globalConstant/database'),
   dbKindConstants = require(rootPrefix + '/lib/globalConstant/dbKind'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger');
@@ -278,8 +277,6 @@ class DbMigrate {
 
     if (dbKind == dbKindConstants.sqlDbKind) {
       return new ExecuteMysqlQuery(dbName, query).perform();
-    } else if (dbKind == dbKindConstants.cassandraDbKind) {
-      return new ExecuteCassandraQuery(keySpace, query).perform();
     } else throw new Error(`Invalid dbKind-${dbKind}`);
   }
 }

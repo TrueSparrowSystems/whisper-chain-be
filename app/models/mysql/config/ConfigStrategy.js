@@ -133,12 +133,6 @@ class ConfigStrategyModel extends ModelBase {
       hashNotToEncrypt[strategyKindName].password = '{{rmqPassword}}';
       hashToEncrypt.rmqPassword = rmqPassword;
       encryptedKeysFound = true;
-    } else if (strategyKindName === configStrategyConstants.cassandra) {
-      const cassandraPassword = hashNotToEncrypt[strategyKindName].password;
-
-      hashNotToEncrypt[strategyKindName].password = '{{cassandraPassword}}';
-      hashToEncrypt.cassandraPassword = cassandraPassword;
-      encryptedKeysFound = true;
     } else if (strategyKindName === configStrategyConstants.websocket) {
       const wsAuthSalt = hashNotToEncrypt[strategyKindName].wsAuthSalt;
 
@@ -168,10 +162,6 @@ class ConfigStrategyModel extends ModelBase {
       case configStrategyConstants.bgJobRabbitmq:
       case configStrategyConstants.socketRabbitmq: {
         configStrategyHash[configStrategyKinds[strategyKind]].password = decryptedJsonObj.rmqPassword;
-        break;
-      }
-      case configStrategyConstants.cassandra: {
-        configStrategyHash[configStrategyKinds[strategyKind]].password = decryptedJsonObj.cassandraPassword;
         break;
       }
       case configStrategyConstants.websocket: {

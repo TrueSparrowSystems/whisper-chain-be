@@ -154,19 +154,6 @@ class CoreConstants {
     return process.env.A_SOCKET_DB_MYSQL_PASSWORD;
   }
 
-  // Cassandra related constants.
-  get CASSANDRA_REPLICATION_CLASS() {
-    return process.env.A_CASSANDRA_REPLICATION_CLASS;
-  }
-
-  get CASSANDRA_REPLICATION_FACTOR() {
-    return process.env.A_CASSANDRA_REPLICATION_FACTOR;
-  }
-
-  get CASSANDRA_REPLICATION_LEVEL() {
-    return process.env.A_DEFAULT_REPLICATION_LEVEL;
-  }
-
   get CONFIG_STRATEGY_SALT() {
     return process.env.A_CONFIG_STRATEGY_SALT;
   }
