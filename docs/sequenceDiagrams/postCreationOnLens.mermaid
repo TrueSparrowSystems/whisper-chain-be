@@ -1,0 +1,47 @@
+%% Documentation: https://github.com/mermaid-js/mermaid
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Cron - start chain
+participant DB
+participant Cron
+participant Platform as Lens
+participant Ipfs as IPFS
+
+Cron->>DB: Query today's seed in platform_chain_seeds
+DB->>Cron: Query result
+
+break
+  note over Cron: If no query result, then log error
+  note over Cron: If already published
+end
+
+Cron->>Ipfs: Upload image
+Ipfs->>Cron: Returns response with cid
+break
+  note over Cron: If error, log error
+end
+
+Cron->>DB: Create entry in ipfs_objects
+DB->>Cron: Query result
+
+Cron->>Ipfs: Upload chain meta
+Ipfs->>Cron: Returns response with cid
+break
+  note over Cron: If error, log error
+end
+
+Cron->>DB: Create entry in ipfs_objects
+DB->>Cron: Query result
+
+Cron->>Platform: Create post
+Platform->>Cron: Returns response
+break
+  note over Cron: If error, log error
+end
+
+Cron->>DB: Create entry in chains
+DB->>Cron: Query result
+
+Cron->>DB: Update entry in platform_chain_seeds
+DB->>Cron: Query result
