@@ -1,4 +1,5 @@
 // Documentation URL - https://www.dbml.org/docs/
+// Editor: https://dbdiagram.io/d
 
 Table platform_chain_seeds {
   id bigint
