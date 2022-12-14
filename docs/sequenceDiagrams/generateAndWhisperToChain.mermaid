@@ -7,12 +7,13 @@ title Generate whisper & add it to chain
 participant Browser as User
 participant Server
 participant DB
-
 participant S3
 
 participant Lens
 participant SD as Stable Diffusion
 participant Ipfs as IPFS
+
+participant Cron
 
 Note over Browser: User clicks on Generate Image
 
@@ -63,10 +64,19 @@ DB->>Server: Response
 
 Server->>DB: Create an entry in whisper
 DB->>Server: Success
-Server->>Browser: Success
+Server->>Browser: 200 Success
 
 
 
 
-%% Server->>Lens: GraphQL Call (transaction hash)
-%% Lens->>Server: Whisper Details
+loop Polling
+    Cron->>DB: Select non indexed whispers
+    DB->>Cron: Array of non indexed whispers
+    Cron->>Lens: For each txn hash GraphQL Call to fetch Status
+    Lens->>Cron: Success response / Pending response
+    Cron->>DB: Update whispers if success response
+    DB->>Cron: Response
+    Note over Cron: Sleep for some secs
+end
+
+        
