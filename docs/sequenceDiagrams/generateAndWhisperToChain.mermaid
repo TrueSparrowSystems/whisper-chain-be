@@ -1,22 +1,27 @@
-%% Documentation: https://github.com/mermaid-js/mermaid
+%% Documentation: https://mermaid-js.github.io/mermaid/#/sequenceDiagram
 %% Editor: https://mermaid.live/edit
 
 sequenceDiagram
 title Generate whisper & add it to chain
-participant Lens
-participant Browser
+
+participant Browser as User
 participant Server
 participant DB
 
+participant S3
+
+participant Lens
 participant SD as Stable Diffusion
 participant Ipfs as IPFS
 
 Note over Browser: User clicks on Generate Image
 
-Browser->>Server: Generate images from a prompt
-Server->> SD: Prompt
-SD->>Server: Response Images
-Server->>Browser: S3 Urls
+Browser->>Server: API call to generate images using prompt
+Server->> SD: Invoke SDK to generate image using prompt
+SD->>Server: Response having image data
+Server->>S3: Upload image to S3
+S3->>Server: Response 200
+Server->>Browser: Return suggestions
 
 %% break
 %%   note over Server: If no query result, then log error
@@ -25,29 +30,43 @@ Server->>Browser: S3 Urls
 
 Note over Browser: User selects a Image & clicks on add it to chain
 
-Browser->>Server: s3 url of image to be uploaded to IPFS
-Server->>Ipfs: Image
-Ipfs->>Server: Metadata
-Server->>Browser: Metadata
+Browser->>Server: API call conatining s3 url of image to be uploaded to IPFS
+Server->>Ipfs: API call to upload image
+Ipfs->>Server: Return CID
+Server->>Ipfs: API call to upload metadata
+Ipfs->>Server: Return CID
+Server->>DB: Create entry in ipfs_objects for image
+DB->>Server: Response
+Server->>DB: Create entry in ipfs_objects for metadata
+DB->>Server: Response
+
+Server->>Browser: Return ipfs_obects of image & metadata
 
 
 %% break
 %%   note over Server: If error, log error
 %% end
 
-Note left of Browser: Browser adds the comment to Lens Protocol
+%% Note over Browser: Browser adds the comment to Lens Protocol
 
-Browser->>Lens: Add the comment using IPFS metadata
-Lens->>Browser: Txn Hash
+Browser->>Lens: GraphQL call to add publication
+Lens->>Browser: Response containing Polygon Txn Hash
 
 
-Note right of Browser: Browser sends the Txn Hash + s3 url to server
 
-Browser->>Server: Txn Hash + S3 url
 
-Note over Server: Server fetches the comment details using txn hash
-Server->>DB: Create an entry in Whisper Table
+Browser->>Server: API call to create Whisper 
+Server->>DB: Create entry in images
+DB->>Server: Response
+
+
+
+Server->>DB: Create an entry in whisper
 DB->>Server: Success
 Server->>Browser: Success
 
 
+
+
+%% Server->>Lens: GraphQL Call (transaction hash)
+%% Lens->>Server: Whisper Details
