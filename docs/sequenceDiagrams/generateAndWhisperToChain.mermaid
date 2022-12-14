@@ -1,0 +1,53 @@
+%% Documentation: https://github.com/mermaid-js/mermaid
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Generate whisper & add it to chain
+participant Lens
+participant Browser
+participant Server
+participant DB
+
+participant SD as Stable Diffusion
+participant Ipfs as IPFS
+
+Note over Browser: User clicks on Generate Image
+
+Browser->>Server: Generate images from a prompt
+Server->> SD: Prompt
+SD->>Server: Response Images
+Server->>Browser: S3 Urls
+
+%% break
+%%   note over Server: If no query result, then log error
+%%   note over Server: If already published
+%% end
+
+Note over Browser: User selects a Image & clicks on add it to chain
+
+Browser->>Server: s3 url of image to be uploaded to IPFS
+Server->>Ipfs: Image
+Ipfs->>Server: Metadata
+Server->>Browser: Metadata
+
+
+%% break
+%%   note over Server: If error, log error
+%% end
+
+Note left of Browser: Browser adds the comment to Lens Protocol
+
+Browser->>Lens: Add the comment using IPFS metadata
+Lens->>Browser: Txn Hash
+
+
+Note right of Browser: Browser sends the Txn Hash + s3 url to server
+
+Browser->>Server: Txn Hash + S3 url
+
+Note over Server: Server fetches the comment details using txn hash
+Server->>DB: Create an entry in Whisper Table
+DB->>Server: Success
+Server->>Browser: Success
+
+
