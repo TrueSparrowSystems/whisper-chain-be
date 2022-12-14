@@ -1,0 +1,152 @@
+// Documentation URL - https://www.dbml.org/docs/
+
+Table platform_chain_seeds {
+  id bigint
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  start_ts timestamp
+  image_id bigint [ref: - images.id]
+  is_published tinyint [
+    note: '
+    NULL = NOT_PUBLISHED,
+    1 = PUBLISHED
+    ']
+  cts timestamp
+  uts timestamp
+
+  indexes {
+      (id) [pk]
+      (platform, start_ts) [unique]
+  }
+}
+
+Table users {
+  id bigint
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  platform_user_id varchar
+  platform_display_name varchar
+  platform_username varchar
+  platform_profile_image_id bigint [ref: - images.id]
+  cookie_token varchar
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE
+    ']
+  cts timestamp
+  uts timestamp
+
+  indexes {
+      (id) [pk]
+      (platform_user_id) [unique]
+  }
+}
+
+Table user_eth_addresses {
+  id bigint
+  user_id bigint [ref: - users.id]
+  eth_address varchar
+  platform tinyint [
+    note: '
+    1 = LENS
+    ']
+  eth_address_kind tinyint [
+    note: '
+    1 = AUTH
+    ']
+  cts timestamp
+  uts timestamp
+
+  indexes {
+      (id) [pk]
+      (user_id)
+      (eth_address)
+  }
+}
+
+Table images {
+  id bigint
+  url varchar
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+  }
+}
+
+Table chains {
+  id bigint
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  platform_id varchar
+  platform_url varchar
+  start_ts timestamp
+  image_id bigint [ref: - images.id]
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE
+    ']
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+      (platform_id, platform) [unique]
+      (platform, start_ts)
+  }
+}
+
+Table whispers {
+  id bigint
+  user_id bigint [ref: > users.id]
+  chain_id bigint [ref: > chains.id]
+  image_id bigint [ref: - images.id]
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  platform_id varchar
+  platform_url varchar
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE
+    ']
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+      (image_id) [unique]
+      (chain_id, cts)
+  }
+}
+
+Table ipfs_objects {
+  id bigint
+  entity_kind tinyint [
+    note: '
+    1 = CHAIN_META,
+    2 = WHISPER_META,
+    3 = IMAGE
+    ']
+  entity_id bigint
+  cid varchar
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+      (entity_id, entity_kind) [unique]
+  }
+}
+
