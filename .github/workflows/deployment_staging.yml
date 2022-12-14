@@ -41,5 +41,5 @@ jobs:
             git pull --rebase
             pm2 kill
             source .env
-            pm2 start app.js --update-env --port 80
+            NODE_PORT=80 pm2 start app.js --update-env
             
