@@ -133,6 +133,7 @@ Table whispers {
       (id) [pk]
       (image_id) [unique]
       (chain_id, cts)
+      (platform_id, status, platform_url)
   }
 }
 
