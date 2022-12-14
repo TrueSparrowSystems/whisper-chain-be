@@ -75,6 +75,7 @@ Table user_eth_addresses {
 Table images {
   id bigint
   url varchar
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
   cts timestamp
   uts timestamp
   indexes {
@@ -93,6 +94,7 @@ Table chains {
   platform_url varchar
   start_ts timestamp
   image_id bigint [ref: - images.id]
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
   status tinyint [
     note: '
     1 = ACTIVE,
@@ -119,6 +121,7 @@ Table whispers {
     ']
   platform_id varchar
   platform_url varchar
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
   status tinyint [
     note: '
     1 = ACTIVE,
@@ -135,19 +138,17 @@ Table whispers {
 
 Table ipfs_objects {
   id bigint
-  entity_kind tinyint [
+  kind tinyint [
     note: '
-    1 = CHAIN_META,
-    2 = WHISPER_META,
+    1 = CHAIN,
+    2 = WHISPER,
     3 = IMAGE
     ']
-  entity_id bigint
   cid varchar
   cts timestamp
   uts timestamp
   indexes {
       (id) [pk]
-      (entity_id, entity_kind) [unique]
   }
 }
 
