@@ -49,12 +49,16 @@ Server->>DB: Create an entry in whisper
 DB->>Server: Success
 Server->>Browser: 200 Success
 
+Note over Cron: A continuos cron to poll lens publication status
 loop Polling
     Cron->>DB: Select non indexed whispers
     DB->>Cron: Array of non indexed whispers
-    Cron->>Lens: For each txn hash GraphQL Call to fetch Status
-    Lens->>Cron: Success response / Pending response
-    Cron->>DB: Update whispers if success response
-    DB->>Cron: Response
+    loop for each non indexed whisper
+        Cron->>Lens: For each txn hash GraphQL Call to fetch Status
+        Lens->>Cron: Success response / Pending response / Error response
+        Note over Cron: If error, log error and continue to next
+        Cron->>DB: Update whispers if success response
+        DB->>Cron: Response
+    end
     Note over Cron: Sleep for some secs
 end

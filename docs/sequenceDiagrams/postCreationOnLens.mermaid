@@ -3,16 +3,16 @@
 
 sequenceDiagram
 title Cron - start chain
-participant DB
 participant Cron
+participant DB
 participant Platform as Lens
 participant Ipfs as IPFS
 
 Cron->>DB: Query today's seed in platform_chain_seeds
-DB->>Cron: Query result
+DB->>Cron: Response
 
 break
-  note over Cron: If no query result, then log error
+  note over Cron: If no records, then log error
   note over Cron: If already published
 end
 
@@ -23,7 +23,7 @@ break
 end
 
 Cron->>DB: Create entry in ipfs_objects
-DB->>Cron: Query result
+DB->>Cron: Response
 
 Cron->>Ipfs: Upload chain meta
 Ipfs->>Cron: Returns response with cid
@@ -32,7 +32,7 @@ break
 end
 
 Cron->>DB: Create entry in ipfs_objects
-DB->>Cron: Query result
+DB->>Cron: Response
 
 Cron->>Platform: Create post
 Platform->>Cron: Returns response
@@ -40,8 +40,19 @@ break
   note over Cron: If error, log error
 end
 
+
+loop Polling
+    Cron->>Lens: For txn hash, GraphQL Call to fetch Status
+    Lens->>Cron: Success response / Pending response / Error response
+    break
+        note over Cron: If error, log error 
+        note over Cron: If success
+    end
+    Note over Cron: Sleep for some secs
+end
+
 Cron->>DB: Create entry in chains
-DB->>Cron: Query result
+DB->>Cron: Response
 
 Cron->>DB: Update entry in platform_chain_seeds
-DB->>Cron: Query result
+DB->>Cron: Response
