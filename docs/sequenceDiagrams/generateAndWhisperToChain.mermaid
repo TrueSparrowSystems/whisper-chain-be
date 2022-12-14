@@ -24,11 +24,6 @@ Server->>S3: Upload image to S3
 S3->>Server: Response 200
 Server->>Browser: Return suggestions
 
-%% break
-%%   note over Server: If no query result, then log error
-%%   note over Server: If already published
-%% end
-
 Note over Browser: User selects a Image & clicks on add it to chain
 
 Browser->>Server: API call conatining s3 url of image to be uploaded to IPFS
@@ -43,31 +38,16 @@ DB->>Server: Response
 
 Server->>Browser: Return ipfs_obects of image & metadata
 
-
-%% break
-%%   note over Server: If error, log error
-%% end
-
-%% Note over Browser: Browser adds the comment to Lens Protocol
-
 Browser->>Lens: GraphQL call to add publication
 Lens->>Browser: Response containing Polygon Txn Hash
-
-
-
 
 Browser->>Server: API call to create Whisper 
 Server->>DB: Create entry in images
 DB->>Server: Response
 
-
-
 Server->>DB: Create an entry in whisper
 DB->>Server: Success
 Server->>Browser: 200 Success
-
-
-
 
 loop Polling
     Cron->>DB: Select non indexed whispers
@@ -78,5 +58,3 @@ loop Polling
     DB->>Cron: Response
     Note over Cron: Sleep for some secs
 end
-
-        
