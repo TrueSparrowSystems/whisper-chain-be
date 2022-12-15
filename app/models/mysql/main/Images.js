@@ -8,6 +8,8 @@ const rootPrefix = '../../../..',
 // Declare variables names.
 const dbName = databaseConstants.mainDbName;
 
+const has = Object.prototype.hasOwnProperty; // Cache the lookup once, in module scope.
+
 /**
  * Class for image model.
  *
@@ -71,6 +73,30 @@ class ImageModel extends ModelBase {
       .fire();
 
     return response;
+  }
+
+  /**
+   * This method inserts an entry in the table.
+   *
+   * @param {object} params
+   * @param {string} params.url
+   * @param {string} params.ipfs_object_id
+   *
+   * @returns {Promise<*>}
+   */
+  async insertRecord(params) {
+    const oThis = this;
+
+    // Perform validations.
+    // if (!has.call(params, 'url') || !has.call(params, 'ipfs_object_id')) {
+    //   throw new Error('Mandatory parameters are missing.');
+    // }
+
+    // if (typeof params.url !== 'string' || typeof params.ipfs_object_id !== 'integer') {
+    //   throw TypeError('Insertion parameters are of wrong params types.');
+    // }
+
+    return oThis.insert(params).fire();
   }
 
   /**
