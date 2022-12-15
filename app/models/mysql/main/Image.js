@@ -6,7 +6,7 @@ const rootPrefix = '../../../..',
   databaseConstants = require(rootPrefix + '/lib/globalConstant/database');
 
 // Declare variables names.
-const dbName = databaseConstants.userDbName;
+const dbName = databaseConstants.mainDbName;
 
 /**
  * Class for image model.

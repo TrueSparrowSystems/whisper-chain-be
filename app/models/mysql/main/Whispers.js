@@ -4,7 +4,7 @@ const rootPrefix = '../../../..',
   whispersConstants = require(rootPrefix + '/lib/globalConstant/big/whispers');
 
 // Declare variables.
-const dbName = databaseConstants.bigDbName;
+const dbName = databaseConstants.mainDbName;
 
 /**
  * Class for whispers model.
