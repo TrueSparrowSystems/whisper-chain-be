@@ -39,7 +39,6 @@ jobs:
           script: |
             cd whisper-chain-be/
             git pull --rebase
-            pm2 kill
             source .env
-            NODE_PORT=80 pm2 start app.js --update-env
+            pm2 restart app.js --update-env
             
