@@ -48,15 +48,6 @@ class ConfigStrategyTemplate {
           clusters: 'multipleClustersEntity'
         }
       },
-      websocketEntity: {
-        entityType: 'object',
-        entitiesPresent: {
-          wsAuthSalt: 'saltEntity',
-          endpoint: 'hostEntity',
-          port: 'portEntity',
-          protocol: 'protocolEntity'
-        }
-      },
       multipleClustersEntity: {
         entityType: 'array',
         entitiesPresent: 'clusterEntity'
@@ -137,8 +128,7 @@ class ConfigStrategyTemplate {
     return {
       [configStrategyConstants.memcached]: 'memcachedEntity',
       [configStrategyConstants.bgJobRabbitmq]: 'rabbitmqEntity',
-      [configStrategyConstants.socketRabbitmq]: 'rabbitmqListEntity',
-      [configStrategyConstants.websocket]: 'websocketEntity'
+      [configStrategyConstants.socketRabbitmq]: 'rabbitmqListEntity'
     };
   }
 }

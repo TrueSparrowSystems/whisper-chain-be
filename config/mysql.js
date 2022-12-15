@@ -57,13 +57,6 @@ const mysqlConfig = {
         user: coreConstants.USER_DB_MYSQL_USER,
         password: coreConstants.USER_DB_MYSQL_PASSWORD
       }
-    },
-    socketDbCluster: {
-      master: {
-        host: coreConstants.SOCKET_DB_MYSQL_HOST,
-        user: coreConstants.SOCKET_DB_MYSQL_USER,
-        password: coreConstants.SOCKET_DB_MYSQL_PASSWORD
-      }
     }
   },
   databases: {}
@@ -78,7 +71,5 @@ mysqlConfig.databases[database.configDbName] = ['configDbCluster'];
 mysqlConfig.databases[database.entityDbName] = ['entityDbCluster'];
 
 mysqlConfig.databases[database.userDbName] = ['userDbCluster'];
-
-mysqlConfig.databases[database.socketDbName] = ['socketDbCluster'];
 
 module.exports = mysqlConfig;

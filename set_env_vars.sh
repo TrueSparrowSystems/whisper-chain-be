@@ -56,11 +56,6 @@ export A_USER_DB_MYSQL_HOST='127.0.0.1'
 export A_USER_DB_MYSQL_USER='root'
 export A_USER_DB_MYSQL_PASSWORD='root'
 
-#mysql socket db
-export A_SOCKET_DB_MYSQL_HOST='127.0.0.1'
-export A_SOCKET_DB_MYSQL_USER='root'
-export A_SOCKET_DB_MYSQL_PASSWORD='root'
-
 # Cassandra related variables.
 export A_DEFAULT_REPLICATION_LEVEL='localOne'
 export A_CASSANDRA_REPLICATION_CLASS='SimpleStrategy'

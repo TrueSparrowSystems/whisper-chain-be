@@ -141,19 +141,6 @@ class CoreConstants {
     return process.env.A_USER_DB_MYSQL_PASSWORD;
   }
 
-  // Socket db.
-  get SOCKET_DB_MYSQL_HOST() {
-    return process.env.A_SOCKET_DB_MYSQL_HOST;
-  }
-
-  get SOCKET_DB_MYSQL_USER() {
-    return process.env.A_SOCKET_DB_MYSQL_USER;
-  }
-
-  get SOCKET_DB_MYSQL_PASSWORD() {
-    return process.env.A_SOCKET_DB_MYSQL_PASSWORD;
-  }
-
   get CONFIG_STRATEGY_SALT() {
     return process.env.A_CONFIG_STRATEGY_SALT;
   }
