@@ -35,8 +35,7 @@ class CreateWhisper extends ServiceBase {
     oThis.chainId = params.chain_id;
     oThis.s3Url = params.s3_url;
 
-    // Todo: update with currentUser after implementation
-    oThis.currentUser = { id: 123456 };
+    oThis.currentUser = params.current_user;
 
     oThis.imageId = null;
   }
@@ -70,11 +69,11 @@ class CreateWhisper extends ServiceBase {
       ipfs_object_id: oThis.imageIpfsObjectId
     };
 
-    const response = await new ImagesModel().insertRecord(insertParams);
+    const insertResponse = await new ImagesModel().insertRecord(insertParams);
 
-    console.log('response--->', response);
+    console.log('insertResponse--->', insertResponse);
 
-    if (response.insertId == null) {
+    if (insertResponse.affectedRows !== 1) {
       return Promise.reject(
         responseHelper.error({
           internal_error_identifier: 'a_s_l_ci_1',
@@ -86,7 +85,7 @@ class CreateWhisper extends ServiceBase {
       );
     }
 
-    oThis.imageId = response.insertId;
+    oThis.imageId = insertResponse.insertId;
   }
 
   /**
@@ -106,9 +105,9 @@ class CreateWhisper extends ServiceBase {
       status: whispersConstants.inactiveStatus
     };
 
-    const response = await new WhispersModel().insertRecord(insertParams);
+    const insertResponse = await new WhispersModel().insertRecord(insertParams);
 
-    if (response.insertId == null) {
+    if (insertResponse.insertId == null) {
       return Promise.reject(
         responseHelper.error({
           internal_error_identifier: 'a_s_l_ci_1',
@@ -120,7 +119,7 @@ class CreateWhisper extends ServiceBase {
       );
     }
 
-    console.log('response---->', response);
+    console.log('insertResponse---->', insertResponse);
   }
 
   /**

@@ -80,19 +80,19 @@ class ImageModel extends ModelBase {
    *
    * @param {object} params
    * @param {string} params.url
-   * @param {string} params.ipfs_object_id
+   * @param {number} params.ipfs_object_id
    *
    * @returns {Promise<*>}
    */
   async insertRecord(params) {
     const oThis = this;
 
-    // Perform validations.
+    // // Perform validations.
     // if (!has.call(params, 'url') || !has.call(params, 'ipfs_object_id')) {
     //   throw new Error('Mandatory parameters are missing.');
     // }
 
-    // if (typeof params.url !== 'string' || typeof params.ipfs_object_id !== 'integer') {
+    // if (typeof params.url != 'string' || typeof params.ipfs_object_id != 'number') {
     //   throw TypeError('Insertion parameters are of wrong params types.');
     // }
 
