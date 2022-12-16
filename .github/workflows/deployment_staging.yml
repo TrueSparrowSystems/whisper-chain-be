@@ -42,5 +42,5 @@ jobs:
             npm install
             source .env
             node db/migrate.js
-            pm2 restart app.js --update-env
+            pm2 restart whisper --update-env
             
