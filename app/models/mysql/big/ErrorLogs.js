@@ -2,7 +2,7 @@ const rootPrefix = '../../../..',
   ModelBase = require(rootPrefix + '/app/models/mysql/Base'),
   databaseConstants = require(rootPrefix + '/lib/globalConstant/database');
 
-const dbName = databaseConstants.bigDbName;
+const dbName = databaseConstants.mainDbName;
 
 /**
  * Class for error logs model.

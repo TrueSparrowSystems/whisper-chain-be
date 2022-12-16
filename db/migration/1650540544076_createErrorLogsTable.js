@@ -2,7 +2,7 @@ const rootPrefix = '../..',
   database = require(rootPrefix + '/lib/globalConstant/database'),
   DbKindConstant = require(rootPrefix + '/lib/globalConstant/dbKind');
 
-const dbName = database.bigDbName;
+const dbName = database.mainDbName;
 
 const dbKind = DbKindConstant.sqlDbKind;
 
