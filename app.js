@@ -25,6 +25,8 @@ const apiRoutes = require(rootPrefix + '/routes/api/index');
 const errorConfig = basicHelper.fetchErrorConfig(apiVersions.web);
 const apiHostName = new URL(coreConstants.API_DOMAIN).hostname;
 
+const cors = require('cors');
+
 morgan.token('id', function getId(req) {
   return req.id;
 });
@@ -156,6 +158,8 @@ process.title = 'API node worker';
 
 // Create express application instance.
 const app = express();
+
+app.use(cors());
 
 // API Docs for web APIs
 const swaggerSpecWeb = swaggerJSDoc(require(rootPrefix + '/config/apiParams/web/openapi.json'));
