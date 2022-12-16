@@ -39,6 +39,8 @@ jobs:
           script: |
             cd whisper-chain-be/
             git pull --rebase
+            npm install
             source .env
+            node db/migrate.js
             pm2 restart app.js --update-env
             
