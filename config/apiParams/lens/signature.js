@@ -5,6 +5,11 @@ const lensSignature = {
   [apiNameConstants.createWhisper]: {
     mandatory: [
       {
+        parameter: 'current_user',
+        validatorMethods: [{ validateNonEmptyObject: null }],
+        kind: 'internal'
+      },
+      {
         parameter: 'transaction_hash',
         validatorMethods: [{ validateString: null }],
         type: 'string'

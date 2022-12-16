@@ -8,7 +8,8 @@ const rootPrefix = '../../..',
   apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions'),
   routeHelper = require(rootPrefix + '/routes/helper'),
   apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName'),
-  lensResponse = require(rootPrefix + '/config/apiParams/lens/response');
+  lensResponse = require(rootPrefix + '/config/apiParams/lens/response'),
+  cookieHelper = require(rootPrefix + '/lib/cookieHelper');
 
 const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.lens);
 
@@ -26,6 +27,8 @@ const setLensApiSourceInternalParam = function(req, res, next) {
 
 // Set internal params
 router.use(setLensApiSourceInternalParam);
+
+router.use(cookieHelper.validateUserLoginCookieIfPresent);
 
 /* Post create whispers */
 router.post('/whispers', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
