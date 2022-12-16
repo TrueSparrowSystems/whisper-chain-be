@@ -4,7 +4,15 @@ const rootPrefix = '../../..',
   responseEntityKey = require(rootPrefix + '/lib/globalConstant/responseEntityKey');
 
 const lensResponse = {
-  [apiNameConstants.createWhisper]: {}
+  [apiNameConstants.createWhisper]: {},
+  [apiNameConstants.ipfsObjects]: {
+    resultType: responseEntityKey.ipfsObjectIds,
+    resultTypeLookup: responseEntityKey.ipfsObjects,
+    entityKindToResponseKeyMap: {
+      [entityTypeConstants.ipfsObjectIds]: responseEntityKey.ipfsObjectIds,
+      [entityTypeConstants.ipfsObjects]: responseEntityKey.ipfsObjects
+    }
+  }
 };
 
 module.exports = lensResponse;

@@ -11,14 +11,6 @@ const webResponse = {
       [entityTypeConstants.suggestionsIds]: responseEntityKey.suggestionsIds,
       [entityTypeConstants.suggestions]: responseEntityKey.suggestions
     }
-  },
-
-  [apiNameConstants.ipfsMetaData]: {
-    resultType: responseEntityKey.ipfsMetadata,
-    resultTypeLookup: responseEntityKey.ipfsMetadata,
-    entityKindToResponseKeyMap: {
-      [entityTypeConstants.ipfsMetadata]: responseEntityKey.ipfsMetadata
-    }
   }
 };
 

@@ -44,4 +44,20 @@ router.post('/whispers', sanitizer.sanitizeDynamicUrlParams, function(req, res, 
   );
 });
 
+/* Post create IPFS object */
+router.post('/ipfs-objects', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  const apiName = apiNameConstants.ipfsObjects;
+  req.internalDecodedParams.apiName = apiName;
+
+  const dataFormatterFunc = async function(serviceResponse) {
+    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
+    serviceResponse.data = wrapperFormatterRsp.data;
+  };
+
+  Promise.resolve(
+    routeHelper.perform(req, res, next, '/app/services/lens/GetIPFSObject', 'r_a_l_2', null, dataFormatterFunc)
+  );
+});
+
 module.exports = router;

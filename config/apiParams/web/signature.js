@@ -41,7 +41,7 @@ const webSignature = {
     ]
   },
 
-  [apiNameConstants.ipfsMetaData]: {
+  [apiNameConstants.ipfsObjects]: {
     mandatory: [
       {
         parameter: 's3_url',
