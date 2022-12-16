@@ -3,6 +3,7 @@ const express = require('express');
 const rootPrefix = '../..',
   v1Routes = require(rootPrefix + '/routes/api/v1/index'),
   webRoutes = require(rootPrefix + '/routes/api/web/index'),
+  imagesRoutes = require(rootPrefix + '/routes/api/images/index'),
   lensRoutes = require(rootPrefix + '/routes/api/lens/index'),
   apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions');
 
@@ -52,5 +53,8 @@ router.use('/lens', lensApis, lensRoutes);
 
 // Api v1 routes.
 router.use('/v1', appV1Apis, v1Routes);
+
+// Api image routes.
+router.use('/images', webApis, imagesRoutes);
 
 module.exports = router;
