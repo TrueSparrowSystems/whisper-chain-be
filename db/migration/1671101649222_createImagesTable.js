@@ -13,7 +13,7 @@ const upQueries = [
     '  `created_at` int(11) NOT NULL,\n' +
     '  `updated_at` int(11) NOT NULL,\n' +
     '  PRIMARY KEY (`id`)\n' +
-    ') ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
+    ') ENGINE=InnoDB AUTO_INCREMENT=3456 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
 ];
 
 const downQueries = ['DROP TABLE if exists `images`;'];

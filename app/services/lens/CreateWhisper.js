@@ -3,7 +3,7 @@ const rootPrefix = '../../../',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   ImagesModel = require(rootPrefix + '/app/models/mysql/main/Images'),
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
-  whispersConstants = require(rootPrefix + '/lib/globalConstant/big/whispers');
+  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers');
 
 /**
  * Class to create whisper.

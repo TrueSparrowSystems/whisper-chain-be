@@ -22,7 +22,7 @@ const upQueries = [
     '  UNIQUE KEY `uk_1` (image_id), \n' +
     '  KEY `index_1` (chain_id, created_at), \n' +
     '  KEY `index_2` (platform_id, status, platform_url) \n' +
-    ') ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
+    ') ENGINE=InnoDB AUTO_INCREMENT=25673 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
 ];
 
 const downQueries = ['DROP TABLE if exists `whispers`;'];

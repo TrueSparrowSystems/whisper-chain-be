@@ -1,7 +1,7 @@
 const rootPrefix = '../../../..',
   ModelBase = require(rootPrefix + '/app/models/mysql/Base'),
   databaseConstants = require(rootPrefix + '/lib/globalConstant/database'),
-  whispersConstants = require(rootPrefix + '/lib/globalConstant/big/whispers');
+  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers');
 
 // Declare variables.
 const dbName = databaseConstants.mainDbName;

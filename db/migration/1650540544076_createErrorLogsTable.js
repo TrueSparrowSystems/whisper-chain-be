@@ -21,7 +21,7 @@ const upQueries = [
     ' `updated_at` DATETIME NOT NULL, \n' +
     ' PRIMARY KEY (`id`), \n' +
     ' KEY `index_1` (`severity`,`status`) \n' +
-    ')  ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
+    ')  ENGINE=InnoDB AUTO_INCREMENT=44456 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
 ];
 
 const downQueries = ['DROP TABLE if exists `error_logs`;'];

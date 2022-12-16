@@ -19,7 +19,7 @@ const upQueries = [
     '  `updated_at` int(11) NOT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
     '  UNIQUE KEY `uk_1` (platform_user_id) \n' +
-    ') ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
+    ') ENGINE=InnoDB AUTO_INCREMENT=2345 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
 ];
 
 const downQueries = ['DROP TABLE if exists `users`;'];
