@@ -1,8 +1,6 @@
 const express = require('express');
 
 const rootPrefix = '../..',
-  v1Routes = require(rootPrefix + '/routes/api/v1/index'),
-  webRoutes = require(rootPrefix + '/routes/api/web/index'),
   imagesRoutes = require(rootPrefix + '/routes/api/images/index'),
   lensRoutes = require(rootPrefix + '/routes/api/lens/index'),
   apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions');
@@ -33,26 +31,8 @@ const lensApis = function(req, res, next) {
   next();
 };
 
-/**
- * App v1 APIs middleware.
- *
- * @param {object} req
- * @param {object} res
- * @param {function} next
- */
-const appV1Apis = function(req, res, next) {
-  req.internalDecodedParams.apiVersion = apiVersions.v1;
-  next();
-};
-
-// Web routes.
-router.use('/web', webApis, webRoutes);
-
 // Lens routes.
 router.use('/lens', lensApis, lensRoutes);
-
-// Api v1 routes.
-router.use('/v1', appV1Apis, v1Routes);
 
 // Api image routes.
 router.use('/images', webApis, imagesRoutes);

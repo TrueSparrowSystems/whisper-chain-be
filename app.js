@@ -157,15 +157,6 @@ process.title = 'API node worker';
 // Create express application instance.
 const app = express();
 
-// API Docs for mobile v1 APIs
-const swaggerSpecV1 = swaggerJSDoc(require(rootPrefix + '/config/apiParams/v1/openapi.json'));
-const swaggerHtmlV1 = swaggerUi.generateHTML(swaggerSpecV1);
-
-app.use('/api-docs/v1', swaggerUi.serveFiles(swaggerSpecV1));
-app.get('/api-docs/v1', function(req, res) {
-  return res.send(swaggerHtmlV1);
-});
-
 // API Docs for web APIs
 const swaggerSpecWeb = swaggerJSDoc(require(rootPrefix + '/config/apiParams/web/openapi.json'));
 const swaggerHtmlWeb = swaggerUi.generateHTML(swaggerSpecWeb);

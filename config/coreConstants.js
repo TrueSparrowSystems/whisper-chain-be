@@ -174,10 +174,6 @@ class CoreConstants {
     return JSON.parse(process.env.API_MAX_DEPRECATED_BUILD_NUMBER);
   }
 
-  get AWS_PINPOINT_REGION() {
-    return process.env.A_AWS_PINPOINT_REGION;
-  }
-
   // AWS SQS for SMS
   get SNS_SMS_REGION() {
     return process.env.A_SNS_SMS_REGION;

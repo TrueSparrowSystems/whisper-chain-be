@@ -7,7 +7,6 @@ const rootPrefix = '..',
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions'),
   apiErrorConfig = require(rootPrefix + '/config/apiParams/apiErrorConfig'),
-  v1ParamErrorConfig = require(rootPrefix + '/config/apiParams/v1/errorConfig'),
   webParamErrorConfig = require(rootPrefix + '/config/apiParams/web/errorConfig'),
   lensParamErrorConfig = require(rootPrefix + '/config/apiParams/lens/errorConfig');
 
@@ -129,11 +128,7 @@ class BasicHelper {
   fetchErrorConfig(apiVersion, dynamicErrorConfig) {
     let paramErrorConfig;
 
-    if (apiVersion === apiVersions.v1) {
-      paramErrorConfig = dynamicErrorConfig
-        ? Object.assign(dynamicErrorConfig, v1ParamErrorConfig)
-        : v1ParamErrorConfig;
-    } else if (apiVersion === apiVersions.web) {
+    if (apiVersion === apiVersions.web) {
       paramErrorConfig = dynamicErrorConfig
         ? Object.assign(dynamicErrorConfig, webParamErrorConfig)
         : webParamErrorConfig;
