@@ -127,12 +127,26 @@ class WhispersModel extends ModelBase {
   async insertRecord(params) {
     const oThis = this;
 
-    // Perform validations.
-    // if (!has.call(params, 'url') || !has.call(params, 'ipfs_object_id')) {
+    // // Perform validations.
+    // if (!has.call(params, 'user_id')
+    // || !has.call(params, 'chain_id')
+    // || !has.call(params, 'image_id')
+    // || !has.call(params, 'platform')
+    // || !has.call(params, 'platform_id')
+    // || !has.call(params, 'ipfs_object_id')
+    // || !has.call(params, 'status')
+    // ) {
     //   throw new Error('Mandatory parameters are missing.');
     // }
 
-    // if (typeof params.url !== 'string' || typeof params.ipfs_object_id !== 'number') {
+    // if (typeof params.user_id != 'number'
+    // || typeof params.chain_id != 'number'
+    // || typeof params.image_id != 'number'
+    // || typeof params.platform != 'string'
+    // || typeof params.platform_id != 'number'
+    // || typeof params.ipfs_object_id != 'number'
+    // || typeof params.status != 'string'
+    // ) {
     //   throw TypeError('Insertion parameters are of wrong params types.');
     // }
 
