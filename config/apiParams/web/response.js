@@ -5,10 +5,11 @@ const rootPrefix = '../../..',
 
 const webResponse = {
   [apiNameConstants.suggestions]: {
-    resultType: responseEntityKey.s3,
-    resultTypeLookup: responseEntityKey.s3,
+    resultType: responseEntityKey.suggestionsIds,
+    resultTypeLookup: responseEntityKey.suggestions,
     entityKindToResponseKeyMap: {
-      [entityTypeConstants.s3]: responseEntityKey.s3
+      [entityTypeConstants.suggestionsIds]: responseEntityKey.suggestionsIds,
+      [entityTypeConstants.suggestions]: responseEntityKey.suggestions
     }
   },
 
