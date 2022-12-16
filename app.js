@@ -204,6 +204,12 @@ app.use(appendRequestDebugInfo, startRequestLogLine);
 // Set response headers.
 app.use(setResponseHeader);
 
+// Health checker.
+app.get('/api/health-check', async function(req, res) {
+  console.log('** Health check success.');
+  res.send(new Date());
+});
+
 /**
  * NOTE: API routes where first sanitize and then assign params.
  */
