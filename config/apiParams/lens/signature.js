@@ -46,6 +46,10 @@ const lensSignature = {
       }
     ],
     optional: []
+  },
+  [apiNameConstants.fetchChains]: {
+    mandatory: [],
+    optional: []
   }
 };
 module.exports = lensSignature;
