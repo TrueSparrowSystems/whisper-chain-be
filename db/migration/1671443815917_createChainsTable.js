@@ -18,8 +18,8 @@ const upQueries = [
     '  `created_at` int(11) NOT NULL,\n' +
     '  `updated_at` int(11) NOT NULL,\n' +
     '  PRIMARY KEY (`id`),\n' +
-    '  UNIQUE KEY `uk_1` (platform, start_ts) \n' +
     '  KEY `index_1` (platform_id, platform), \n' +
+    '  UNIQUE KEY `uk_1` (platform, start_ts) \n' +
     ') ENGINE=InnoDB AUTO_INCREMENT=2345 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
 ];
 
