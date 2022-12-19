@@ -60,4 +60,20 @@ router.post('/ipfs-objects', sanitizer.sanitizeDynamicUrlParams, function(req, r
   );
 });
 
+/* Post create IPFS object */
+router.get('/chains', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  const apiName = apiNameConstants.fetchChains;
+  req.internalDecodedParams.apiName = apiName;
+
+  const dataFormatterFunc = async function(serviceResponse) {
+    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
+    serviceResponse.data = wrapperFormatterRsp.data;
+  };
+
+  Promise.resolve(
+    routeHelper.perform(req, res, next, '/app/services/lens/FetchChains', 'r_a_l_3', null, dataFormatterFunc)
+  );
+});
+
 module.exports = router;
