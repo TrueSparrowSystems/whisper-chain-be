@@ -48,7 +48,13 @@ const lensSignature = {
     optional: []
   },
   [apiNameConstants.fetchChains]: {
-    mandatory: [],
+    mandatory: [
+      {
+        parameter: 'page',
+        validatorMethods: [{ validateNonZeroInteger: null }],
+        type: 'number'
+      }
+    ],
     optional: []
   }
 };
