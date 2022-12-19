@@ -135,6 +135,38 @@ class ChainModel extends ModelBase {
   }
 
   /**
+   * This method gets the chains data with pagination.
+   *
+   * @param {number} page
+   * @param {number} limit
+   * @param {number} platform
+   *
+   * @returns {Promise<void>}
+   */
+  async getChainsDataWithPagination(page, limit, platform) {
+    const oThis = this;
+    const offset = (page - 1) * limit;
+    const response = {};
+
+    const dbRows = await oThis
+      .select('*')
+      .where({
+        platform: platform
+      })
+      .order_by('created_at DESC')
+      .limit(limit)
+      .offset(offset)
+      .fire();
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response[formatDbRow.id] = formatDbRow;
+    }
+
+    return response;
+  }
+
+  /**
    * List of formatted column names that can be exposed by service.
    *
    * @returns {array}

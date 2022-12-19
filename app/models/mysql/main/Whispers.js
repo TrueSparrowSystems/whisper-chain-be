@@ -86,6 +86,45 @@ class WhispersModel extends ModelBase {
   }
 
   /**
+   * This method gets the whispers for the chain_id passed.
+   *
+   * @param {number} chainId
+   *
+   * @returns {Promise<any>}
+   */
+  async getWhisperByChainId(chainId) {
+    const oThis = this;
+
+    const response = await oThis
+      .select('*')
+      .where({ chain_id: chainId })
+      .order_by('created_at DESC')
+      .fire();
+
+    return response;
+  }
+
+  /**
+   * This method gets the latest whispers with a limit for the chain_id passed.
+   *
+   * @param {number} chainId
+   * @param {number} limit
+   *
+   * @returns {Promise<any>}
+   */
+  async getWhisperByChainIdWithLimit(chainId, limit) {
+    const oThis = this;
+    const response = await oThis
+      .select('*')
+      .where({ chain_id: chainId })
+      .order_by('created_at DESC')
+      .limit(limit)
+      .fire();
+
+    return response;
+  }
+
+  /**
    * This method gets the response for the array of ids passed.
    *
    * @param {array} ids
