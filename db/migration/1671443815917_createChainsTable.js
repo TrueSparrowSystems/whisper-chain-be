@@ -8,6 +8,7 @@ const dbKind = dbKindConstants.sqlDbKind;
 const upQueries = [
   'CREATE TABLE `chains` (\n' +
     '  `id` bigint(20) NOT NULL AUTO_INCREMENT,\n' +
+    '  `user_id` bigint(20) NOT NULL,\n' +
     '  `platform` tinyint(4) NOT NULL,\n' +
     '  `platform_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,\n' +
     '  `platform_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,\n' +

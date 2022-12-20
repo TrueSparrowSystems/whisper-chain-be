@@ -90,13 +90,13 @@ Table images {
 
 Table chains {
   id bigint
+  user_id bigint  [ref: > users.id]
   platform tinyint [
     note: '
     1 = LENS,
     2 = TWITTER
     ']
   platform_id varchar
-  user_id bigint  [ref: > users.id]
   platform_url varchar
   start_ts timestamp
   image_id bigint [ref: - images.id]

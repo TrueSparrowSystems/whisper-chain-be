@@ -14,6 +14,7 @@ const upQueries = [
     '  `platform_username` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,\n' +
     '  `platform_profile_image_id` bigint(20) NOT NULL,\n' +
     '  `cookie_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,\n' +
+    '  `kind` tinyint(4) NOT NULL,\n' +
     '  `status` tinyint(4) NOT NULL,\n' +
     '  `created_at` int(11) NOT NULL,\n' +
     '  `updated_at` int(11) NOT NULL,\n' +
