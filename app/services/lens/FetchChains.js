@@ -5,6 +5,9 @@ const rootPrefix = '../../..',
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
   UserModel = require(rootPrefix + '/app/models/mysql/main/User'),
   ImageModel = require(rootPrefix + '/app/models/mysql/main/Images'),
+  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
+  platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
+  chainConstants = require(rootPrefix + '/lib/globalConstant/chains'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
 
 /**
@@ -18,6 +21,8 @@ class FetchChains extends ServiceBase {
    *
    * @param {object} params
    * @param {number} params.page
+   * @param {number} params.limit
+   * @param {string} params.platform
    *
    * @constructor
    */
@@ -30,7 +35,7 @@ class FetchChains extends ServiceBase {
     oThis.limit = params.limit;
     oThis.platform = params.platform;
 
-    oThis.chainIds = null;
+    oThis.chainIds = [];
     oThis.chainsMap = {};
 
     oThis.whispersMap = {};
@@ -40,8 +45,6 @@ class FetchChains extends ServiceBase {
 
     oThis.imageIds = [];
     oThis.imagesMap = {};
-
-    oThis.chainIdToWhisperIds = {};
   }
 
   /**
@@ -68,15 +71,30 @@ class FetchChains extends ServiceBase {
     const oThis = this;
     try {
       console.log('* Fetching chains data from DB');
-      const chainsMap = await new ChainsModel().getActiveChainsDataWithPagination(
+      const chainsArray = await new ChainsModel().getActiveChainsDataWithPagination(
         oThis.page,
         oThis.limit,
         oThis.platform
       );
-      oThis.chainsMap = chainsMap;
-      oThis.chainIds = Object.keys(oThis.chainsMap);
 
-      chainsMap.forEach((chain) => {
+      console.log(' Chains Data: ', chainsArray);
+
+      chainsArray.forEach((chain) => {
+        const chainObject = {
+          id: chain.id,
+          uts: chain.updatedAt,
+          ipfsObjectId: chain.ipfsObjectId,
+          recentWhisperIds: [],
+          startTs: chain.createdAt,
+          imageId: chain.imageId,
+          userId: chain.userId,
+          platform: platformConstants.platforms[chain.platform],
+          platformChainId: chain.platformId,
+          platformChainUrl: chain.platformUrl,
+          status: chainConstants.statuses[chain.status]
+        };
+        oThis.chainsMap[chain.id] = chainObject;
+        oThis.chainIds.push(chain.id);
         oThis.userIds.push(chain.userId);
         oThis.imageIds.push(chain.imageId);
       });
@@ -98,24 +116,42 @@ class FetchChains extends ServiceBase {
     const oThis = this;
     try {
       console.log('* Fetching whispers data from DB');
-      oThis.chainIds.forEach(async (chainId) => {
-        const whispersArray = await new WhispersModel().getWhisperByChainIdWithLimit(chainId, 3);
-        const whisperIds = [];
-        whispersArray.forEach((whisper) => {
-          whisperIds.push(whisper.id);
-          oThis.whispersMap[whisper.id] = whisper;
-          oThis.userIds.push(whisper.userId);
-          oThis.imageIds.push(whisper.imageId);
+      if (oThis.chainIds.length > 0) {
+        oThis.chainIds.forEach(async (chainId) => {
+          const whispersArray = await new WhispersModel().getWhisperByChainIdWithLimit(chainId, 3);
+
+          console.log('* * *', whispersArray);
+          const whisperIds = [];
+          whispersArray.forEach((whisper) => {
+            const whisperObject = {
+              id: whisper.id,
+              imageId: whisper.imageId,
+              userId: whisper.userId,
+              ipfsObjectId: whisper.ipfsObjectId,
+              uts: whisper.updatedAt,
+              platformChainId: whisper.platformId,
+              platformChainUrl: whisper.platformUrl,
+              chainId: chainId,
+              platform: platformConstants.platforms[whisper.platform],
+              status: whispersConstants.statuses[whisper.status]
+            };
+
+            whisperIds.push(whisper.id);
+            oThis.whispersMap[whisper.id] = whisperObject;
+            oThis.userIds.push(whisper.userId);
+            oThis.imageIds.push(whisper.imageId);
+          });
+
+          oThis.chainsMap[chainId].recentWhisperIds = whisperIds;
         });
-        oThis.chainIdToWhisperIds[chainId] = whisperIds;
-      });
+      }
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
-          internal_error_identifier: 'a_s_l_fc_1',
+          internal_error_identifier: 'a_s_l_fc_2',
           api_error_identifier: 'something_went_wrong',
           debug_options: {
-            s3Url: oThis.page,
+            chainIds: oThis.chainIds,
             error: error
           }
         })
@@ -131,14 +167,26 @@ class FetchChains extends ServiceBase {
   async createImagesMap() {
     const oThis = this;
     try {
-      oThis.imagesMap = await new ImageModel().getByIds(oThis.imageIds);
+      if (oThis.imageIds.length > 0) {
+        const imagesMap = await new ImageModel().getByIds(oThis.imageIds);
+        console.log(' before  loop', imagesMap, oThis.imageIds);
+        for (let index = 0; index < oThis.imageIds.length; index++) {
+          const imageObject = {
+            id: imagesMap[oThis.imageIds[index]].id,
+            url: imagesMap[oThis.imageIds[index]].url,
+            uts: imagesMap[oThis.imageIds[index]].updatedAt
+          };
+          oThis.imagesMap[oThis.imageIds[index]] = imageObject;
+        }
+        console.log(' After for loop', oThis.imagesMap, oThis.imageIds);
+      }
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
-          internal_error_identifier: 'a_s_l_gwl_cim_1',
+          internal_error_identifier: 'a_s_l_fc_cim_1',
           api_error_identifier: 'something_went_wrong',
           debug_options: {
-            s3Url: oThis.s3Url,
+            imageIds: oThis.imageIds,
             error: error
           }
         })
@@ -154,14 +202,20 @@ class FetchChains extends ServiceBase {
   async createUserMap() {
     const oThis = this;
     try {
-      oThis.userMap = await new UserModel().getByIds(oThis.userIds);
+      if (oThis.userIds.length > 0) {
+        oThis.userMap = await new UserModel().getByIds(oThis.userIds);
+
+        for (let index = 0; index < oThis.userIds.length; index++) {
+          oThis.userMap[oThis.userIds[index]].uts = oThis.userMap[oThis.userIds[index]].updatedAt;
+        }
+      }
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
-          internal_error_identifier: 'a_s_l_gwl_cum_1',
+          internal_error_identifier: 'a_s_l_fc_cum_1',
           api_error_identifier: 'something_went_wrong',
           debug_options: {
-            s3Url: oThis.s3Url,
+            userIds: oThis.userIds,
             error: error
           }
         })
@@ -177,14 +231,13 @@ class FetchChains extends ServiceBase {
    */
   _prepareResponse() {
     const oThis = this;
-
+    console.log('preparing response ----------------------------------------->', oThis.whispersMap, oThis.chainsMap);
     return responseHelper.successWithData({
       [entityTypeConstants.chainIds]: oThis.chainIds,
-      [entityTypeConstants.chains]: oThis.chainMap,
+      [entityTypeConstants.chains]: oThis.chainsMap,
       [entityTypeConstants.whispers]: oThis.whispersMap,
       [entityTypeConstants.images]: oThis.imagesMap,
-      [entityTypeConstants.users]: oThis.userMap,
-      [entityTypeConstants.chainIdToWhisperIds]: oThis.chainIdToWhisperIds
+      [entityTypeConstants.users]: oThis.userMap
     });
   }
 }

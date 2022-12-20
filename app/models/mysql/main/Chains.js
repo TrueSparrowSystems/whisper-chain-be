@@ -159,7 +159,7 @@ class ChainModel extends ModelBase {
   async getActiveChainsDataWithPagination(page, limit, platform) {
     const oThis = this;
     const offset = (page - 1) * limit;
-    const response = {};
+    const response = [];
     const dbRows = await oThis
       .select('*')
       .where({
@@ -173,7 +173,7 @@ class ChainModel extends ModelBase {
 
     for (let index = 0; index < dbRows.length; index++) {
       const formatDbRow = oThis.formatDbData(dbRows[index]);
-      response[formatDbRow.id] = formatDbRow;
+      response.push(formatDbRow);
     }
 
     return response;

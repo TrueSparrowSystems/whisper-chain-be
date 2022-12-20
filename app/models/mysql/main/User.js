@@ -76,7 +76,19 @@ class UserModel extends ModelBase {
     const oThis = this;
 
     const response = await oThis
-      .select(['id', 'platform', 'platform_user_id', 'platform_display_name', 'platform_username', 'platform_profile_image_id', 'kind', 'cookie_token', 'status','created_at','updated_at'])
+      .select([
+        'id',
+        'platform',
+        'platform_user_id',
+        'platform_display_name',
+        'platform_username',
+        'platform_profile_image_id',
+        'kind',
+        'cookie_token',
+        'status',
+        'created_at',
+        'updated_at'
+      ])
       .where({ id: id })
       .fire();
 
@@ -138,7 +150,19 @@ class UserModel extends ModelBase {
    * @returns {array}
    */
   safeFormattedColumnNames() {
-    return ['id', 'platform', 'platform_user_id', 'platform_display_name', 'platform_username', 'platform_profile_image_id', 'kind', 'cookie_token', 'status','created_at','updated_at'];
+    return [
+      'id',
+      'platform',
+      'platform_user_id',
+      'platform_display_name',
+      'platform_username',
+      'platform_profile_image_id',
+      'kind',
+      'cookie_token',
+      'status',
+      'created_at',
+      'updated_at'
+    ];
   }
 }
 
