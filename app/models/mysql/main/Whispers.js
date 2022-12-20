@@ -7,8 +7,6 @@ const rootPrefix = '../../../..',
 // Declare variables.
 const dbName = databaseConstants.mainDbName;
 
-const has = Object.prototype.hasOwnProperty; // Cache the lookup once, in module scope.
-
 /**
  * Class for whispers model.
  *
@@ -33,18 +31,18 @@ class WhispersModel extends ModelBase {
   /**
    * Format Db data.
    *
-   * @param {object} params
-   * @param {number} params.id
-   * @param {number} params.user_id
-   * @param {number} params.chain_id
-   * @param {number} params.image_id
-   * @param {number} params.platform
-   * @param {string} params.platform_id
-   * @param {string} params.platform_url
-   * @param {number} params.ipfs_object_id
-   * @param {number} params.status
-   * @param {number} params.created_at
-   * @param {number} params.updated_at
+   * @param {object} dbRow
+   * @param {number} dbRow.id
+   * @param {number} dbRow.user_id
+   * @param {number} dbRow.chain_id
+   * @param {number} dbRow.image_id
+   * @param {number} dbRow.platform
+   * @param {string} dbRow.platform_id
+   * @param {string} dbRow.platform_url
+   * @param {number} dbRow.ipfs_object_id
+   * @param {number} dbRow.status
+   * @param {number} dbRow.created_at
+   * @param {number} dbRow.updated_at
    *
    * @returns {object}
    */
@@ -52,17 +50,17 @@ class WhispersModel extends ModelBase {
     const oThis = this;
 
     const formattedData = {
-      id: params.id,
-      userId: params.user_id,
-      chainId: params.chain_id,
-      imageId: params.image_id,
-      platform: params.platform,
-      platformId: params.platform_id,
-      platformUrl: params.platform_url,
-      ipfsObjectId: params.ipfs_object_id,
-      status: params.status,
-      createdAt: params.created_at,
-      updatedAt: params.updated_at
+      id: dbRow.id,
+      userId: dbRow.user_id,
+      chainId: dbRow.chain_id,
+      imageId: dbRow.image_id,
+      platform: dbRow.platform,
+      platformId: dbRow.platform_id,
+      platformUrl: dbRow.platform_url,
+      ipfsObjectId: dbRow.ipfs_object_id,
+      status: dbRow.status,
+      createdAt: dbRow.created_at,
+      updatedAt: dbRow.updated_at
     };
 
     return oThis.sanitizeFormattedData(formattedData);
@@ -194,6 +192,33 @@ class WhispersModel extends ModelBase {
     params.status = whispersConstants.invertedStatuses[params.status];
 
     return oThis.insert(params).fire();
+  }
+
+  /**
+   * Fetch whisper info by chain id.
+   *
+   * @param {number} chainId
+   *
+   * @returns {Promise<{}>}
+   */
+  async fetchByChainId(chainId) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('id, user_id, image_id, platform, platform_id, platform_url, ipfs_object_id, status, updated_at')
+      .where({
+        chain_id: chainId
+      })
+      .fire();
+
+    const response = [];
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response.push(formatDbRow);
+    }
+
+    return response;
   }
 }
 

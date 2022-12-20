@@ -58,6 +58,30 @@ const lensSignature = {
         parameter: 'platform',
         validatorMethods: [{ validateString: null }],
         kind: 'internal'
+      },
+      {
+        parameter: 'limit',
+        validatorMethods: [{ validateNonZeroInteger: null }],
+        type: 'number'
+      }
+    ],
+    optional: []
+  },
+  [apiNameConstants.whispers]: {
+    mandatory: [
+      {
+        parameter: 'chain_id',
+        validatorMethods: [{ validateNonZeroInteger: null }],
+        type: 'number'
+      }, {
+        parameter: 'page',
+        validatorMethods: [{ validateNonZeroInteger: null }],
+        type: 'number'
+      },
+      {
+        parameter: 'limit',
+        validatorMethods: [{ validateNonZeroInteger: null }],
+        type: 'number'
       }
     ],
     optional: []

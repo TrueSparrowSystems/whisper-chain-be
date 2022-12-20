@@ -12,6 +12,17 @@ const lensResponse = {
       [entityTypeConstants.ipfsObjectIds]: responseEntityKey.ipfsObjectIds,
       [entityTypeConstants.ipfsObjects]: responseEntityKey.ipfsObjects
     }
+  },
+  [apiNameConstants.whispers]: {
+    resultType: responseEntityKey.whisperIds,
+    resultTypeLookup: responseEntityKey.whipsers,
+    entityKindToResponseKeyMap: {
+      [entityTypeConstants.whisperIds]: responseEntityKey.whisperIds,
+      [entityTypeConstants.whispers]: responseEntityKey.whipsers,
+      [entityTypeConstants.chains]: responseEntityKey.chains,
+      [entityTypeConstants.images]: responseEntityKey.images,
+      [entityTypeConstants.users]: responseEntityKey.users
+    }
   }
 };
 

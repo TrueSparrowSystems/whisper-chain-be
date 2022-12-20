@@ -78,4 +78,22 @@ router.get('/chains', sanitizer.sanitizeDynamicUrlParams, function(req, res, nex
   );
 });
 
+/* Get list of whisper of a chain. */
+router.get('/:chain_id', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  const apiName = apiNameConstants.whispers;
+  req.internalDecodedParams.apiName = apiName;
+  req.decodedParams.chain_id = req.params.chain_id;
+
+  const dataFormatterFunc = async function(serviceResponse) {
+    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
+    serviceResponse.data = wrapperFormatterRsp.data;
+  };
+
+  Promise.resolve(
+    routeHelper.perform(req, res, next, 'app/services/lens/GetWhisperList', 'r_a_l_4', null, dataFormatterFunc)
+  );
+});
+
+
 module.exports = router;

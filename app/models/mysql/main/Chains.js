@@ -77,7 +77,7 @@ class ChainModel extends ModelBase {
   async getById(id) {
     const oThis = this;
 
-    const response = await oThis
+    const dbRows = await oThis
       .select([
         'id',
         'user_id',
@@ -94,7 +94,16 @@ class ChainModel extends ModelBase {
       .where({ id: id })
       .fire();
 
-    return response;
+      const response = [];
+
+      for (let index = 0; index < dbRows.length; index++) {
+        const formatDbRow = oThis.formatDbData(dbRows[index]);
+        response.push(formatDbRow);
+      }
+
+      console.log(response);
+
+      return response;
   }
 
   /**
