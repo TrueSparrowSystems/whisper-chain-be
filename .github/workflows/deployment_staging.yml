@@ -41,6 +41,7 @@ jobs:
             git pull --rebase
             npm install
             source .env
+            node db/seed.js
             node db/migrate.js
             pm2 restart whisper --update-env
             
