@@ -70,14 +70,11 @@ class FetchChains extends ServiceBase {
   async fetchChainsData() {
     const oThis = this;
     try {
-      console.log('* Fetching chains data from DB');
       const chainsArray = await new ChainsModel().getActiveChainsDataWithPagination(
         oThis.page,
         oThis.limit,
         oThis.platform
       );
-
-      console.log(' Chains Data: ', chainsArray);
 
       chainsArray.forEach((chain) => {
         const chainObject = {
@@ -115,12 +112,10 @@ class FetchChains extends ServiceBase {
   async fetchLastThreeWhispers() {
     const oThis = this;
     try {
-      console.log('* Fetching whispers data from DB');
       if (oThis.chainIds.length > 0) {
-        oThis.chainIds.forEach(async (chainId) => {
+        for (const index in oThis.chainIds) {
+          const chainId = oThis.chainIds[index];
           const whispersArray = await new WhispersModel().getWhisperByChainIdWithLimit(chainId, 3);
-
-          console.log('* * *', whispersArray);
           const whisperIds = [];
           whispersArray.forEach((whisper) => {
             const whisperObject = {
@@ -143,7 +138,7 @@ class FetchChains extends ServiceBase {
           });
 
           oThis.chainsMap[chainId].recentWhisperIds = whisperIds;
-        });
+        }
       }
     } catch (error) {
       return Promise.reject(
@@ -169,7 +164,6 @@ class FetchChains extends ServiceBase {
     try {
       if (oThis.imageIds.length > 0) {
         const imagesMap = await new ImageModel().getByIds(oThis.imageIds);
-        console.log(' before  loop', imagesMap, oThis.imageIds);
         for (let index = 0; index < oThis.imageIds.length; index++) {
           const imageObject = {
             id: imagesMap[oThis.imageIds[index]].id,
@@ -178,7 +172,6 @@ class FetchChains extends ServiceBase {
           };
           oThis.imagesMap[oThis.imageIds[index]] = imageObject;
         }
-        console.log(' After for loop', oThis.imagesMap, oThis.imageIds);
       }
     } catch (error) {
       return Promise.reject(
@@ -231,7 +224,6 @@ class FetchChains extends ServiceBase {
    */
   _prepareResponse() {
     const oThis = this;
-    console.log('preparing response ----------------------------------------->', oThis.whispersMap, oThis.chainsMap);
     return responseHelper.successWithData({
       [entityTypeConstants.chainIds]: oThis.chainIds,
       [entityTypeConstants.chains]: oThis.chainsMap,
