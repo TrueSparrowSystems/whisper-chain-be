@@ -23,6 +23,17 @@ const lensResponse = {
       [entityTypeConstants.images]: responseEntityKey.images,
       [entityTypeConstants.users]: responseEntityKey.users
     }
+  },
+  [apiNameConstants.fetchChains]: {
+    resultType: responseEntityKey.chainIds,
+    resultTypeLookup: responseEntityKey.chains,
+    entityKindToResponseKeyMap: {
+      [entityTypeConstants.chainIds]: responseEntityKey.chainIds,
+      [entityTypeConstants.whispers]: responseEntityKey.whipsers,
+      [entityTypeConstants.chains]: responseEntityKey.chains,
+      [entityTypeConstants.images]: responseEntityKey.images,
+      [entityTypeConstants.users]: responseEntityKey.users
+    }
   }
 };
 
