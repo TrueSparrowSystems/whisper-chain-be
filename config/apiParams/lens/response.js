@@ -15,10 +15,10 @@ const lensResponse = {
   },
   [apiNameConstants.whispers]: {
     resultType: responseEntityKey.whisperIds,
-    resultTypeLookup: responseEntityKey.whipsers,
+    resultTypeLookup: responseEntityKey.whispers,
     entityKindToResponseKeyMap: {
       [entityTypeConstants.whisperIds]: responseEntityKey.whisperIds,
-      [entityTypeConstants.whispers]: responseEntityKey.whipsers,
+      [entityTypeConstants.whispers]: responseEntityKey.whispers,
       [entityTypeConstants.chains]: responseEntityKey.chains,
       [entityTypeConstants.images]: responseEntityKey.images,
       [entityTypeConstants.users]: responseEntityKey.users
@@ -29,7 +29,7 @@ const lensResponse = {
     resultTypeLookup: responseEntityKey.chains,
     entityKindToResponseKeyMap: {
       [entityTypeConstants.chainIds]: responseEntityKey.chainIds,
-      [entityTypeConstants.whispers]: responseEntityKey.whipsers,
+      [entityTypeConstants.whispers]: responseEntityKey.whispers,
       [entityTypeConstants.chains]: responseEntityKey.chains,
       [entityTypeConstants.images]: responseEntityKey.images,
       [entityTypeConstants.users]: responseEntityKey.users

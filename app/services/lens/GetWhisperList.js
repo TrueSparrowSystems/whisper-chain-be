@@ -11,7 +11,7 @@ const rootPrefix = '../../..',
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
 
 /**
- * Class to get whipser list of a chain.
+ * Class to get whispers list of a chain.
  *
  * @class GetWhisperOfChain
  */
@@ -135,7 +135,7 @@ class GetWhisperOfChain extends ServiceBase {
           internal_error_identifier: 'a_s_l_gwl_ccm_1',
           api_error_identifier: 'something_went_wrong',
           debug_options: {
-            s3Url: oThis.s3Url,
+            chainId: oThis.chainId,
             error: error
           }
         })
