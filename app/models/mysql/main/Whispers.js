@@ -1,7 +1,8 @@
 const rootPrefix = '../../../..',
   ModelBase = require(rootPrefix + '/app/models/mysql/Base'),
   databaseConstants = require(rootPrefix + '/lib/globalConstant/database'),
-  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers');
+  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
+  platformConstants = require(rootPrefix + '/lib/globalConstant/platform');
 
 // Declare variables.
 const dbName = databaseConstants.mainDbName;
@@ -189,7 +190,7 @@ class WhispersModel extends ModelBase {
     //   throw TypeError('Insertion parameters are of wrong params types.');
     // }
 
-    params.platform = whispersConstants.invertedPlatforms[params.platform];
+    params.platform = platformConstants.invertedPlatforms[params.platform];
     params.status = whispersConstants.invertedStatuses[params.status];
 
     return oThis.insert(params).fire();

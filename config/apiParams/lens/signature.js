@@ -53,6 +53,11 @@ const lensSignature = {
         parameter: 'page',
         validatorMethods: [{ validateNonZeroInteger: null }],
         type: 'number'
+      },
+      {
+        parameter: 'platform',
+        validatorMethods: [{ validateString: null }],
+        kind: 'internal'
       }
     ],
     optional: []

@@ -9,7 +9,8 @@ const rootPrefix = '../../..',
   routeHelper = require(rootPrefix + '/routes/helper'),
   apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName'),
   lensResponse = require(rootPrefix + '/config/apiParams/lens/response'),
-  cookieHelper = require(rootPrefix + '/lib/cookieHelper');
+  cookieHelper = require(rootPrefix + '/lib/cookieHelper'),
+  whisperConstants = require(rootPrefix + '/lib/globalConstant/whispers');
 
 const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.lens);
 
@@ -20,13 +21,14 @@ const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.lens)
  * @param {object} res
  * @param {function} next
  */
-const setLensApiSourceInternalParam = function(req, res, next) {
+const setLensApiInternalParam = function(req, res, next) {
   req.internalDecodedParams.api_source = apiSourceConstants.lens;
+  req.internalDecodedParams.platform = whisperConstants.lensPlatform;
   next();
 };
 
 // Set internal params
-router.use(setLensApiSourceInternalParam);
+router.use(setLensApiInternalParam);
 
 router.use(cookieHelper.validateUserLoginCookieIfPresent);
 
@@ -60,7 +62,7 @@ router.post('/ipfs-objects', sanitizer.sanitizeDynamicUrlParams, function(req, r
   );
 });
 
-/* Post create IPFS object */
+/* Get chains data */
 router.get('/chains', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
   const apiName = apiNameConstants.fetchChains;
   req.internalDecodedParams.apiName = apiName;
