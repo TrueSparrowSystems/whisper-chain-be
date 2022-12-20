@@ -3,8 +3,8 @@
  */
 const rootPrefix = '../../../..',
   ModelBase = require(rootPrefix + '/app/models/mysql/Base'),
-  databaseConstants = require(rootPrefix + '/lib/globalConstant/database');
-
+  databaseConstants = require(rootPrefix + '/lib/globalConstant/database'),
+  platformConstants = require(rootPrefix + '/lib/globalConstant/platform');
 // Declare variables names.
 const dbName = databaseConstants.mainDbName;
 
@@ -33,7 +33,8 @@ class ChainModel extends ModelBase {
    * Format db data.
    *
    * @param {object} dbRow
-   * @param {object} dbRow.id
+   * @param {number} dbRow.id
+   * @param {number} dbRow.user_id
    * @param {string} dbRow.platform
    * @param {string} dbRow.platform_id
    * @param {string} dbRow.platform_url
@@ -51,6 +52,7 @@ class ChainModel extends ModelBase {
 
     const formattedData = {
       id: dbRow.id,
+      userId: dbRow.user_id,
       platform: dbRow.platform,
       platformId: dbRow.platform_id,
       platformUrl: dbRow.platform_url,
@@ -78,6 +80,7 @@ class ChainModel extends ModelBase {
     const response = await oThis
       .select([
         'id',
+        'user_id',
         'platform',
         'platform_id',
         'platform_url',
@@ -139,7 +142,7 @@ class ChainModel extends ModelBase {
    *
    * @param {number} page
    * @param {number} limit
-   * @param {number} platform
+   * @param {string} platform
    *
    * @returns {Promise<void>}
    */
@@ -147,11 +150,11 @@ class ChainModel extends ModelBase {
     const oThis = this;
     const offset = (page - 1) * limit;
     const response = {};
-
     const dbRows = await oThis
       .select('*')
       .where({
-        platform: platform
+        platform: platformConstants.invertedPlatforms[platform],
+        status: 
       })
       .order_by('created_at DESC')
       .limit(limit)
@@ -174,6 +177,7 @@ class ChainModel extends ModelBase {
   safeFormattedColumnNames() {
     return [
       'id',
+      'user_id',
       'platform',
       'platform_id',
       'platform_url',
