@@ -113,12 +113,19 @@ class WhispersModel extends ModelBase {
    */
   async getWhisperByChainIdWithLimit(chainId, limit) {
     const oThis = this;
-    const response = await oThis
+    const response = [];
+    const dbRows = await oThis
       .select('*')
       .where({ chain_id: chainId })
+      .where(['status NOT IN (?) ', [whispersConstants.inactiveStatus]])
       .order_by('created_at DESC')
       .limit(limit)
       .fire();
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response.push(formatDbRow);
+    }
 
     return response;
   }

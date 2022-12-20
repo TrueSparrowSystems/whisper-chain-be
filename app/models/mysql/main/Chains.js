@@ -4,7 +4,8 @@
 const rootPrefix = '../../../..',
   ModelBase = require(rootPrefix + '/app/models/mysql/Base'),
   databaseConstants = require(rootPrefix + '/lib/globalConstant/database'),
-  platformConstants = require(rootPrefix + '/lib/globalConstant/platform');
+  platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
+  chainConstants = require(rootPrefix + '/lib/globalConstant/chains');
 // Declare variables names.
 const dbName = databaseConstants.mainDbName;
 
@@ -94,16 +95,16 @@ class ChainModel extends ModelBase {
       .where({ id: id })
       .fire();
 
-      const response = [];
+    const response = [];
 
-      for (let index = 0; index < dbRows.length; index++) {
-        const formatDbRow = oThis.formatDbData(dbRows[index]);
-        response.push(formatDbRow);
-      }
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response.push(formatDbRow);
+    }
 
-      console.log(response);
+    console.log(response);
 
-      return response;
+    return response;
   }
 
   /**
@@ -155,7 +156,7 @@ class ChainModel extends ModelBase {
    *
    * @returns {Promise<void>}
    */
-  async getChainsDataWithPagination(page, limit, platform) {
+  async getActiveChainsDataWithPagination(page, limit, platform) {
     const oThis = this;
     const offset = (page - 1) * limit;
     const response = {};
@@ -163,7 +164,7 @@ class ChainModel extends ModelBase {
       .select('*')
       .where({
         platform: platformConstants.invertedPlatforms[platform],
-        status: 
+        status: chainConstants.invertedStatuses[chainConstants.activeStatus]
       })
       .order_by('created_at DESC')
       .limit(limit)
