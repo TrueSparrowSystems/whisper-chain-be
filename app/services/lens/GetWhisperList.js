@@ -5,6 +5,9 @@ const rootPrefix = '../../..',
   ChainModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
   ImageModel = require(rootPrefix + '/app/models/mysql/main/Images'),
   UserModel = require(rootPrefix + '/app/models/mysql/main/User'),
+  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
+  chainConstants = require(rootPrefix + '/lib/globalConstant/chains'),
+  platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
 
 /**
@@ -70,12 +73,24 @@ class GetWhisperOfChain extends ServiceBase {
 
       for (let index = 0; index < whispersModelResponse.length; index++) {
         const whisper = whispersModelResponse[index];
-        oThis.whispersMap[whisper.id] = whisper;
+
+        const whisperObject = {
+          id: whisper.id,
+          imageId: whisper.imageId,
+          userId: whisper.userId,
+          ipfsObjectId: whisper.ipfsObjectId,
+          uts: whisper.updatedAt,
+          platformChainId: whisper.platformId,
+          platformChainUrl: whisper.platformUrl,
+          chainId: oThis.chainId,
+          platform: platformConstants.platforms[whisper.platform],
+          status: whispersConstants.statuses[whisper.status]
+        };
+        oThis.whispersMap[whisper.id] = whisperObject;
         oThis.whisperIds.push(whisper.id);
         oThis.imageIds.push(whisper.imageId);
         oThis.userIds.push(whisper.userId);
       }
-
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
@@ -100,7 +115,20 @@ class GetWhisperOfChain extends ServiceBase {
     try {
       const chainModelResponse = await new ChainModel().getById(oThis.chainId);
 
-      oThis.chainMap[oThis.chainId] = chainModelResponse[0];
+      const chainObject = {
+        id: chainModelResponse[0].id,
+        imageId: chainModelResponse[0].imageId,
+        recentWhisperIds: [],
+        userId: chainModelResponse[0].userId,
+        ipfsObjectId: chainModelResponse[0].ipfsObjectId,
+        uts: chainModelResponse[0].updatedAt,
+        startTs: chainModelResponse[0].createdAt,
+        platformChainId: chainModelResponse[0].platformId,
+        platformChainUrl: chainModelResponse[0].platformUrl,
+        platform: platformConstants.platforms[chainModelResponse[0].platform],
+        status: chainConstants.statuses[chainModelResponse[0].status]
+      };
+      oThis.chainMap[oThis.chainId] = chainObject;
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
@@ -123,7 +151,16 @@ class GetWhisperOfChain extends ServiceBase {
   async createImagesMap() {
     const oThis = this;
     try {
-      oThis.imagesMap = await new ImageModel().getByIds(oThis.imageIds);
+      const imagesModelResponse = await new ImageModel().getByIds(oThis.imageIds);
+
+      for (let index = 0; index < oThis.imageIds.length; index++) {
+        const imageObject = {
+          id: imagesModelResponse[oThis.imageIds[index]].id,
+          url: imagesModelResponse[oThis.imageIds[index]].url,
+          uts: imagesModelResponse[oThis.imageIds[index]].updatedAt
+        };
+        oThis.imagesMap[oThis.imageIds[index]] = imageObject;
+      }
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
@@ -147,6 +184,10 @@ class GetWhisperOfChain extends ServiceBase {
     const oThis = this;
     try {
       oThis.userMap = await new UserModel().getByIds(oThis.userIds);
+
+      for (let index = 0; index < oThis.userIds.length; index++) {
+        oThis.userMap[oThis.userIds[index]].uts = oThis.userMap[oThis.userIds[index]].updatedAt;
+      }
     } catch (error) {
       return Promise.reject(
         responseHelper.error({

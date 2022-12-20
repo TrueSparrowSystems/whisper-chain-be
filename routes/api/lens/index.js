@@ -91,9 +91,8 @@ router.get('/:chain_id', sanitizer.sanitizeDynamicUrlParams, function(req, res, 
   };
 
   Promise.resolve(
-    routeHelper.perform(req, res, next, 'app/services/lens/GetWhisperList', 'r_a_l_4', null, dataFormatterFunc)
+    routeHelper.perform(req, res, next, '/app/services/lens/GetWhisperList', 'r_a_l_4', null, dataFormatterFunc)
   );
 });
-
 
 module.exports = router;
