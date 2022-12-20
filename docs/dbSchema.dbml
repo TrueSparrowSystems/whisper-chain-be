@@ -36,6 +36,11 @@ Table users {
   platform_username varchar
   platform_profile_image_id bigint [ref: - images.id]
   cookie_token varchar
+  kind tinyint [
+    note: '
+    1 = INTERNAL,
+    2 = EXTERNAL,
+    ']
   status tinyint [
     note: '
     1 = ACTIVE,
@@ -91,6 +96,7 @@ Table chains {
     2 = TWITTER
     ']
   platform_id varchar
+  user_id bigint  [ref: > users.id]
   platform_url varchar
   start_ts timestamp
   image_id bigint [ref: - images.id]
