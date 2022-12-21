@@ -22,10 +22,10 @@ Browser->>Server: Authenticate
 note over Server: Verify signature
 note over Server: If success, create cookie
 
-Server->>DB: Check if user alredy exists
+Server->>DB: Check if user already exists
 DB->>Server: Response
 
-note over Server: If user alredy exist
+note over Server: If user already exist
 Server->>DB: Update cookie in users
 DB->>Server: Response
 Server->>Browser: Set cookie
