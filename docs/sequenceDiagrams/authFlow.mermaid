@@ -5,6 +5,7 @@ sequenceDiagram
 title Auth Service 
 
 participant Browser
+participant Wallet
 participant Platform as Lens
 participant Server
 participant DB
@@ -12,7 +13,8 @@ participant DB
 Browser->>Platform: Get challenge text
 Platform->>Browser: Response
 
-note over Browser: Create signature
+Browser->>Wallet: Create signature
+Wallet->>Browser: Response
 
 Browser->>Platform: Verify signature
 Platform->>Browser: Response
@@ -20,16 +22,17 @@ Platform->>Browser: Response
 Browser->>Server: Authenticate
 
 note over Server: Verify signature
-note over Server: If success, create cookie
+break
+    note over Server: If verification failed
+end
 
-Server->>DB: Check if user already exists
+
+Server->>DB: Get user details
 DB->>Server: Response
 
-note over Server: If user already exist
-Server->>DB: Update cookie in users
-DB->>Server: Response
-Server->>Browser: Set cookie
-note over Server: Else
+note over Server: Create cookie
+
+note over Server: If new user
 
 Server->>DB: Create entry in images
 DB->>Server: Response
@@ -38,6 +41,7 @@ DB->>Server: Response
 Server->>DB: Create entry in user_eth_addresses
 DB->>Server: Response
 
+note over Server: End of if
 note over Server: Set user in internal decoded params
 
 Server->>Browser: Set cookie
