@@ -1,5 +1,6 @@
 const rootPrefix = '../../../..',
   ModelBase = require(rootPrefix + '/app/models/mysql/Base'),
+  responseHelper = require(rootPrefix + '/lib/formatter/response'),
   databaseConstants = require(rootPrefix + '/lib/globalConstant/database'),
   whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
   platformConstants = require(rootPrefix + '/lib/globalConstant/platform');
@@ -226,6 +227,70 @@ class WhispersModel extends ModelBase {
     }
 
     return response;
+  }
+
+  /**
+   * Fetch whisper info by status.
+   *
+   * @param {string} status
+   *
+   * @returns {Promise<{}>}
+   */
+  async fetchWhispersByStatus(status) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('id, user_id, image_id, platform, platform_id, platform_url, ipfs_object_id, status, updated_at')
+      .where({
+        status: whispersConstants.invertedStatuses[status]
+      })
+      .fire();
+
+    const response = [];
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response.push(formatDbRow);
+    }
+
+    return response;
+  }
+
+  /**
+   * Fetch whisper info by status.
+   *
+   * @param {number} id
+   * @param {string} platformId
+   * @param {string} platformUrl
+   *
+   * @returns {Promise<{}>}
+   */
+  async updateProcessingWhisper(id, platformId, platformUrl) {
+    const oThis = this;
+
+    const updatedResponse = await oThis
+      .update({
+        status: whispersConstants.activeStatus,
+        platformId: platformId,
+        platformUrl: platformUrl
+      })
+      .where({ id: id })
+      .fire();
+
+    if (updatedResponse.affectedRows != 1) {
+      return Promise.reject(
+        responseHelper.error({
+          internal_error_identifier: 'a_m_ms_m_w_upw_1',
+          api_error_identifier: 'something_went_wrong',
+          debug_options: {
+            id: id,
+            platformId: platformId
+          }
+        })
+      );
+    }
+
+    return;
   }
 }
 
