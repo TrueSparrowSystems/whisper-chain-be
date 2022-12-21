@@ -131,7 +131,8 @@ Table whispers {
   status tinyint [
     note: '
     1 = ACTIVE,
-    2 = INACTIVE
+    2 = INACTIVE,
+    3 = PROCESSING
     ']
   cts timestamp
   uts timestamp
