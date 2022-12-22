@@ -1,4 +1,4 @@
-const rootPrefix = '../../../',
+const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   ImagesModel = require(rootPrefix + '/app/models/mysql/main/Images'),
@@ -71,8 +71,6 @@ class CreateWhisper extends ServiceBase {
 
     const insertResponse = await new ImagesModel().insertRecord(insertParams);
 
-    console.log('insertResponse--->', insertResponse);
-
     if (insertResponse.affectedRows !== 1) {
       return Promise.reject(
         responseHelper.error({
@@ -118,8 +116,6 @@ class CreateWhisper extends ServiceBase {
         })
       );
     }
-
-    console.log('insertResponse---->', insertResponse);
   }
 
   /**

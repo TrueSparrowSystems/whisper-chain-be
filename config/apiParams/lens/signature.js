@@ -73,7 +73,8 @@ const lensSignature = {
         parameter: 'chain_id',
         validatorMethods: [{ validateNonZeroInteger: null }],
         type: 'number'
-      }, {
+      },
+      {
         parameter: 'page',
         validatorMethods: [{ validateNonZeroInteger: null }],
         type: 'number'
@@ -82,6 +83,51 @@ const lensSignature = {
         parameter: 'limit',
         validatorMethods: [{ validateNonZeroInteger: null }],
         type: 'number'
+      }
+    ],
+    optional: []
+  },
+  [apiNameConstants.lensConnect]: {
+    mandatory: [
+      {
+        parameter: 'platform',
+        validatorMethods: [{ validateString: null }],
+        kind: 'internal'
+      },
+      {
+        parameter: 'platform_profile_image_url',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'platform_user_id',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'platform_display_name',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'platform_username',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'challenge_message',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'signed_challenge_message',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'wallet_address',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
       }
     ],
     optional: []

@@ -51,8 +51,8 @@ class CoreConstants {
     return process.env.A_COOKIE_TOKEN_SECRET;
   }
 
-  get WEB_COOKIE_SECRET() {
-    return process.env.A_W_COOKIE_SECRET;
+  get API_COOKIE_SECRET() {
+    return process.env.API_COOKIE_SECRET;
   }
 
   get V1_COOKIE_SECRET() {
@@ -147,6 +147,10 @@ class CoreConstants {
 
   get ENCRYPTION_KEY() {
     return process.env.A_ENCRYPTION_KEY;
+  }
+
+  get GLOBAL_ENCRYPTED_ENCRYPTION_SALT() {
+    return process.env.GLOBAL_ENCRYPTED_ENCRYPTION_SALT;
   }
 
   // Pepo-campaigns details.

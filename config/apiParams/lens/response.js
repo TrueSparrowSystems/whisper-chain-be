@@ -34,6 +34,12 @@ const lensResponse = {
       [entityTypeConstants.images]: responseEntityKey.images,
       [entityTypeConstants.users]: responseEntityKey.users
     }
+  },
+  [apiNameConstants.lensConnect]: {
+    entityKindToResponseKeyMap: {
+      [entityTypeConstants.currentUser]: responseEntityKey.currentUser,
+      [entityTypeConstants.users]: responseEntityKey.users
+    }
   }
 };
 

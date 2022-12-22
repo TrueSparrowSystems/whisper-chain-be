@@ -4,6 +4,7 @@ const rootPrefix = '../../../..',
   localCipher = require(rootPrefix + '/lib/localCipher'),
   util = require(rootPrefix + '/lib/util'),
   cookieConstants = require(rootPrefix + '/lib/globalConstant/cookie'),
+  userConstants = require(rootPrefix + '/lib/globalConstant/user'),
   coreConstants = require(rootPrefix + '/config/coreConstants');
 
 // Declare variables names.
@@ -58,9 +59,9 @@ class UserModel extends ModelBase {
       platformDisplayName: dbRow.platform_display_name,
       platformUsername: dbRow.platform_username,
       platformProfileImageId: dbRow.platform_profile_image_id,
-      kind: dbRow.kind,
+      kind: userConstants.kinds[dbRow.kind],
       cookieToken: dbRow.cookie_token,
-      status: dbRow.status,
+      status: userConstants.statuses[dbRow.status],
       createdAt: dbRow.created_at,
       updatedAt: dbRow.updated_at
     };
@@ -79,22 +80,18 @@ class UserModel extends ModelBase {
   async getById(id) {
     const oThis = this;
 
-    const response = await oThis
-      .select([
-        'id',
-        'platform',
-        'platform_user_id',
-        'platform_display_name',
-        'platform_username',
-        'platform_profile_image_id',
-        'kind',
-        'cookie_token',
-        'status',
-        'created_at',
-        'updated_at'
-      ])
+    const dbRows = await oThis
+      .select('*')
       .where({ id: id })
       .fire();
+
+    const response = [];
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+
+      response.push(formatDbRow);
+    }
 
     return response;
   }
@@ -183,7 +180,6 @@ class UserModel extends ModelBase {
    * @param {string} decryptedEncryptionSalt
    * @param {object} options
    * @param {number} options.timestamp
-   * @param {string} options.platform
    *
    * @returns {string}
    */
@@ -193,20 +189,10 @@ class UserModel extends ModelBase {
     const cookieToken = oThis.getCookieToken(userObj, decryptedEncryptionSalt, options);
 
     if (!userObj.id) {
-      throw new Error(`Invalid userId-${options.userId} for getCookieValue`);
+      throw new Error(`Invalid userId-${userObj.id} for getCookieValue`);
     }
 
-    return (
-      cookieConstants.latestVersion +
-      ':' +
-      userObj.id +
-      ':' +
-      options.platform +
-      ':' +
-      options.timestamp +
-      ':' +
-      cookieToken
-    );
+    return cookieConstants.latestVersion + ':' + userObj.id + ':' + options.timestamp + ':' + cookieToken;
   }
 
   /**
@@ -216,12 +202,10 @@ class UserModel extends ModelBase {
    * @param {string} decryptedEncryptionSalt
    * @param {object} options
    * @param {number} options.timestamp
-   * @param {string} options.platform
    *
    * @returns {string}
    */
   getCookieToken(userObj, decryptedEncryptionSalt, options) {
-    console.log(userObj, decryptedEncryptionSalt, options);
     const decryptedCookieToken = localCipher.decrypt(decryptedEncryptionSalt, userObj.cookieToken);
 
     let strSecret = null;
@@ -229,25 +213,8 @@ class UserModel extends ModelBase {
     strSecret = coreConstants.API_COOKIE_SECRET;
 
     const stringToSign =
-      userObj.id +
-      ':' +
-      options.platform +
-      ':' +
-      options.timestamp +
-      ':' +
-      strSecret +
-      ':' +
-      decryptedCookieToken.substring(0, 16);
-    const salt =
-      userObj.id +
-      ':' +
-      options.platform +
-      ':' +
-      decryptedCookieToken.slice(-16) +
-      ':' +
-      strSecret +
-      ':' +
-      options.timestamp;
+      userObj.id + ':' + options.timestamp + ':' + strSecret + ':' + decryptedCookieToken.substring(0, 16);
+    const salt = userObj.id + ':' + decryptedCookieToken.slice(-16) + ':' + strSecret + ':' + options.timestamp;
 
     return util.createSha256Digest(salt, stringToSign);
   }
