@@ -21,6 +21,8 @@ class GetWhisperOfChain extends ServiceBase {
    *
    * @param {object} params
    * @param {string} params.chain_id
+   * @param {number} params.page
+   * @param {number} params.limit
    *
    * @constructor
    */
@@ -30,6 +32,8 @@ class GetWhisperOfChain extends ServiceBase {
     const oThis = this;
 
     oThis.chainId = params.chain_id;
+    oThis.page = params.page;
+    oThis.limit = params.limit;
 
     oThis.whispersMap = {};
     oThis.whisperIds = [];
@@ -69,7 +73,11 @@ class GetWhisperOfChain extends ServiceBase {
   async createWhispersMap() {
     const oThis = this;
     try {
-      const whispersModelResponse = await new WhispersModel().fetchByChainId(oThis.chainId);
+      const whispersModelResponse = await new WhispersModel().getWhispersDataWithPagination(
+        oThis.page,
+        oThis.limit,
+        oThis.chainId
+      );
 
       for (let index = 0; index < whispersModelResponse.length; index++) {
         const whisper = whispersModelResponse[index];

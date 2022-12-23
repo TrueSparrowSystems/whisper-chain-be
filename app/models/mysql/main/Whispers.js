@@ -105,6 +105,36 @@ class WhispersModel extends ModelBase {
   }
 
   /**
+   * This method gets the whispers data with pagination.
+   *
+   * @param {number} page
+   * @param {number} limit
+   * @param {number} chainId
+   *
+   * @returns {Promise<void>}
+   */
+  async getWhispersDataWithPagination(page, limit, chainId) {
+    const oThis = this;
+    const offset = (page - 1) * limit;
+    const response = [];
+    const dbRows = await oThis
+      .select('*')
+      .where({ chain_id: chainId })
+      .where(['status NOT IN (?) ', [whispersConstants.inactiveStatus]])
+      .order_by('created_at DESC')
+      .limit(limit)
+      .offset(offset)
+      .fire();
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response.push(formatDbRow);
+    }
+
+    return response;
+  }
+
+  /**
    * This method gets the latest whispers with a limit for the chain_id passed.
    *
    * @param {number} chainId
