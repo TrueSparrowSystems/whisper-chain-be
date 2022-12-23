@@ -20,7 +20,7 @@ class GetWhisperOfChain extends ServiceBase {
    * Constructor to get Whispers of a chain.
    *
    * @param {object} params
-   * @param {string} params.chain_id
+   * @param {number} params.chain_id
    * @param {number} params.page
    * @param {number} params.limit
    *
