@@ -35,7 +35,11 @@ class CreateWhisper extends ServiceBase {
     oThis.chainId = params.chain_id;
     oThis.s3Url = params.s3_url;
 
-    oThis.currentUser = params.current_user;
+    // todo: Please revert this change once the auth flow integrated @vaibhav
+    // oThis.currentUser = params.current_user;
+    oThis.currentUser = {
+      id: 1
+    };
 
     oThis.imageId = null;
   }
