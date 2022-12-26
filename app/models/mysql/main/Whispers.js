@@ -301,8 +301,8 @@ class WhispersModel extends ModelBase {
     const updatedResponse = await oThis
       .update({
         status: whispersConstants.activeStatus,
-        platformId: platformId,
-        platformUrl: platformUrl
+        platform_id: platformId,
+        platform_url: platformUrl
       })
       .where({ id: id })
       .fire();
