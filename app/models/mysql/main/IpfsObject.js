@@ -64,6 +64,29 @@ class IpfsObjectsModel extends ModelBase {
   }
 
   /**
+   * This method gets the response for the id passed.
+   *
+   * @param {string} id
+   *
+   * @returns {Promise<any>}
+   */
+  async getById(id) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('*')
+      .where({ id: id })
+      .fire();
+
+    const response = [];
+
+    const formatDbRow = oThis.formatDbData(dbRows[0]);
+    response.push(formatDbRow);
+
+    return response;
+  }
+
+  /**
    * Fetch user by ids.
    *
    * @param {array} ids

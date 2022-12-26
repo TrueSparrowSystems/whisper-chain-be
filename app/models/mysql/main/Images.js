@@ -67,10 +67,15 @@ class ImageModel extends ModelBase {
   async getById(id) {
     const oThis = this;
 
-    const response = await oThis
-      .select(['id', 'url', 'ipfs_object_id', 'created_at', 'updated_at'])
+    const dbRows = await oThis
+      .select('*')
       .where({ id: id })
       .fire();
+
+    const response = [];
+
+    const formatDbRow = oThis.formatDbData(dbRows[0]);
+    response.push(formatDbRow);
 
     return response;
   }

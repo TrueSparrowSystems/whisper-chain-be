@@ -107,6 +107,35 @@ class PlatformChainSeedsModel extends ModelBase {
   }
 
   /**
+   * This method gets the response for the id passed.
+   *
+   * @param {string} publicationStatus
+   *
+   * @returns {Promise<any>}
+   */
+  async fetchPlatformChainSeedsByPublicationStatus(publicationStatus) {
+    const oThis = this;
+
+    const dbRows = await oThis
+      .select('*')
+      .where({
+        is_published: platformChainSeedsConstants.invertedPublicationStatus[publicationStatus]
+      })
+      .order_by('created_at ASC')
+      .limit(1)
+      .fire();
+
+    const response = [];
+
+    for (let index = 0; index < dbRows.length; index++) {
+      const formatDbRow = oThis.formatDbData(dbRows[index]);
+      response.push(formatDbRow);
+    }
+
+    return response;
+  }
+
+  /**
    * This method inserts an entry in the table.
    *
    * @param {object} params
@@ -121,6 +150,30 @@ class PlatformChainSeedsModel extends ModelBase {
     const oThis = this;
 
     return oThis.insert(params).fire();
+  }
+
+  /**
+   * Update an entry in the table.
+   *
+   * @param {number} id
+   * @param {string} publicationStatus
+   * @param {string} platform
+   *
+   * @returns {Promise<{}>}
+   */
+  async updatePublicationStatusById(id, publicationStatus, platform) {
+    const oThis = this;
+
+    const updatedResponse = await oThis
+      .update({
+        platform: platform,
+        is_published: platformChainSeedsConstants.invertedPublicationStatus[publicationStatus],
+        start_ts: Date.now() / 1000
+      })
+      .where({ id: id })
+      .fire();
+
+    return updatedResponse;
   }
 }
 

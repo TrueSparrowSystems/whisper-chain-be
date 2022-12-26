@@ -4,7 +4,7 @@ const rootPrefix = '..',
   gql = require('graphql-tag');
 
 class LensHelper {
-  async getPublication(postTxHash) {
+  async getPublicationByTxHash(postTxHash) {
     const client = await clientHelper.getApolloClient();
 
     const res = await client.query({
@@ -28,6 +28,17 @@ class LensHelper {
     });
 
     return res;
+  }
+
+  async createPostViaDispatcher(postDataCID) {
+    const client = await clientHelper.getApolloClient();
+
+    return await client.mutate({
+      mutation: gql(gqlSchema.postViaDispatcher),
+      variables: {
+        postDataCID
+      }
+    });
   }
 }
 
