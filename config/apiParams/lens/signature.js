@@ -131,6 +131,11 @@ const lensSignature = {
       }
     ],
     optional: []
-  }
+  },
+
+  [apiNameConstants.logout]: {
+    mandatory: [],
+    optional: []
+  },
 };
 module.exports = lensSignature;

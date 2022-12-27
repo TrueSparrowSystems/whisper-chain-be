@@ -128,4 +128,10 @@ router.post('/ipfs-objects', sanitizer.sanitizeDynamicUrlParams, function(req, r
   );
 });
 
+router.post('/logout', cookieHelper.parseLensUserLoginCookieForLogout, function(req, res, next) {
+  req.internalDecodedParams.apiName = apiNameConstants.logout;
+
+  Promise.resolve(routeHelper.perform(req, res, next, '/app/services/lens/Logout', 'r_a_l_6', null));
+});
+
 module.exports = router;
