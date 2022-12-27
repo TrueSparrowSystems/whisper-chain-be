@@ -94,9 +94,9 @@ router.get('/:chain_id', sanitizer.sanitizeDynamicUrlParams, function(req, res, 
   );
 });
 
-// router.use(cookieHelper.validateUserLoginCookieIfPresent);
+router.use(cookieHelper.validateUserLoginCookieIfPresent);
 
-// router.use(cookieHelper.validateUserLoginCookieRequired);
+router.use(cookieHelper.validateUserLoginCookieRequired);
 
 /* Post create whispers */
 router.post('/whispers', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
