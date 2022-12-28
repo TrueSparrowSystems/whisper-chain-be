@@ -85,16 +85,19 @@ class Connect extends ServiceBase {
   async verifySignature() {
     const oThis = this;
     try {
-      await new VerifyLensSignerAddressLib().perform(
+      await new VerifyLensSignerAddressLib(
         oThis.challengeMessage,
         oThis.signedChallengeMessage,
         oThis.walletAddress
-      );
+      ).perform();
     } catch (error) {
       return Promise.reject(
         responseHelper.error({
           internal_error_identifier: error.internal_error_identifier,
-          api_error_identifier: 'unauthorized_api_request'
+          api_error_identifier: 'unauthorized_api_request',
+          debug_options: {
+            error: error
+          }
         })
       );
     }
