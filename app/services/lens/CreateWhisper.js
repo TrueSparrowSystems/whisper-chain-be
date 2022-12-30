@@ -100,7 +100,7 @@ class CreateWhisper extends ServiceBase {
       platform: whispersConstants.lensPlatform,
       platform_id: oThis.transactionHash,
       ipfs_object_id: oThis.imageIpfsObjectId,
-      status: whispersConstants.inactiveStatus
+      status: whispersConstants.processingStatus
     };
 
     const insertResponse = await new WhispersModel().insertRecord(insertParams);
