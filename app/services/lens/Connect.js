@@ -1,5 +1,6 @@
 const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
+  CommonValidators = require(rootPrefix + '/lib/validators/Common'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   localCipher = require(rootPrefix + '/lib/localCipher'),
   VerifyLensSignerAddressLib = require(rootPrefix + '/lib/VerifyLensSignerAddress'),
@@ -130,6 +131,10 @@ class Connect extends ServiceBase {
    */
   async createImage() {
     const oThis = this;
+
+    if (!CommonValidators.validateNonBlankString(oThis.platformProfileImageUrl)) {
+      return;
+    }
 
     const insertParams = {
       url: oThis.platformProfileImageUrl
