@@ -136,6 +136,9 @@ class GetWhisperOfChain extends ServiceBase {
         platform: platformConstants.platforms[chainModelResponse[0].platform],
         status: chainConstants.statuses[chainModelResponse[0].status]
       };
+
+      oThis.userIds.push(chainModelResponse[0].userId);
+      oThis.imageIds.push(chainModelResponse[0].imageId);
       oThis.chainMap[oThis.chainId] = chainObject;
     } catch (error) {
       return Promise.reject(

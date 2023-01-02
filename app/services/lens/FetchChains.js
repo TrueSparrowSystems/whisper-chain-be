@@ -60,9 +60,9 @@ class FetchChains extends ServiceBase {
 
     await oThis.fetchLastThreeWhispers();
 
-    await oThis.createImagesMap();
-
     await oThis.createUserMap();
+
+    await oThis.createImagesMap();
 
     return oThis._prepareResponse();
   }
@@ -224,6 +224,7 @@ class FetchChains extends ServiceBase {
    */
   _prepareResponse() {
     const oThis = this;
+
     return responseHelper.successWithData({
       [entityTypeConstants.chainIds]: oThis.chainIds,
       [entityTypeConstants.chains]: oThis.chainsMap,
