@@ -1,8 +1,21 @@
+const rootPrefix = '..',
+  coreConstants = require(rootPrefix + '/config/coreConstants');
+
 class GqlSchema {
   get publicationIdByTx() {
     return `query GetPublication($postTxHash: TxHash){
     publication(request:{txHash: $postTxHash}){
       ... on Post{
+        id
+      }
+    }
+  }`;
+  }
+
+  get publicationIdForCommentByTx() {
+    return `query GetPublication($postTxHash: TxHash){
+    publication(request:{txHash: $postTxHash}){
+      ... on Comment{
         id
       }
     }
@@ -22,7 +35,7 @@ class GqlSchema {
     return `mutation CreatePostViaDispatcher($postDataCID: Url!) {
       createPostViaDispatcher(
         request: {
-          profileId: "0x5691"
+          profileId: "${coreConstants.WHISPER_CHAIN_LENS_PROFILE_ID}"
           contentURI: $postDataCID
           collectModule: { freeCollectModule: { followerOnly: true } }
           referenceModule: { followerOnlyReferenceModule: false }

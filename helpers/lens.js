@@ -17,6 +17,19 @@ class LensHelper {
     return res;
   }
 
+  async getPublicationCommentByTxHash(postTxHash) {
+    const client = await clientHelper.getApolloClient();
+
+    const res = await client.query({
+      query: gql(gqlSchema.publicationIdForCommentByTx),
+      variables: {
+        postTxHash
+      }
+    });
+
+    return res;
+  }
+
   async getPublicationMetadataStatus(postTxHash) {
     const client = await clientHelper.getApolloClient();
 
@@ -33,7 +46,7 @@ class LensHelper {
   async createPostViaDispatcher(postDataCID) {
     const client = await clientHelper.getApolloClient();
 
-    return await client.mutate({
+    return client.mutate({
       mutation: gql(gqlSchema.postViaDispatcher),
       variables: {
         postDataCID

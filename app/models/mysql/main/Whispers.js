@@ -300,7 +300,7 @@ class WhispersModel extends ModelBase {
 
     const updatedResponse = await oThis
       .update({
-        status: whispersConstants.activeStatus,
+        status: whispersConstants.invertedStatuses[whispersConstants.activeStatus],
         platform_id: platformId,
         platform_url: platformUrl
       })

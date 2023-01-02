@@ -253,6 +253,10 @@ class CoreConstants {
   get WEB_ASSET_CDN_URL() {
     return process.env.A_WEB_ASSET_CDN_URL;
   }
+
+  get WHISPER_CHAIN_LENS_PROFILE_ID() {
+    return process.env.WHISPER_CHAIN_LENS_PROFILE_ID;
+  }
 }
 
 module.exports = new CoreConstants();
