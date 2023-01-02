@@ -200,6 +200,10 @@ class FetchChains extends ServiceBase {
 
         for (let index = 0; index < oThis.userIds.length; index++) {
           oThis.userMap[oThis.userIds[index]].uts = oThis.userMap[oThis.userIds[index]].updatedAt;
+
+          if (oThis.userMap[oThis.userIds[index]].platformProfileImageId) {
+            oThis.imageIds.push(oThis.userMap[oThis.userIds[index]].platformProfileImageId);
+          }
         }
       }
     } catch (error) {
