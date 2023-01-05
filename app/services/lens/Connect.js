@@ -55,6 +55,8 @@ class Connect extends ServiceBase {
     oThis.userId = null;
     oThis.platformProfileImageId = null;
     oThis.decryptedEncryptionSalt = null;
+
+    oThis.isFirstTimeUser = false;
   }
 
   /**
@@ -74,6 +76,8 @@ class Connect extends ServiceBase {
       await oThis.createImage();
       await oThis.createUser();
       await oThis.createUserEthAddress();
+
+      oThis.isFirstTimeUser = true;
     }
 
     return oThis._prepareResponse();
@@ -263,6 +267,7 @@ class Connect extends ServiceBase {
     const currentUser = {
       id: oThis.user.id,
       uts: Date.now(),
+      isFirstTimeUser: oThis.isFirstTimeUser,
       userId: oThis.userId
     };
     const userMap = {};
