@@ -43,5 +43,5 @@ jobs:
             source .env
             node db/seed.js
             node db/migrate.js
-            pm2 restart app.js --update-env
+            pm2 restart whisper --update-env
             
