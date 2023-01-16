@@ -1,0 +1,34 @@
+%% Documentation: https://github.com/mermaid-js/mermaid
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Cron - Whisper Status Polling
+participant Cron
+participant DB
+participant Platform as Lens
+
+
+Cron->>DB: Fetch whispers with 'PROCESSING' state 
+DB->>Cron: Response
+
+break
+  note over Cron: If no records found
+end
+
+loop Polling
+    Cron->>Platform: For txn hash, GraphQL Call to fetch Status
+    Platform->>Cron: Success response / Pending response / Error response
+    break
+    note over Cron: If error, log error
+    note over Cron: If success
+    end
+    Note over Cron: Sleep for some secs
+end
+
+
+Cron->>Lens: Get publication(whisper) 
+Lens->>Cron: Response
+Cron->>DB: Update entry in whispers
+DB->>Cron: Response
+
+note over Cron: Sleep for some secs

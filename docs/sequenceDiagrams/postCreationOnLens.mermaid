@@ -1,0 +1,58 @@
+%% Documentation: https://github.com/mermaid-js/mermaid
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Cron - start chain
+participant Cron
+participant DB
+participant Platform as Lens
+participant Ipfs as IPFS
+
+Cron->>DB: Query today's seed in platform_chain_seeds
+DB->>Cron: Response
+
+break
+  note over Cron: If no records, then log error
+  note over Cron: If already published
+end
+
+Cron->>Ipfs: Upload image
+Ipfs->>Cron: Returns response with cid
+break
+  note over Cron: If error, log error
+end
+
+Cron->>DB: Create entry in ipfs_objects
+DB->>Cron: Response
+
+Cron->>Ipfs: Upload chain meta
+Ipfs->>Cron: Returns response with cid
+break
+  note over Cron: If error, log error
+end
+
+Cron->>DB: Create entry in ipfs_objects
+DB->>Cron: Response
+
+Cron->>Platform: Create post
+Platform->>Cron: Returns response
+break
+  note over Cron: If error, log error
+end
+
+
+loop Polling
+    Cron->>Lens: For txn hash, GraphQL Call to fetch Status
+    Lens->>Cron: Success response / Pending response / Error response
+    break
+        note over Cron: If error, log error 
+        note over Cron: If success
+    end
+    Note over Cron: Sleep for some secs
+end
+
+Cron->>DB: Create entry in chains
+DB->>Cron: Response
+
+Cron->>DB: Update entry in platform_chain_seeds
+DB->>Cron: Response

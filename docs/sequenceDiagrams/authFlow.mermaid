@@ -1,0 +1,47 @@
+%% Documentation: https://github.com/mermaid-js/mermaid
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Auth Service 
+
+participant Browser
+participant Wallet
+participant Platform as Lens
+participant Server
+participant DB
+
+Browser->>Platform: Get challenge text
+Platform->>Browser: Response
+
+Browser->>Wallet: Create signature
+Wallet->>Browser: Response
+
+Browser->>Platform: Verify signature
+Platform->>Browser: Response
+
+Browser->>Server: Authenticate
+
+note over Server: Verify signature
+break
+    note over Server: If verification failed
+end
+
+
+Server->>DB: Get user details
+DB->>Server: Response
+
+note over Server: Create cookie
+
+note over Server: If new user
+
+Server->>DB: Create entry in images
+DB->>Server: Response
+Server->>DB: Create entry in users
+DB->>Server: Response
+Server->>DB: Create entry in user_eth_addresses
+DB->>Server: Response
+
+note over Server: End of if
+note over Server: Set user in internal decoded params
+
+Server->>Browser: Set cookie

@@ -1,75 +1,285 @@
-const express = require('express');
+const rootPrefix = '.';
+
+const express = require('express'),
+  createNamespace = require('continuation-local-storage').createNamespace,
+  morgan = require('morgan'),
+  bodyParser = require('body-parser'),
+  helmet = require('helmet'),
+  swaggerJSDoc = require('swagger-jsdoc'),
+  swaggerUi = require('swagger-ui-express'),
+  customUrlParser = require('url'),
+  URL = require('url').URL;
+
+const requestSharedNameSpace = createNamespace('eeeApiNameSpace');
+
+const responseHelper = require(rootPrefix + '/lib/formatter/response'),
+  logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
+  customMiddleware = require(rootPrefix + '/helpers/customMiddleware'),
+  apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions'),
+  basicHelper = require(rootPrefix + '/helpers/basic'),
+  coreConstants = require(rootPrefix + '/config/coreConstants'),
+  sanitizer = require(rootPrefix + '/helpers/sanitizer');
+
+const apiRoutes = require(rootPrefix + '/routes/api/index');
+
+const errorConfig = basicHelper.fetchErrorConfig(apiVersions.web);
+const apiHostName = new URL(coreConstants.API_DOMAIN).hostname;
+
+const cors = require('cors');
+
+morgan.token('id', function getId(req) {
+  return req.id;
+});
+
+// eslint-disable-next-line no-unused-vars
+morgan.token('pid', function getPid(req) {
+  return process.pid;
+});
+
+// eslint-disable-next-line no-unused-vars
+morgan.token('endTime', function getEndTime(req) {
+  return Date.now();
+});
+
+// eslint-disable-next-line no-unused-vars
+morgan.token('endDateTime', function getEndDateTime(req) {
+  return basicHelper.logDateFormat();
+});
+
+morgan.token('ipAddress', function getIpAddress(req) {
+  return req.headers['x-real-ip'];
+});
+
+/**
+ * First log line of request start
+ *
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ *
+ * @returns {Promise<void>}
+ */
+const startRequestLogLine = function(req, res, next) {
+  const message = [
+    "Started '",
+    customUrlParser.parse(req.originalUrl).pathname, // Todo: deprecation fix
+    "'  '",
+    req.method,
+    "' at ",
+    basicHelper.logDateFormat()
+  ];
+
+  logger.step(message.join(''));
+
+  if (!basicHelper.isProduction()) {
+    logger.step(
+      '\nHEADERS FOR CURRENT REQUEST=====================================\n',
+      JSON.stringify(req.headers),
+      '\n========================================================'
+    );
+  }
+
+  next();
+};
+
+/**
+ * Get request params
+ *
+ * @param {object} req
+ * @return {*}
+ */
+const getRequestParams = function(req) {
+  // IMPORTANT NOTE: Don't assign parameters before sanitization.
+  if (req.method === 'POST') {
+    return req.body;
+  } else if (req.method === 'GET') {
+    return req.query;
+  }
+
+  return {};
+};
+
+/**
+ * Assign params
+ *
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ *
+ * @returns {Promise<void>}
+ */
+const assignParams = function(req, res, next) {
+  req.decodedParams = getRequestParams(req);
+
+  /**
+   * Internal decoded params are for parameters which are not passed in the request from outside.
+   */
+  req.internalDecodedParams = {};
+
+  next();
+};
+
+/**
+ * Set request debugging/logging details to shared namespace.
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ *
+ * @returns {Promise<void>}
+ */
+const appendRequestDebugInfo = function(req, res, next) {
+  requestSharedNameSpace.run(function() {
+    requestSharedNameSpace.set('reqId', req.id);
+    requestSharedNameSpace.set('startTime', req.startTime);
+    next();
+  });
+};
+
+/**
+ * Set response headers
+ *
+ * @param {object} req
+ * @param {object} res
+ * @param {object} next
+ *
+ * @returns {Promise<void>}
+ */
+const setResponseHeader = async function(req, res, next) {
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Cache-Control', 'no-store, no-cache, max-age=0, must-revalidate, post-check=0, pre-check=0');
+  res.setHeader('Vary', '*');
+  res.setHeader('Expires', '-1');
+  res.setHeader('Last-Modified', new Date().toUTCString());
+  next();
+};
+
+// Set worker process title.
+process.title = 'API node worker';
+
+// Create express application instance.
 const app = express();
-const bodyParser = require('body-parser');
-const fs = require('fs');
 
-const FileIo = require('./FileIo');
-const Ipfs = require('./Ipfs');
+app.use(function(req, res, next) {
+  if (!basicHelper.isProduction()) {
+    res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
+    );
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Credentials', 'true');
 
-var cors = require('cors');
+    if (req.method === 'OPTIONS') {
+      return res.status(200).json();
+    }
+  }
+  next();
+});
 
-app.use(cors());
+// API Docs for web APIs
+const swaggerSpecWeb = swaggerJSDoc(require(rootPrefix + '/config/apiParams/web/openapi.json'));
+const swaggerHtmlWeb = swaggerUi.generateHTML(swaggerSpecWeb);
 
-// Create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use('/api-docs/web', swaggerUi.serveFiles(swaggerSpecWeb));
+app.get('/api-docs/web', function(req, res) {
+  return res.send(swaggerHtmlWeb);
+});
 
-app.get('/api/health-check', async function (req, res) {
+// Add id and startTime to request.
+app.use(customMiddleware());
+
+// Load Morgan
+app.use(
+  morgan(
+    '[:pid][:id][:endTime][' +
+      coreConstants.APP_NAME +
+      '] Completed with ":status" in :response-time ms at :endDateTime -  ":res[content-length] bytes" - ":ipAddress" ":remote-user" - "HTTP/:http-version :method :url" - ":referrer" - ":user-agent" \n\n'
+  )
+);
+
+app.use(function(req, res, next) {
+  let data = '';
+  req.on('data', function(chunk) {
+    data += chunk;
+  });
+  req.on('end', function() {
+    req.rawBody = data;
+  });
+  next();
+});
+
+// Helmet helps secure Express apps by setting various HTTP headers.
+app.use(helmet());
+
+// Node.js body parsing middleware. Default limit is 100kb
+app.use(bodyParser.json({ limit: '2mb' }));
+
+// Parsing the URL-encoded data with the qs library (extended: true). Default limit is 100kb
+app.use(bodyParser.urlencoded({ extended: true, limit: '2mb' }));
+
+// Start Request logging. Placed below static and health check to reduce logs.
+app.use(appendRequestDebugInfo, startRequestLogLine);
+
+// Set response headers.
+app.use(setResponseHeader);
+
+// Health checker.
+app.get('/api/health-check', async function(req, res) {
   console.log('** Health check success.');
   res.send(new Date());
 });
 
-app.get('/api/whisper/suggestions', urlencodedParser, async function (req, res) {
-  try {
-    const GenerateAndUploadImages = require('./GenerateAndUploadImages');
-    const s3Urls = await new GenerateAndUploadImages({prompt: req.query.prompt, artStyle: req.query.art_style || null}).perform();
-
-    res.json({success: true, data: {s3_urls: s3Urls}});
-  } catch(error) {
-    res.json({success: false});
+/**
+ * NOTE: API routes where first sanitize and then assign params.
+ */
+app.use('/api', sanitizer.sanitizeBodyAndQuery, assignParams, function(request, response, next) {
+  if (request.hostname === apiHostName) {
+    apiRoutes(request, response, next);
+  } else {
+    next();
   }
 });
 
-app.get('/api/whisper', urlencodedParser, async function (req, res) {
-  try {
-    const s3Url = req.query.s3_url;
-    const downloadFilePath = await new FileIo().download(s3Url, 'png');
+// Catch 404 and forward to error handler.
+// eslint-disable-next-line no-unused-vars
+app.use(function(req, res, next) {
+  return responseHelper.renderApiResponse(
+    responseHelper.error({
+      internal_error_identifier: 'a_1',
+      api_error_identifier: 'resource_not_found',
+      debug_options: {}
+    }),
+    res,
+    errorConfig
+  );
+});
 
-    console.log('* Downloading file from S3');
-    const fileName = downloadFilePath.split('/').at(-1);
-    const localFileData = fs.readFileSync(downloadFilePath);
-    console.log('** Download file completed from S3');
+// Error handler.
+// eslint-disable-next-line no-unused-vars
+app.use(async function(err, req, res, next) {
+  let errorObject = null;
 
-    console.log('* Upload image to IPFS');
-    const imageCid = await new Ipfs().uploadImage(fileName, localFileData);
-    console.log('** Upload image to IPFS completed:', imageCid);
+  if (err.code == 'EBADCSRFTOKEN') {
+    logger.error('a_3', 'Bad CSRF TOKEN', err);
 
-    console.log('* Upload meta data to IPFS');
-    const metadataCid = await new Ipfs().uploadMetaData(fileName, imageCid);
-    console.log('** Upload meta data to IPFS completed:', metadataCid);
-
-    console.log('* Deleting local file');
-    fs.rm(downloadFilePath, { recursive: true }, err => {
-      if (err) {
-        throw err
-      }
+    errorObject = responseHelper.error({
+      internal_error_identifier: 'a_3',
+      api_error_identifier: 'forbidden_api_request',
+      debug_options: {}
     });
-    console.log('** Deleting local file completed');
+  } else {
+    logger.error('a_2', 'Something went wrong', err);
 
-    res.json({success: true, data: {
-      cids: {
-        image: imageCid,
-        metadata: metadataCid
-      }
-      }});
+    errorObject = responseHelper.error({
+      internal_error_identifier: 'a_2',
+      api_error_identifier: 'something_went_wrong',
+      debug_options: { err: err }
+    });
 
-  } catch(error) {
-    res.json({success: false});
+    logger.error(' In catch block of app.js', errorObject);
   }
+
+  return responseHelper.renderApiResponse(errorObject, res, errorConfig);
 });
 
-const server = app.listen(3000, function () {
-  const host = server.address().address;
-  const port = server.address().port;
-
-  console.log("Example app listening at http://%s:%s", host, port)
-});
+module.exports = app;

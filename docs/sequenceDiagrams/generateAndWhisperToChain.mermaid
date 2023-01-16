@@ -1,0 +1,64 @@
+%% Documentation: https://mermaid-js.github.io/mermaid/#/sequenceDiagram
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Generate whisper & add it to chain
+
+participant Browser as User
+participant Server
+participant DB
+participant S3
+
+participant Lens
+participant SD as Stable Diffusion
+participant Ipfs as IPFS
+
+participant Cron
+
+Note over Browser: User clicks on Generate Image
+
+Browser->>Server: API call to generate images using prompt
+Server->> SD: Invoke SDK to generate image using prompt
+SD->>Server: Response having image data
+Server->>S3: Upload image to S3
+S3->>Server: Response 200
+Server->>Browser: Return suggestions
+
+Note over Browser: User selects a Image & clicks on add it to chain
+
+Browser->>Server: API call conatining s3 url of image to be uploaded to IPFS
+Server->>Ipfs: API call to upload image
+Ipfs->>Server: Return CID
+Server->>Ipfs: API call to upload metadata
+Ipfs->>Server: Return CID
+Server->>DB: Create entry in ipfs_objects for image
+DB->>Server: Response
+Server->>DB: Create entry in ipfs_objects for metadata
+DB->>Server: Response
+
+Server->>Browser: Return ipfs_obects of image & metadata
+
+Browser->>Lens: GraphQL call to add publication
+Lens->>Browser: Response containing Polygon Txn Hash
+
+Browser->>Server: API call to create Whisper 
+Server->>DB: Create entry in images
+DB->>Server: Response
+
+Server->>DB: Create an entry in whisper
+DB->>Server: Success
+Server->>Browser: 200 Success
+
+Note over Cron: A continuos cron to poll lens publication status
+loop Polling
+    Cron->>DB: Select non indexed whispers
+    DB->>Cron: Array of non indexed whispers
+    loop for each non indexed whisper
+        Cron->>Lens: For each txn hash GraphQL Call to fetch Status
+        Lens->>Cron: Success response / Pending response / Error response
+        Note over Cron: If error, log error and continue to next
+        Cron->>DB: Update whispers if success response
+        DB->>Cron: Response
+    end
+    Note over Cron: Sleep for some secs
+end

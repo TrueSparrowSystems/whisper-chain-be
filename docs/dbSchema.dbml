@@ -1,0 +1,162 @@
+// Documentation URL - https://www.dbml.org/docs/
+// Editor: https://dbdiagram.io/d
+
+Table platform_chain_seeds {
+  id bigint
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  start_ts timestamp
+  image_id bigint [ref: - images.id]
+  is_published tinyint [
+    note: '
+    NULL = NOT_PUBLISHED,
+    1 = PUBLISHED
+    ']
+  cts timestamp
+  uts timestamp
+
+  indexes {
+      (id) [pk]
+      (platform, start_ts) [unique]
+  }
+}
+
+Table users {
+  id bigint
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  platform_user_id varchar
+  platform_display_name varchar
+  platform_username varchar
+  platform_profile_image_id bigint [ref: - images.id]
+  cookie_token varchar
+  kind tinyint [
+    note: '
+    1 = INTERNAL,
+    2 = EXTERNAL,
+    ']
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE
+    ']
+  cts timestamp
+  uts timestamp
+
+  indexes {
+      (id) [pk]
+      (platform_user_id) [unique]
+  }
+}
+
+Table user_eth_addresses {
+  id bigint
+  user_id bigint [ref: - users.id]
+  eth_address varchar
+  platform tinyint [
+    note: '
+    1 = LENS
+    ']
+  eth_address_kind tinyint [
+    note: '
+    1 = AUTH
+    ']
+  cts timestamp
+  uts timestamp
+
+  indexes {
+      (id) [pk]
+      (user_id)
+      (eth_address)
+  }
+}
+
+Table images {
+  id bigint
+  url varchar
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+  }
+}
+
+Table chains {
+  id bigint
+  user_id bigint  [ref: > users.id]
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  platform_id varchar
+  platform_url varchar
+  start_ts timestamp
+  image_id bigint [ref: - images.id]
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE
+    ']
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+      (platform_id, platform) [unique]
+      (platform, start_ts)
+  }
+}
+
+Table whispers {
+  id bigint
+  user_id bigint [ref: > users.id]
+  chain_id bigint [ref: > chains.id]
+  image_id bigint [ref: - images.id]
+  platform tinyint [
+    note: '
+    1 = LENS,
+    2 = TWITTER
+    ']
+  platform_id varchar
+  platform_url varchar
+  ipfs_object_id bigint [ref: > ipfs_objects.id]
+  status tinyint [
+    note: '
+    1 = ACTIVE,
+    2 = INACTIVE,
+    3 = PROCESSING
+    ']
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+      (image_id) [unique]
+      (chain_id, cts)
+      (platform_id, status, platform_url)
+  }
+}
+
+Table ipfs_objects {
+  id bigint
+  kind tinyint [
+    note: '
+    1 = CHAIN,
+    2 = WHISPER,
+    3 = IMAGE
+    ']
+  cid varchar
+  cts timestamp
+  uts timestamp
+  indexes {
+      (id) [pk]
+  }
+}
+
