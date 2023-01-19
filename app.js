@@ -62,7 +62,7 @@ morgan.token('ipAddress', function getIpAddress(req) {
 const startRequestLogLine = function(req, res, next) {
   const message = [
     "Started '",
-    customUrlParser.parse(req.originalUrl).pathname, // Todo: deprecation fix
+    customUrlParser.parse(req.originalUrl).pathname,
     "'  '",
     req.method,
     "' at ",
@@ -113,6 +113,7 @@ const assignParams = function(req, res, next) {
 
   /**
    * Internal decoded params are for parameters which are not passed in the request from outside.
+   * Setting it to empty object is needed from security point of view.
    */
   req.internalDecodedParams = {};
 
@@ -154,7 +155,7 @@ const setResponseHeader = async function(req, res, next) {
 };
 
 // Set worker process title.
-process.title = 'API node worker';
+process.title = 'Whisper Chain API';
 
 // Create express application instance.
 const app = express();
@@ -263,12 +264,12 @@ app.use(async function(err, req, res, next) {
     logger.error('a_3', 'Bad CSRF TOKEN', err);
 
     errorObject = responseHelper.error({
-      internal_error_identifier: 'a_3',
+      internal_error_identifier: 'a_2',
       api_error_identifier: 'forbidden_api_request',
       debug_options: {}
     });
   } else {
-    logger.error('a_2', 'Something went wrong', err);
+    logger.error('a_3', 'Something went wrong', err);
 
     errorObject = responseHelper.error({
       internal_error_identifier: 'a_2',

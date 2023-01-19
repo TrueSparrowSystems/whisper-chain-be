@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Core ENV Details.
+export A_ENVIRONMENT='staging'
+export A_PORT=3000
+export A_DEFAULT_LOG_LEVEL='debug';
+export API_DOMAIN='http://localhost'
+
+export A_DEVOPS_APP_NAME='whisperchain';
+export A_DEVOPS_ENV_ID='whisperchain-dev';
+export A_DEVOPS_IP_ADDRESS='127.0.0.1';
+
+export A_MYSQL_CONNECTION_POOL_SIZE='3'
+export A_DB_SUFFIX='development'
+
+export A_MAIN_DB_MYSQL_HOST='host here'
+export A_MAIN_DB_MYSQL_USER='user here'
+export A_MAIN_DB_MYSQL_PASSWORD='password here'
+
+export STABILITY_API_KEY=
+export S3_ACCESS_KEY_ID=
+export S3_SECRET_ACCESS_KEY=
+export S3_BUCKET=
+export S3_REGION=us-east-2
+export IPFS_TOKEN=
+export INFURA_PROJECT_ID=
+export INFURA_API_SECRET_KEY=
+export TX_SIGNER=
+
+# cookie signing secret for cookie
+export API_COOKIE_SECRET=
+export GLOBAL_ENCRYPTED_ENCRYPTION_SALT=
+export A_ENCRYPTION_KEY=
+
+export LENS_PLATFORM_USER_ID=
+export ALCHEMY_ENDPOINT=
+export WALLET_ADDRESS=
+export SIGNER_PK=
+export WHISPER_CHAIN_LENS_PROFILE_ID=
