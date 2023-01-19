@@ -412,9 +412,9 @@
 		"paths": {
 			"/api/lens/connect": {
 				"post": {
-					"summary": "",
+					"summary": "User connect",
 					"tags": [
-						""
+						"Connect"
 					],
 					"parameters": [
 						{
@@ -502,14 +502,15 @@
 								}
 							}
 						}
-					}
+					},
+					"description": "User is logged in and cookie created for handling auth in subsequent requests."
 				}
 			},
 			"/api/lens/chains": {
 				"get": {
-					"summary": "",
+					"summary": "Get chains to be shown on homepage.",
 					"tags": [
-						""
+						"Home Page"
 					],
 					"parameters": [
 						{
@@ -574,14 +575,15 @@
 								}
 							}
 						}
-					}
+					},
+					"description": "Returns a list of chains and at max 3 whispers from each chain. Pagination support is present."
 				}
 			},
 			"/api/lens/:chain_id": {
 				"get": {
-					"summary": "",
+					"summary": "Get whispers from a specific chain",
 					"tags": [
-						""
+						"Chain Page"
 					],
 					"parameters": [
 						{
@@ -654,14 +656,15 @@
 								}
 							}
 						}
-					}
+					},
+					"description": "Returns list of whispers which belong to a specific chain. Pagination support is present."
 				}
 			},
 			"/api/lens/whispers": {
 				"post": {
-					"summary": "",
+					"summary": "Add to chain",
 					"tags": [
-						""
+						"Generate Page"
 					],
 					"parameters": [
 						{
@@ -726,14 +729,15 @@
 								}
 							}
 						}
-					}
+					},
+					"description": "Add to chain and create a whisper."
 				}
 			},
 			"/api/lens/ipfs-objects": {
 				"post": {
-					"summary": "",
+					"summary": "Upload to IPFS",
 					"tags": [
-						""
+						"Generate Page"
 					],
 					"parameters": [
 						{
@@ -781,14 +785,15 @@
 								}
 							}
 						}
-					}
+					},
+					"description": "Upload image and metadata to IPFS and return cid in response."
 				}
 			},
 			"/api/lens/logout": {
 				"post": {
-					"summary": "",
+					"summary": "Logout",
 					"tags": [
-						""
+						"Logout"
 					],
 					"parameters": [],
 					"responses": {
@@ -817,9 +822,9 @@
 			},
 			"/api/images": {
 				"get": {
-					"summary": "",
+					"summary": "Generate suggestions",
 					"tags": [
-						""
+						"Generate Page"
 					],
 					"parameters": [
 						{
@@ -875,7 +880,8 @@
 								}
 							}
 						}
-					}
+					},
+					"description": "Using stable diffusion in the BE, generate image suggestions using the prompt and art style input from user."
 				}
 			}
 		}
