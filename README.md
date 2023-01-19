@@ -1,7 +1,7 @@
-# Whisper Chain APIs
-This repository has implementation of Whisper Chain backend APIs, developed using Node.js.
+# Whisper Chain Backend
+This repository has implementation of Whisper Chain backend APIs and cron processes, developed using Node.js.
 
-## Pre-requisites for local setup
+## Pre-requisites for environment setup
 
 * Install [Node.js](https://nodejs.org/en/download/) - currently the latest LTS version is 18 and we encourage installing the same.
 
