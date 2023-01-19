@@ -7,8 +7,7 @@ const rootPrefix = '..',
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions'),
   apiErrorConfig = require(rootPrefix + '/config/apiParams/apiErrorConfig'),
-  webParamErrorConfig = require(rootPrefix + '/config/apiParams/web/errorConfig'),
-  lensParamErrorConfig = require(rootPrefix + '/config/apiParams/lens/errorConfig');
+  webParamErrorConfig = require(rootPrefix + '/config/apiParams/web/errorConfig');
 
 /**
  * Class for basic helper methods.
@@ -132,10 +131,6 @@ class BasicHelper {
       paramErrorConfig = dynamicErrorConfig
         ? Object.assign(dynamicErrorConfig, webParamErrorConfig)
         : webParamErrorConfig;
-    } else if (apiVersion === apiVersions.lens) {
-      paramErrorConfig = dynamicErrorConfig
-        ? Object.assign(dynamicErrorConfig, lensParamErrorConfig)
-        : lensParamErrorConfig;
     } else {
       throw new Error(`Unsupported API Version ${apiVersion}`);
     }

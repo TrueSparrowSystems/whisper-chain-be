@@ -25,6 +25,8 @@ class TraverseRouteTree {
     const routeFile = require(oThis.rootRouteFilePath);
     routeFile.stack.forEach(oThis._traverse.bind(oThis, []));
 
+    console.log('traversedRouteMap:', oThis.traversedRouteMap);
+
     return oThis.traversedRouteMap;
   }
 

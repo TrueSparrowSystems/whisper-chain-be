@@ -14,12 +14,33 @@
 		],
 		"components": {
 			"schemas": {
-				"user_ids": {
-					"type": "array",
-					"items": {
-						"type": "integer",
-						"example": 123
-					}
+				"currentUser": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "integer",
+							"example": 1,
+							"description": "BE notes: this is the id of users table"
+						},
+						"uts": {
+							"type": "integer",
+							"example": 1651666861
+						},
+						"is_first_time_user": {
+							"type": "boolean",
+							"example": false
+						},
+						"userId": {
+							"type": "integer",
+							"example": "1",
+							"description": "BE notes: this is the id of users table"
+						}
+					},
+					"required": [
+						"id",
+						"uts",
+						"userId"
+					]
 				},
 				"users": {
 					"type": "object",
@@ -31,17 +52,242 @@
 								"example": 123,
 								"description": "BE notes: this is the id of users table"
 							},
-							"email": {
-								"type": "string",
-								"example": "david@example.com"
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
 							},
-							"name": {
+							"platform": {
 								"type": "string",
-								"example": "David"
+								"example": "LENS"
+							},
+							"platform_user_id": {
+								"type": "integer",
+								"example": 1651666861
+							},
+							"platform_display_name": {
+								"type": "string",
+								"example": "ABC"
+							},
+							"platform_username": {
+								"type": "string",
+								"example": "User-ABC"
+							},
+							"platform_profile_image_id": {
+								"type": "integer",
+								"example": 1651666861
 							},
 							"status": {
 								"type": "string",
 								"example": "ACTIVE"
+							}
+						},
+						"required": [
+							"id",
+							"uts",
+							"platform",
+							"platform_user_id",
+							"platform_display_name",
+							"platform_username",
+							"platform_profile_image_id",
+							"status"
+						]
+					},
+					"example": {
+						"123": {
+							"id": 123,
+							"uts": 1651666861,
+							"platform": "LENS",
+							"platform_user_id": 1651666861,
+							"platform_display_name": "ABC",
+							"platform_username": "User-ABC",
+							"platform_profile_image_id": 1651666861,
+							"status": "ACTIVE"
+						}
+					}
+				},
+				"chain_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"whispers": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 123,
+								"description": "BE notes: this is the id of whispers table"
+							},
+							"image_id": {
+								"type": "integer",
+								"example": 10000001,
+								"description": "BE notes: this is the id of images table"
+							},
+							"user_id": {
+								"type": "integer",
+								"example": 10000001,
+								"description": "BE notes: this is the id of users table"
+							},
+							"ipfs_object_id": {
+								"type": "integer",
+								"example": 10000001,
+								"description": "BE notes: this is the id of ipfs_objects table"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							},
+							"platform_chain_id": {
+								"type": "string",
+								"example": "0x55cf-0x05"
+							},
+							"platform_chain_url": {
+								"type": "string",
+								"example": 123,
+								"description": "https://testnet.lenster.xyz/posts/0x55cf-0x05"
+							},
+							"chain_id": {
+								"type": "integer",
+								"example": 10000001,
+								"description": "BE notes: this is the id of chains table"
+							},
+							"platform": {
+								"type": "string",
+								"example": "LENS"
+							},
+							"status": {
+								"type": "string",
+								"example": "ACTIVE"
+							}
+						},
+						"required": [
+							"id",
+							"image_id",
+							"user_id",
+							"ipfs_object_id",
+							"uts",
+							"platform_chain_id",
+							"platform_chain_url",
+							"chain_id",
+							"platform",
+							"status"
+						]
+					},
+					"example": {
+						"123": {
+							"id": 123,
+							"image_id": 10000001,
+							"user_id": 10000001,
+							"ipfs_object_id": 10000001,
+							"uts": 1651666861,
+							"platform_chain_id": "0x55cf-0x05",
+							"platform_chain_url": 123,
+							"chain_id": 10000001,
+							"platform": "LENS",
+							"status": "ACTIVE"
+						}
+					}
+				},
+				"chains": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 123,
+								"description": "BE notes: this is the id of chains table"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							},
+							"ipfs_object_id": {
+								"type": "integer",
+								"example": 10000001,
+								"description": "BE notes: this is the id of ipfs_objects table"
+							},
+							"recent_whisper_ids": {
+								"type": "array",
+								"example": [
+									10000001,
+									10000002
+								]
+							},
+							"start_ts": {
+								"type": "integer",
+								"example": 1651666861
+							},
+							"image_id": {
+								"type": "integer",
+								"example": 100000001,
+								"description": "BE notes: this is the id of images table"
+							},
+							"platform": {
+								"type": "string",
+								"example": "LENS"
+							},
+							"platform_chain_id": {
+								"type": "string",
+								"example": "0x55cf-0x05"
+							},
+							"platform_chain_url": {
+								"type": "string",
+								"example": "https://testnet.lenster.xyz/posts/0x55cf-0x05"
+							},
+							"status": {
+								"type": "string",
+								"example": "ACTIVE"
+							}
+						},
+						"required": [
+							"id",
+							"uts",
+							"ipfs_object_id",
+							"recent_whisper_ids",
+							"start_ts",
+							"image_id",
+							"platform",
+							"platform_chain_id",
+							"platform_chain_url",
+							"status"
+						]
+					},
+					"example": {
+						"123": {
+							"id": 123,
+							"uts": 1651666861,
+							"ipfs_object_id": 10000001,
+							"recent_whisper_ids": [
+								10000001,
+								10000002
+							],
+							"start_ts": 1651666861,
+							"image_id": 100000001,
+							"platform": "LENS",
+							"platform_chain_id": "0x55cf-0x05",
+							"platform_chain_url": "https://testnet.lenster.xyz/posts/0x55cf-0x05",
+							"status": "ACTIVE"
+						}
+					}
+				},
+				"images": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 123,
+								"description": "BE notes: this is the id of images table"
+							},
+							"url": {
+								"type": "string",
+								"example": "https://stability/83cf4737-813e-4946-be36-812d853a9253.png"
 							},
 							"uts": {
 								"type": "integer",
@@ -50,17 +296,113 @@
 						},
 						"required": [
 							"id",
-							"email",
-							"status",
+							"url",
 							"uts"
 						]
 					},
 					"example": {
 						"123": {
 							"id": 123,
-							"email": "david@example.com",
-							"name": "David",
-							"status": "ACTIVE",
+							"url": "https://stability/83cf4737-813e-4946-be36-812d853a9253.png",
+							"uts": 1651666861
+						}
+					}
+				},
+				"whisper_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"ipfs_object_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"ipfs_objects": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 1,
+								"description": "This is the id of ipfs object table"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							},
+							"cid": {
+								"type": "string",
+								"example": "123abc123"
+							},
+							"entity_kind": {
+								"type": "integer",
+								"example": 1
+							},
+							"entity_id": {
+								"type": "integer",
+								"example": 10
+							}
+						},
+						"required": [
+							"id",
+							"uts",
+							"cid",
+							"entity_kind",
+							"entity_id"
+						]
+					},
+					"example": {
+						"1": {
+							"id": 1,
+							"uts": 1651666861,
+							"cid": "123abc123",
+							"entity_kind": 1,
+							"entity_id": 10
+						}
+					}
+				},
+				"suggestions_ids": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"example": 123
+					}
+				},
+				"suggestions": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "integer",
+								"example": 123,
+								"description": "BE notes: this is the uuid"
+							},
+							"image_url": {
+								"type": "string",
+								"example": "https://stability/83cf4737-813e-4946-be36-812d853a9253.png"
+							},
+							"uts": {
+								"type": "integer",
+								"example": 1651666861
+							}
+						},
+						"required": [
+							"id",
+							"image_url",
+							"uts"
+						]
+					},
+					"example": {
+						"123": {
+							"id": 123,
+							"image_url": "https://stability/83cf4737-813e-4946-be36-812d853a9253.png",
 							"uts": 1651666861
 						}
 					}
@@ -68,25 +410,295 @@
 			}
 		},
 		"paths": {
-			"/api/web/signup": {
+			"/api/lens/connect": {
 				"post": {
-					"summary": "user sign up",
+					"summary": "",
 					"tags": [
-						"user CRUD"
+						""
 					],
 					"parameters": [
 						{
 							"in": "request body",
-							"name": "email",
+							"name": "platform_profile_image_url",
 							"required": true,
 							"schema": {
 								"type": "string"
-							},
-							"description": "elaborated description if needed."
+							}
 						},
 						{
 							"in": "request body",
-							"name": "password",
+							"name": "platform_user_id",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "platform_display_name",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "platform_username",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "challenge_message",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "signed_challenge_message",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "wallet_address",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"currentUser": {
+														"$ref": "#/components/schemas/currentUser"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/lens/chains": {
+				"get": {
+					"summary": "",
+					"tags": [
+						""
+					],
+					"parameters": [
+						{
+							"in": "query string",
+							"name": "page",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "query string",
+							"name": "limit",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"chain_ids": {
+														"$ref": "#/components/schemas/chain_ids"
+													},
+													"whispers": {
+														"$ref": "#/components/schemas/whispers"
+													},
+													"chains": {
+														"$ref": "#/components/schemas/chains"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "chain_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "chains"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/lens/:chain_id": {
+				"get": {
+					"summary": "",
+					"tags": [
+						""
+					],
+					"parameters": [
+						{
+							"in": "path",
+							"name": "chain_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "query string",
+							"name": "page",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "query string",
+							"name": "limit",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"whisper_ids": {
+														"$ref": "#/components/schemas/whisper_ids"
+													},
+													"whispers": {
+														"$ref": "#/components/schemas/whispers"
+													},
+													"chains": {
+														"$ref": "#/components/schemas/chains"
+													},
+													"images": {
+														"$ref": "#/components/schemas/images"
+													},
+													"users": {
+														"$ref": "#/components/schemas/users"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "whisper_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "whispers"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/lens/whispers": {
+				"post": {
+					"summary": "",
+					"tags": [
+						""
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "transaction_hash",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "whisper_ipfs_object_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "image_ipfs_object_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "chain_id",
+							"required": true,
+							"schema": {
+								"type": "number"
+							}
+						},
+						{
+							"in": "request body",
+							"name": "s3_url",
 							"required": true,
 							"schema": {
 								"type": "string"
@@ -117,16 +729,110 @@
 					}
 				}
 			},
-			"/api/web/users": {
-				"get": {
-					"summary": "Get all users",
+			"/api/lens/ipfs-objects": {
+				"post": {
+					"summary": "",
 					"tags": [
-						"user CRUD"
+						""
+					],
+					"parameters": [
+						{
+							"in": "request body",
+							"name": "s3_url",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						}
+					],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {
+													"ipfs_object_ids": {
+														"$ref": "#/components/schemas/ipfs_object_ids"
+													},
+													"ipfs_objects": {
+														"$ref": "#/components/schemas/ipfs_objects"
+													},
+													"result_type": {
+														"type": "string",
+														"example": "ipfs_object_ids"
+													},
+													"result_type_lookup": {
+														"type": "string",
+														"example": "ipfs_objects"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/lens/logout": {
+				"post": {
+					"summary": "",
+					"tags": [
+						""
+					],
+					"parameters": [],
+					"responses": {
+						"200": {
+							"description": "OK",
+							"content": {
+								"application/json": {
+									"schema": {
+										"type": "object",
+										"properties": {
+											"success": {
+												"type": "boolean",
+												"example": true
+											},
+											"data": {
+												"type": "object",
+												"properties": {}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"/api/images": {
+				"get": {
+					"summary": "",
+					"tags": [
+						""
 					],
 					"parameters": [
 						{
 							"in": "query string",
-							"name": "pagination_identifier",
+							"name": "prompt",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
+						},
+						{
+							"in": "query string",
+							"name": "art_style",
 							"required": false,
 							"schema": {
 								"type": "string"
@@ -148,22 +854,19 @@
 											"data": {
 												"type": "object",
 												"properties": {
-													"user_ids": {
-														"$ref": "#/components/schemas/user_ids"
+													"suggestions_ids": {
+														"$ref": "#/components/schemas/suggestions_ids"
 													},
-													"users": {
-														"$ref": "#/components/schemas/users"
-													},
-													"meta": {
-														"type": "object"
+													"suggestions": {
+														"$ref": "#/components/schemas/suggestions"
 													},
 													"result_type": {
 														"type": "string",
-														"example": "user_ids"
+														"example": "suggestions_ids"
 													},
 													"result_type_lookup": {
 														"type": "string",
-														"example": "users"
+														"example": "suggestions"
 													}
 												}
 											}
@@ -178,6 +881,6 @@
 		}
 	},
 	"apis": [
-		"./routes/api/web/index"
+		"./routes/api/index"
 	]
 }

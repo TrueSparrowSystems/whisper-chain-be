@@ -19,20 +19,8 @@ const webApis = function(req, res, next) {
   next();
 };
 
-/**
- * Lens APIs middleware.
- *
- * @param {object} req
- * @param {object} res
- * @param {function} next
- */
-const lensApis = function(req, res, next) {
-  req.internalDecodedParams.apiVersion = apiVersions.lens;
-  next();
-};
-
 // Lens routes.
-router.use('/lens', lensApis, lensRoutes);
+router.use('/lens', webApis, lensRoutes);
 
 // Api image routes.
 router.use('/images', webApis, imagesRoutes);

@@ -180,8 +180,8 @@ app.use(function(req, res, next) {
 const swaggerSpecWeb = swaggerJSDoc(require(rootPrefix + '/config/apiParams/web/openapi.json'));
 const swaggerHtmlWeb = swaggerUi.generateHTML(swaggerSpecWeb);
 
-app.use('/api-docs/web', swaggerUi.serveFiles(swaggerSpecWeb));
-app.get('/api-docs/web', function(req, res) {
+app.use('/api-docs', swaggerUi.serveFiles(swaggerSpecWeb));
+app.get('/api-docs', function(req, res) {
   return res.send(swaggerHtmlWeb);
 });
 

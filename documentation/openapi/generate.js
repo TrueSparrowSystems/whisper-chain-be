@@ -16,11 +16,11 @@ class GenerateSwaggerSpec {
 
     oThis.entityFormatterClassMap = FormatterComposerFactory.getComposer(apiVersion).entityClassMapping;
 
-    oThis.routeIndexFilePath = `/routes/api/${apiVersion}/index`;
-    oThis.routesMap = new TraverseRouteTree(`/api/${apiVersion}`, rootPrefix + oThis.routeIndexFilePath).perform();
+    oThis.routeIndexFilePath = `/routes/api/index`;
+    oThis.routesMap = new TraverseRouteTree(`/api`, rootPrefix + oThis.routeIndexFilePath).perform();
     oThis.responseSignatures = require(rootPrefix + `/config/apiParams/${apiVersion}/response`);
     oThis.requestSignatures = require(rootPrefix + `/config/apiParams/${apiVersion}/signature`);
-    oThis.routeSpecs = require(rootPrefix + `/config/apiParams/${apiVersion}/routeSpec.js`);
+    oThis.routeSpecs = require(rootPrefix + `/config/apiParams/${apiVersion}/routeSpec`);
 
     oThis.openapiFilePath = `./config/apiParams/${apiVersion}/openapi.json`;
 
@@ -36,6 +36,7 @@ class GenerateSwaggerSpec {
     oThis._initSwaggerSpec();
 
     for (const route in oThis.routesMap) {
+      console.log('generating doc for route:', route);
       const routeInfo = oThis.routeSpecs[route];
       const apiName = routeInfo.apiName;
       const responseSignature = oThis.responseSignatures[apiName];
@@ -240,5 +241,3 @@ class GenerateSwaggerSpec {
 }
 
 new GenerateSwaggerSpec('web').perform();
-
-new GenerateSwaggerSpec('v1').perform();

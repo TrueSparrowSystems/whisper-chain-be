@@ -10,7 +10,7 @@ const rootPrefix = '../../..',
   apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName'),
   webResponse = require(rootPrefix + '/config/apiParams/web/response');
 
-const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.lens);
+const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.web);
 
 /**
  * Set api_source in internal decoded params

@@ -9,13 +9,13 @@ const rootPrefix = '../../..',
   apiVersions = require(rootPrefix + '/lib/globalConstant/apiVersions'),
   routeHelper = require(rootPrefix + '/routes/helper'),
   apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName'),
-  lensResponse = require(rootPrefix + '/config/apiParams/lens/response'),
+  webResponse = require(rootPrefix + '/config/apiParams/web/response'),
   cookieHelper = require(rootPrefix + '/lib/cookieHelper'),
   cookieConstants = require(rootPrefix + '/lib/globalConstant/cookie'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   whisperConstants = require(rootPrefix + '/lib/globalConstant/whispers');
 
-const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.lens);
+const FormatterComposer = FormatterComposerFactory.getComposer(apiVersions.web);
 
 /**
  * Set api_source in internal decoded params
@@ -51,7 +51,7 @@ router.post('/connect', sanitizer.sanitizeDynamicUrlParams, function(req, res, n
       cookieHelper.setLensUserLoginCookie(req, res, options);
     }
 
-    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const formatterParams = Object.assign({}, webResponse[apiName], { serviceData: serviceResponse.data });
     const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
     serviceResponse.data = wrapperFormatterRsp.data;
   };
@@ -67,7 +67,7 @@ router.get('/chains', sanitizer.sanitizeDynamicUrlParams, function(req, res, nex
   req.internalDecodedParams.apiName = apiName;
 
   const dataFormatterFunc = async function(serviceResponse) {
-    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const formatterParams = Object.assign({}, webResponse[apiName], { serviceData: serviceResponse.data });
     const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
     serviceResponse.data = wrapperFormatterRsp.data;
   };
@@ -84,7 +84,7 @@ router.get('/:chain_id', sanitizer.sanitizeDynamicUrlParams, function(req, res, 
   req.decodedParams.chain_id = req.params.chain_id;
 
   const dataFormatterFunc = async function(serviceResponse) {
-    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const formatterParams = Object.assign({}, webResponse[apiName], { serviceData: serviceResponse.data });
     const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
     serviceResponse.data = wrapperFormatterRsp.data;
   };
@@ -118,7 +118,7 @@ router.post('/ipfs-objects', sanitizer.sanitizeDynamicUrlParams, function(req, r
   req.internalDecodedParams.apiName = apiName;
 
   const dataFormatterFunc = async function(serviceResponse) {
-    const formatterParams = Object.assign({}, lensResponse[apiName], { serviceData: serviceResponse.data });
+    const formatterParams = Object.assign({}, webResponse[apiName], { serviceData: serviceResponse.data });
     const wrapperFormatterRsp = await new FormatterComposer(formatterParams).perform();
     serviceResponse.data = wrapperFormatterRsp.data;
   };
