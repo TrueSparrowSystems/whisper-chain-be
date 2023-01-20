@@ -47,7 +47,6 @@ router.post('/connect', sanitizer.sanitizeDynamicUrlParams, function(req, res, n
         cookieName: cookieConstants.lensUserLoginCookieName,
         cookieExpiry: cookieConstants.lensCookieExpiryTime
       };
-
       cookieHelper.setLensUserLoginCookie(req, res, options);
     }
 

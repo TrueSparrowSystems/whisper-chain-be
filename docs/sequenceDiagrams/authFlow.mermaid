@@ -2,7 +2,7 @@
 %% Editor: https://mermaid.live/edit
 
 sequenceDiagram
-title Auth Service 
+title Connect API  
 
 participant Browser
 participant Wallet
@@ -19,18 +19,15 @@ Wallet->>Browser: Response
 Browser->>Platform: Verify signature
 Platform->>Browser: Response
 
-Browser->>Server: Authenticate
+Browser->>Server: Connect
 
-note over Server: Verify signature
+note over Server: From signature, recover and verify wallet address
 break
     note over Server: If verification failed
 end
 
-
 Server->>DB: Get user details
 DB->>Server: Response
-
-note over Server: Create cookie
 
 note over Server: If new user
 
@@ -42,6 +39,5 @@ Server->>DB: Create entry in user_eth_addresses
 DB->>Server: Response
 
 note over Server: End of if
-note over Server: Set user in internal decoded params
 
-Server->>Browser: Set cookie
+Server->>Browser: Set cookie and return current_user entity and users map.
