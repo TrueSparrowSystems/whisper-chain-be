@@ -20,6 +20,7 @@
     "js-base64": "3.7.2",
     "morgan": "1.10.0",
     "mysql": "2.18.1",
+    "node-telegram-bot-api": "^0.61.0",
     "sanitize-html": "2.3.2",
     "uuid": "8.3.2",
     "swagger-jsdoc": "6.2.1",
