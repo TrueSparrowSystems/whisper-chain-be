@@ -264,9 +264,7 @@ class CoreConstants {
   }
 
   get TELEGRAM_WHITELISTED_USER_IDS() {
-    const userIds = process.env.WHITELISTED_USER_IDS.split(',');
-
-    return userIds;
+    return process.env.WHITELISTED_USER_IDS;
   }
 }
 
