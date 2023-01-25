@@ -262,6 +262,12 @@ class CoreConstants {
   get TELEGRAM_BOT_TOKEN() {
     return process.env.TELEGRAM_BOT_TOKEN;
   }
+
+  get TELEGRAM_WHITELISTED_USER_IDS() {
+    const userIds = process.env.WHITELISTED_USER_IDS.split(',');
+
+    return userIds;
+  }
 }
 
 module.exports = new CoreConstants();
