@@ -65,5 +65,3 @@ npm-debug.log*
 
 localTests
 shared-local-instance.db
-
-set_env_vars.sh
