@@ -1,0 +1,54 @@
+%% Documentation: https://github.com/mermaid-js/mermaid
+%% Editor: https://mermaid.live/edit
+
+sequenceDiagram
+title Telegram Bot Image Upload 
+
+participant Admin
+participant Telegram Bot
+participant Server
+participant Telegram Bot API
+participant Local Storage
+participant S3
+participant DB
+
+
+
+Admin->>Telegram Bot: Send SeedImage
+Telegram Bot->>Server: Forward Message details
+break
+    note over Server: If message doesn't contain image
+end
+
+note over Server: If UserID is not Whitelisted
+Server->>Telegram Bot: response
+Telegram Bot->>Admin: You are not an admin
+note over Server: End of if
+
+
+Server->>Telegram Bot API: Fetch Image details
+Telegram Bot API->>Server: JSON response
+Server->>Telegram Bot API: Download Image from filepath
+Telegram Bot API->>Server: Response 
+
+Server->>Local Storage: Save the file to disk
+Local Storage->>Server: Response
+
+Server->>S3: Upload Image to S3
+S3->>Server: Url location response  
+
+Server->>DB: Create Entry in Images
+DB->>Server: Response
+
+
+Server->>DB: Create Entry in PlatformChainSeed
+DB->>Server: Response
+
+Server->>Telegram Bot: Success Response
+Telegram Bot->>Admin: Received Image and Seeding process is completed!
+
+
+
+%%set filesize
+%%fetch filepath from image details
+%%get instance of AWS S3
