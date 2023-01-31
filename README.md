@@ -49,13 +49,17 @@ TODO
 
 * Detailed documentation can be found at <domain>/api-docs route.
 
-## Daily post publication cron db seeding steps using telegram bot
-1. Download and open Telegram
-2. Search for 
-    - Local WhisperChain (@localWCBot) for testing
-    - Whisper Chain Admin (@WhisperChainAdminBot) for Staging
-3. Send image on the bot and select "Compress the image"
-
+## Telegram Bot for seeding chain images
+### How to setup?
+1. Create Bot on Telegram side.
+2. Set following env variables:
+   - TELEGRAM_BOT_TOKEN - Bot token
+   - WHITELISTED_USER_IDS - Array of telegram user ids of admin users.
+3. Setup continuous cron using following command:
 ```sh
 > node lib/cron/seedImage.js
 ```
+
+### How to use?
+1. Go to bot page.
+2. Upload photo. That's it.
