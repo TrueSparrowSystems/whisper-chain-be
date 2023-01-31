@@ -49,7 +49,9 @@ TODO
 
 * Detailed documentation can be found at <domain>/api-docs route.
 
-## Daily post publication cron db seeding steps
-1. Take images from PX team, upload them inside the *stability* folder in the *whisperchain-staging-static-files* bucket and make them public.
-2. Create a new entry in the *images* table where *url* is S3 url from step 1 and *ipfs_object_id* field will be empty.
-3. Create a new entry in the *platform_chain_seeds* table where *image_id* field will be id of the images table from step 2 and *is_published* field will be 2. 
+## Daily post publication cron db seeding steps using telegram bot
+1. Download and open Telegram.
+2. Search for 
+    - Local WhisperChain (@localWCBot) for testing
+    - Whisper Chain Admin (@WhisperChainAdminBot) for deployment
+3. Run node lib/cron/seedImage.js and send image on the bot and select "Compress the image". 
