@@ -49,7 +49,17 @@ TODO
 
 * Detailed documentation can be found at <domain>/api-docs route.
 
-## Daily post publication cron db seeding steps
-1. Take images from PX team, upload them inside the *stability* folder in the *whisperchain-staging-static-files* bucket and make them public.
-2. Create a new entry in the *images* table where *url* is S3 url from step 1 and *ipfs_object_id* field will be empty.
-3. Create a new entry in the *platform_chain_seeds* table where *image_id* field will be id of the images table from step 2 and *is_published* field will be 2. 
+## Telegram Bot for seeding chain images
+### How to setup?
+1. Create Bot on Telegram side.
+2. Set following env variables:
+   - TELEGRAM_BOT_TOKEN - Bot token
+   - WHITELISTED_USER_IDS - Array of telegram user ids of admin users.
+3. Setup continuous cron using following command:
+```sh
+> node lib/cron/seedImage.js
+```
+
+### How to use?
+1. Go to bot page.
+2. Upload photo. That's it.

@@ -257,6 +257,15 @@ class CoreConstants {
   get WHISPER_CHAIN_LENS_PROFILE_ID() {
     return process.env.WHISPER_CHAIN_LENS_PROFILE_ID;
   }
+
+  // Telegram bot token
+  get TELEGRAM_BOT_TOKEN() {
+    return process.env.TELEGRAM_BOT_TOKEN;
+  }
+
+  get TELEGRAM_WHITELISTED_USER_IDS() {
+    return process.env.WHITELISTED_USER_IDS;
+  }
 }
 
 module.exports = new CoreConstants();

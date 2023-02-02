@@ -105,6 +105,29 @@ class ImageModel extends ModelBase {
   }
 
   /**
+   * This method inserts an entry in the table.
+   *
+   * @param {object} params
+   * @param {string} params.url
+   *
+   * @returns {Promise<*>}
+   */
+  async insertUrl(param) {
+    const oThis = this;
+
+    // // Perform validations.
+    if (!has.call(param, 'url')) {
+      console.log('No URL KEY FOUND!');
+
+      throw new Error(`Invalid Url-${param.url}`);
+    }
+
+    const insertedResponse = await oThis.insert(param).fire();
+
+    return insertedResponse.insertId;
+  }
+
+  /**
    * This method gets the response for the array of ids passed.
    *
    * @param {array} ids
