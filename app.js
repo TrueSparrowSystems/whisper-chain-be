@@ -173,11 +173,7 @@ app.use(function(req, res, next) {
       'Access-Control-Allow-Headers',
       'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
     );
-    res.header('Access-Control-Allow-Origin', [
-      'http://localhost:3000',
-      'https://staging.whisperchain.xyz/',
-      'https://api.staging.whisperchain.xyz/'
-    ]);
+    res.header('Access-Control-Allow-Origin', '*');
 
     res.header('Access-Control-Allow-Credentials', 'true');
 
