@@ -25,7 +25,7 @@ const apiRoutes = require(rootPrefix + '/routes/api/index');
 const errorConfig = basicHelper.fetchErrorConfig(apiVersions.web);
 const apiHostName = new URL(coreConstants.API_DOMAIN).hostname;
 
-const cors = require('cors');
+//const cors = require('cors');
 
 morgan.token('id', function getId(req) {
   return req.id;
@@ -159,12 +159,12 @@ process.title = 'Whisper Chain API';
 
 // Create express application instance.
 const app = express();
-
-app.use(
-  cors({
-    origin: '*'
-  })
-);
+//
+// app.use(
+//   cors({
+//     origin: '*'
+//   })
+// );
 
 app.use(function(req, res, next) {
   if (!basicHelper.isProduction()) {
@@ -173,6 +173,8 @@ app.use(function(req, res, next) {
       'Access-Control-Allow-Headers',
       'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
     );
+    res.header('Access-Control-Allow-Origin', ['http://localhost:3000', 'https://staging.whisperchain.xyz/']);
+
     res.header('Access-Control-Allow-Credentials', 'true');
 
     if (req.method === 'OPTIONS') {
