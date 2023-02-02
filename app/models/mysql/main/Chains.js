@@ -45,6 +45,7 @@ class ChainModel extends ModelBase {
    * @param {number} dbRow.status
    * @param {number} dbRow.created_at
    * @param {number} dbRow.updated_at
+   * @param {number} dbRow.total_whispers
    *
    * @returns {object}
    */
@@ -62,7 +63,8 @@ class ChainModel extends ModelBase {
       ipfsObjectId: dbRow.ipfs_object_id,
       status: dbRow.status,
       createdAt: dbRow.created_at,
-      updatedAt: dbRow.updated_at
+      updatedAt: dbRow.updated_at,
+      total_whispers: dbRow.total_whispers
     };
 
     return oThis.sanitizeFormattedData(formattedData);
@@ -90,7 +92,8 @@ class ChainModel extends ModelBase {
         'ipfs_object_id',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'total_whispers'
       ])
       .where({ id: id })
       .fire();
@@ -178,6 +181,54 @@ class ChainModel extends ModelBase {
 
     return response;
   }
+  /**
+   * This method gets the total wishpers on chain id.
+   *
+   * @param {number} id
+   *
+   * @returns {Promise<void>}
+   */
+  async getTotalWhisperById(id) {
+    const oThis = this;
+    const resp = await oThis.getById(id);
+    const response = resp[0].total_whispers;
+
+    return response;
+  }
+  /**
+   * Fetch whisper info by status.
+   *
+   * @param {number} id
+   *
+   * @returns {Promise<{}>}
+   */
+  async updateTotalWhispers(id) {
+    const oThis = this;
+    let whispers = await oThis.getTotalWhisperById(id);
+
+    whispers = parseInt(whispers) + 1;
+    //console.log(typeof whispers);
+    const updatedResponse = await oThis
+      .update({
+        total_whispers: whispers
+      })
+      .where({ id: id })
+      .fire();
+
+    if (updatedResponse.affectedRows != 1) {
+      return Promise.reject(
+        responseHelper.error({
+          internal_error_identifier: 'a_m_ms_m_c_utw_1',
+          api_error_identifier: 'something_went_wrong',
+          debug_options: {
+            id: id
+          }
+        })
+      );
+    }
+    //console.log('new whisper---------',await oThis.getTotalWhisperById(id));
+    return;
+  }
 
   /**
    * List of formatted column names that can be exposed by service.
@@ -196,7 +247,8 @@ class ChainModel extends ModelBase {
       'ipfs_object_id',
       'status',
       'created_at',
-      'updated_at'
+      'updated_at',
+      'total_whispers'
     ];
   }
 }

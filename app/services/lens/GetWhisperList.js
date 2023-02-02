@@ -1,3 +1,5 @@
+const { totalWhispers } = require('../../../lib/globalConstant/chains');
+
 const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
@@ -134,7 +136,8 @@ class GetWhisperOfChain extends ServiceBase {
         platformChainId: chainModelResponse[0].platformId,
         platformChainUrl: chainModelResponse[0].platformUrl,
         platform: platformConstants.platforms[chainModelResponse[0].platform],
-        status: chainConstants.statuses[chainModelResponse[0].status]
+        status: chainConstants.statuses[chainModelResponse[0].status],
+        totalWhispers: new ChainModel().getTotalWhisperById(chain.id)
       };
 
       oThis.userIds.push(chainModelResponse[0].userId);

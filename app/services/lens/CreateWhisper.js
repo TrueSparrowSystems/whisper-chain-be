@@ -3,6 +3,7 @@ const rootPrefix = '../../..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   ImagesModel = require(rootPrefix + '/app/models/mysql/main/Images'),
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
+  ChainsModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
   whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers');
 
 /**
@@ -115,6 +116,8 @@ class CreateWhisper extends ServiceBase {
           }
         })
       );
+    } else {
+      await new ChainsModel().updateTotalWhispers(oThis.chainId);
     }
   }
 
