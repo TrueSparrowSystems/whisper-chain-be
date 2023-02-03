@@ -1,13 +1,10 @@
 const rootPrefix = '../..',
   ChainModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
-  basicHelper = require(rootPrefix + '/helpers/basic'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger');
 
-const queryTableName = 'chains';
-
 /**
- * Class to sanitize utm table.
+ * Class update total whispers column.
  *
  * @class UpdateTotalWhisper
  */
@@ -24,7 +21,7 @@ class UpdateTotalWhisper {
   }
 
   /**
-   * Validate data.
+   * Update data.
    *
    * @returns {Promise<void>}
    * @private
@@ -34,33 +31,26 @@ class UpdateTotalWhisper {
 
     // UPDATE chains SET total_whispers = (select count(*) from whispers where whispers.chain_id=chains.id);
 
-    //whispers select groups by chain_id dbRows ={chain_id, count}
-    // const dbRows = await oThis
-    //   .select('bundle_id, score')
-    //   .where({
-    //     bundle_id: bundleIds
-    //   })
-    //   .group_by('score, bundle_id')
-    //   .order_by('bundle_id ASC, score DESC')
-    //   .fire();
+    const whispers = [];
+    const dbRows = await new WhispersModel()
+      .select('count(*) as total_whispers, chain_id')
+      .group_by('chain_id')
+      .fire();
 
-    const query = `UPDATE ${queryTableName} SET total_whispers = (select count(*) from whispers where whispers.chain_id=chains.id)`;
-
-    const queryRsp = await new UtmLogModel().fire(selectQuery);
-
-    const dbRows = queryRsp.rows;
-
-    if (dbRows.length === 0) {
-      return;
+    for (let index = 0; index < dbRows.length; index++) {
+      whispers.push({ total_whispers: dbRows[index].total_whispers, chain_id: dbRows[index].chain_id });
     }
 
-    // for (let index = 0; index < dbRows.length; index++) {
-    //   const formattedDbRow = new UtmLogModel().formatDbData(dbRows[index]);
+    //console.log(whispers);
 
-    //   if (formattedDbRow.utmContent) {
-    //     logger.log('Validate Remaining user Id specific Data, values: ' + JSON.stringify(formattedDbRow));
-    //   }
-    // }
+    if (whispers) {
+      for (let index = 0; index < whispers.length; index++) {
+        await new ChainModel()
+          .update({ total_whispers: whispers[index].total_whispers })
+          .where({ id: whispers[index].chain_id })
+          .fire();
+      }
+    }
   }
 }
 
