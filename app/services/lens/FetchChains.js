@@ -92,7 +92,7 @@ class FetchChains extends ServiceBase {
           platformChainUrl: chain.platformUrl,
           status: chainConstants.statuses[chain.status],
           // TODO total_whispers - getTotalWhisperById not needed.
-          totalWhispers: new ChainsModel().getTotalWhisperById(chain.id)
+          totalWhispers: chain.totalWhispers
         };
         oThis.chainsMap[chain.id] = chainObject;
         oThis.chainIds.push(chain.id);

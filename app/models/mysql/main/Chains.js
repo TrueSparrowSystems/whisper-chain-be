@@ -64,8 +64,8 @@ class ChainModel extends ModelBase {
       status: dbRow.status,
       createdAt: dbRow.created_at,
       updatedAt: dbRow.updated_at,
-      // TODO total_whispers - key should be in camecase
-      total_whispers: dbRow.total_whispers
+      // TODO total_whispers
+      totalWhispers: dbRow.total_whispers
     };
 
     return oThis.sanitizeFormattedData(formattedData);
@@ -183,20 +183,6 @@ class ChainModel extends ModelBase {
     return response;
   }
   /**
-   * This method gets the total wishpers on chain id.
-   *
-   * @param {number} id
-   *
-   * @returns {Promise<void>}
-   */
-  async getTotalWhisperById(id) {
-    const oThis = this;
-    const resp = await oThis.getById(id);
-    const response = resp[0].total_whispers;
-
-    return response;
-  }
-  /**
    * Fetch whisper info by status.
    *
    * @param {number} id
@@ -207,13 +193,10 @@ class ChainModel extends ModelBase {
   // UPDATE chains SET total_whispers = total_whispers + 1;
   async updateTotalWhispers(id) {
     const oThis = this;
-    let whispers = await oThis.getTotalWhisperById(id);
-
-    whispers = parseInt(whispers) + 1;
     //console.log(typeof whispers);
     const updatedResponse = await oThis
       .update({
-        total_whispers: whispers
+        total_whispers: total_whispers + 1
       })
       .where({ id: id })
       .fire();
