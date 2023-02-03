@@ -116,9 +116,9 @@ class CreateWhisper extends ServiceBase {
           }
         })
       );
-    } else {
-      await new ChainsModel().updateTotalWhispers(oThis.chainId);
     }
+
+    await new ChainsModel().updateTotalWhispers(oThis.chainId);
   }
 
   /**

@@ -31,6 +31,7 @@ class UpdateTotalWhisper {
 
     // UPDATE chains SET total_whispers = (select count(*) from whispers where whispers.chain_id=chains.id);
 
+    // TODO total_whispers - query should consider only those whispers which are of ACTIVE status.
     const whispers = [];
     const dbRows = await new WhispersModel()
       .select('count(*) as total_whispers, chain_id')

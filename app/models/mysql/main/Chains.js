@@ -64,6 +64,7 @@ class ChainModel extends ModelBase {
       status: dbRow.status,
       createdAt: dbRow.created_at,
       updatedAt: dbRow.updated_at,
+      // TODO total_whispers - key should be in camecase
       total_whispers: dbRow.total_whispers
     };
 
@@ -202,6 +203,8 @@ class ChainModel extends ModelBase {
    *
    * @returns {Promise<{}>}
    */
+  // TODO total_whispers - don't select before update.
+  // UPDATE chains SET total_whispers = total_whispers + 1;
   async updateTotalWhispers(id) {
     const oThis = this;
     let whispers = await oThis.getTotalWhisperById(id);

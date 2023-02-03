@@ -5,6 +5,7 @@ const rootPrefix = '../..',
 const dbName = database.mainDbName;
 const dbKind = dbKindConstants.sqlDbKind;
 
+// TODO total_whispers - bigint type is not needed. We can keep int.
 const upQueries = ['ALTER TABLE `chains` \n\
     ADD COLUMN `total_whispers` bigint(20) NOT NULL;'];
 
