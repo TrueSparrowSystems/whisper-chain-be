@@ -14,7 +14,7 @@
 		],
 		"components": {
 			"schemas": {
-				"currentUser": {
+				"current_user": {
 					"type": "object",
 					"properties": {
 						"id": {
@@ -242,6 +242,10 @@
 							"status": {
 								"type": "string",
 								"example": "ACTIVE"
+							},
+							"total_whispers": {
+								"type": "integer",
+								"exmaple": 1
 							}
 						},
 						"required": [
@@ -254,7 +258,8 @@
 							"platform",
 							"platform_chain_id",
 							"platform_chain_url",
-							"status"
+							"status",
+							"total_whispers"
 						]
 					},
 					"example": {
@@ -489,8 +494,8 @@
 											"data": {
 												"type": "object",
 												"properties": {
-													"currentUser": {
-														"$ref": "#/components/schemas/currentUser"
+													"current_user": {
+														"$ref": "#/components/schemas/current_user"
 													},
 													"users": {
 														"$ref": "#/components/schemas/users"
