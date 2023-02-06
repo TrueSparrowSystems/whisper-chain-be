@@ -137,7 +137,6 @@ class GetWhisperOfChain extends ServiceBase {
         platformChainUrl: chainModelResponse[0].platformUrl,
         platform: platformConstants.platforms[chainModelResponse[0].platform],
         status: chainConstants.statuses[chainModelResponse[0].status],
-        // TODO total_whispers getTotalWhisperById not needed.
         totalWhispers: chainModelResponse[0].totalWhispers
       };
 

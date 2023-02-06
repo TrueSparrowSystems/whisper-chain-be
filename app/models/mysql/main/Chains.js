@@ -64,7 +64,6 @@ class ChainModel extends ModelBase {
       status: dbRow.status,
       createdAt: dbRow.created_at,
       updatedAt: dbRow.updated_at,
-      // TODO total_whispers
       totalWhispers: dbRow.total_whispers
     };
 
@@ -189,22 +188,17 @@ class ChainModel extends ModelBase {
    *
    * @returns {Promise<{}>}
    */
-  // TODO total_whispers - don't select before update.
-  // UPDATE chains SET total_whispers = total_whispers + 1;
-  async updateTotalWhispers(id) {
+  async incrementTotalWhispers(id) {
     const oThis = this;
-    //console.log(typeof whispers);
     const updatedResponse = await oThis
-      .update({
-        total_whispers: total_whispers + 1
-      })
+      .update(['total_whispers = total_whispers + 1'])
       .where({ id: id })
       .fire();
 
     if (updatedResponse.affectedRows != 1) {
       return Promise.reject(
         responseHelper.error({
-          internal_error_identifier: 'a_m_ms_m_c_utw_1',
+          internal_error_identifier: 'a_m_ms_m_c_itw_1',
           api_error_identifier: 'something_went_wrong',
           debug_options: {
             id: id
@@ -212,7 +206,7 @@ class ChainModel extends ModelBase {
         })
       );
     }
-    //console.log('new whisper---------',await oThis.getTotalWhisperById(id));
+
     return;
   }
 

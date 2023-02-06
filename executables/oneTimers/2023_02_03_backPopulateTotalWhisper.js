@@ -1,6 +1,7 @@
 const rootPrefix = '../..',
   ChainModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
+  whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger');
 
 /**
@@ -29,20 +30,16 @@ class UpdateTotalWhisper {
   async _addTotalWhispersInChain() {
     const oThis = this;
 
-    // UPDATE chains SET total_whispers = (select count(*) from whispers where whispers.chain_id=chains.id);
-
-    // TODO total_whispers - query should consider only those whispers which are of ACTIVE status.
     const whispers = [];
     const dbRows = await new WhispersModel()
       .select('count(*) as total_whispers, chain_id')
+      .where({ status: whispersConstants.invertedStatuses[whispersConstants.activeStatus] })
       .group_by('chain_id')
       .fire();
 
     for (let index = 0; index < dbRows.length; index++) {
       whispers.push({ total_whispers: dbRows[index].total_whispers, chain_id: dbRows[index].chain_id });
     }
-
-    //console.log(whispers);
 
     if (whispers) {
       for (let index = 0; index < whispers.length; index++) {
