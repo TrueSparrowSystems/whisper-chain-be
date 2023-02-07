@@ -266,6 +266,19 @@ class CoreConstants {
   get TELEGRAM_WHITELISTED_USER_IDS() {
     return process.env.WHITELISTED_USER_IDS;
   }
+
+  // Memcached constans.
+  get MEMCACHED_SERVERS() {
+    return process.env.NA_MEMCACHE_SERVERS.split(' ');
+  }
+
+  get MEMCACHED_DEFAULT_TTL() {
+    return process.env.NA_MEMCACHE_DEFAULT_TTL;
+  }
+
+  get MEMCACHED_CONSISTENT_BEHAVIOUR() {
+    return process.env.NA_MEMCACHE_CONSISTENT_BEHAVIOUR;
+  }
 }
 
 module.exports = new CoreConstants();
