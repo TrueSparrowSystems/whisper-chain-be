@@ -8,7 +8,7 @@ const rootPrefix = '../../..',
   whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
   chainConstants = require(rootPrefix + '/lib/globalConstant/chains'),
   platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
-  GetByIdCache = require(rootPrefix + '/lib/cacheManagement/single/chains/GetById'),
+  GetChainByIdCache = require(rootPrefix + '/lib/cacheManagement/single/chains/GetChainById'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
 
 /**
@@ -122,7 +122,7 @@ class GetWhisperOfChain extends ServiceBase {
   async createChainMap() {
     const oThis = this;
     try {
-      const chainModelResponse = await new GetByIdCache({ id: oThis.chainId }).fetch();
+      const chainModelResponse = await new GetChainByIdCache({ id: oThis.chainId }).fetch();
       const chainObject = {
         id: chainModelResponse.data.id,
         imageId: chainModelResponse.data.imageId,
