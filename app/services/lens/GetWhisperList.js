@@ -8,7 +8,7 @@ const rootPrefix = '../../..',
   whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
   chainConstants = require(rootPrefix + '/lib/globalConstant/chains'),
   platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
-  GetByIdCache = require(rootPrefix + 'lib/cacheManagement/single/chains/GetById'),
+  GetByIdCache = require(rootPrefix + '/lib/cacheManagement/single/chains/GetById'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
 
 /**
@@ -122,24 +122,23 @@ class GetWhisperOfChain extends ServiceBase {
   async createChainMap() {
     const oThis = this;
     try {
-      const chainModelResponse = await new GetByIdCache({ ids: oThis.chainId }).fetch();
-
+      const chainModelResponse = await new GetByIdCache({ id: oThis.chainId }).fetch();
       const chainObject = {
-        id: chainModelResponse[0].id,
-        imageId: chainModelResponse[0].imageId,
+        id: chainModelResponse.data.id,
+        imageId: chainModelResponse.data.imageId,
         recentWhisperIds: [],
-        userId: chainModelResponse[0].userId,
-        ipfsObjectId: chainModelResponse[0].ipfsObjectId,
-        uts: chainModelResponse[0].updatedAt,
-        startTs: chainModelResponse[0].createdAt,
-        platformChainId: chainModelResponse[0].platformId,
-        platformChainUrl: chainModelResponse[0].platformUrl,
-        platform: platformConstants.platforms[chainModelResponse[0].platform],
-        status: chainConstants.statuses[chainModelResponse[0].status]
+        userId: chainModelResponse.data.userId,
+        ipfsObjectId: chainModelResponse.data.ipfsObjectId,
+        uts: chainModelResponse.data.updatedAt,
+        startTs: chainModelResponse.data.createdAt,
+        platformChainId: chainModelResponse.data.platformId,
+        platformChainUrl: chainModelResponse.data.platformUrl,
+        platform: platformConstants.platforms[chainModelResponse.data.platform],
+        status: chainConstants.statuses[chainModelResponse.data.status]
       };
 
-      oThis.userIds.push(chainModelResponse[0].userId);
-      oThis.imageIds.push(chainModelResponse[0].imageId);
+      oThis.userIds.push(chainModelResponse.data.userId);
+      oThis.imageIds.push(chainModelResponse.data.imageId);
       oThis.chainMap[oThis.chainId] = chainObject;
     } catch (error) {
       return Promise.reject(
