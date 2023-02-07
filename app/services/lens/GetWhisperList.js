@@ -2,12 +2,13 @@ const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
-  ChainModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
+  // ChainModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
   ImageModel = require(rootPrefix + '/app/models/mysql/main/Images'),
   UserModel = require(rootPrefix + '/app/models/mysql/main/User'),
   whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
   chainConstants = require(rootPrefix + '/lib/globalConstant/chains'),
   platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
+  GetByIdCache = require(rootPrefix + 'lib/cacheManagement/single/chains/GetById'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
 
 /**
@@ -121,7 +122,7 @@ class GetWhisperOfChain extends ServiceBase {
   async createChainMap() {
     const oThis = this;
     try {
-      const chainModelResponse = await new ChainModel().getById(oThis.chainId);
+      const chainModelResponse = await new GetByIdCache({ ids: oThis.chainId }).fetch();
 
       const chainObject = {
         id: chainModelResponse[0].id,
