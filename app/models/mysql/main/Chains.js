@@ -199,6 +199,55 @@ class ChainModel extends ModelBase {
       'updated_at'
     ];
   }
+
+  /**
+   * Flush cache.
+   *
+   * @param {object} params
+   * @param {number} [params.id]
+   *
+   * @returns {Promise<*>}
+   */
+  static async flushCache(params) {
+    const id = params.id;
+    const GetChainById = require(rootPrefix + '/lib/cacheManagement/single/chains/GetChainById');
+
+    await new GetChainById({ id: id }).clear();
+  }
+
+  // /**
+  //  * Flush cache.
+  //  *
+  //  * @param {object} params
+  //  * @param {number} [params.page]
+  //  * @param {number} [params.limit]
+  //  * @param {number} [params.platform]
+  //  *
+  //  * @returns {Promise<*>}
+  //  */
+  // async flushCacheAll(params) {
+  //   const limit = params.limit,
+  //         platform = params.platform;
+
+  //   let page = params.page;
+
+  //   const GetChainWithPagination = require(rootPrefix + '/lib/cacheManagement/single/chains/GetChainWithPagination');
+  //   // eslint-disable-next-line no-constant-condition
+  //   while(1){
+  //     const getCacheInsatnce = new GetChainWithPagination({
+  //       page: page,
+  //       limit: limit,
+  //       platform: platform
+  //     });
+  //     const flag = await getCacheInsatnce.fetchFromCache();
+  //     getCacheInsatnce.clear();
+  //     if(!flag){
+  //       break;
+  //     }
+  //     page += 1;
+  //   }
+
+  // }
 }
 
 module.exports = ChainModel;
