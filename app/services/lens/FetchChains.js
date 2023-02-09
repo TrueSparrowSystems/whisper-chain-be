@@ -3,10 +3,11 @@ const { totalWhispers } = require('../../../lib/globalConstant/chains');
 const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  ChainsModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
+  //ChainsModel = require(rootPrefix + '/app/models/mysql/main/Chains'),
   WhispersModel = require(rootPrefix + '/app/models/mysql/main/Whispers'),
   UserModel = require(rootPrefix + '/app/models/mysql/main/User'),
   ImageModel = require(rootPrefix + '/app/models/mysql/main/Images'),
+  GetChainWithPaginationCache = require(rootPrefix + '/lib/cacheManagement/single/chains/GetChainWithPagination'),
   whispersConstants = require(rootPrefix + '/lib/globalConstant/whispers'),
   platformConstants = require(rootPrefix + '/lib/globalConstant/platform'),
   chainConstants = require(rootPrefix + '/lib/globalConstant/chains'),
@@ -72,13 +73,13 @@ class FetchChains extends ServiceBase {
   async fetchChainsData() {
     const oThis = this;
     try {
-      const chainsArray = await new ChainsModel().getActiveChainsDataWithPagination(
-        oThis.page,
-        oThis.limit,
-        oThis.platform
-      );
+      const chainsArray = await new GetChainWithPaginationCache({
+        page: oThis.page,
+        limit: oThis.limit,
+        platform: oThis.platform
+      }).fetch();
 
-      chainsArray.forEach((chain) => {
+      chainsArray.data.forEach((chain) => {
         const chainObject = {
           id: chain.id,
           uts: chain.updatedAt,
