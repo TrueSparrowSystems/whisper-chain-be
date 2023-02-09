@@ -181,6 +181,7 @@ class ChainModel extends ModelBase {
 
     return response;
   }
+
   /**
    * Fetch whisper info by status.
    *
@@ -195,19 +196,7 @@ class ChainModel extends ModelBase {
       .where({ id: id })
       .fire();
 
-    if (updatedResponse.affectedRows != 1) {
-      return Promise.reject(
-        responseHelper.error({
-          internal_error_identifier: 'a_m_ms_m_c_itw_1',
-          api_error_identifier: 'something_went_wrong',
-          debug_options: {
-            id: id
-          }
-        })
-      );
-    }
-
-    return;
+    return updatedResponse;
   }
 
   /**
