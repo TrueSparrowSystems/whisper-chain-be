@@ -38,7 +38,10 @@ jobs:
           port: ${{ secrets.WHISPER_CHAIN_SSH_PORT }}
           script: |
             cd whisper-chain-be/
+            git stash
             git pull --rebase
+            git fetch
+            git checkout ${{ github.event.inputs.branch }}
             npm install
             source .env
             node db/seed.js
