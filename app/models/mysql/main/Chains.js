@@ -45,6 +45,7 @@ class ChainModel extends ModelBase {
    * @param {number} dbRow.status
    * @param {number} dbRow.created_at
    * @param {number} dbRow.updated_at
+   * @param {number} dbRow.total_whispers
    *
    * @returns {object}
    */
@@ -62,7 +63,8 @@ class ChainModel extends ModelBase {
       ipfsObjectId: dbRow.ipfs_object_id,
       status: dbRow.status,
       createdAt: dbRow.created_at,
-      updatedAt: dbRow.updated_at
+      updatedAt: dbRow.updated_at,
+      totalWhispers: dbRow.total_whispers
     };
 
     return oThis.sanitizeFormattedData(formattedData);
@@ -90,7 +92,8 @@ class ChainModel extends ModelBase {
         'ipfs_object_id',
         'status',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'total_whispers'
       ])
       .where({ id: id })
       .fire();
@@ -180,6 +183,23 @@ class ChainModel extends ModelBase {
   }
 
   /**
+   * Fetch whisper info by status.
+   *
+   * @param {number} id
+   *
+   * @returns {Promise<{}>}
+   */
+  async incrementTotalWhispers(id) {
+    const oThis = this;
+    const updatedResponse = await oThis
+      .update(['total_whispers = total_whispers + 1'])
+      .where({ id: id })
+      .fire();
+
+    return updatedResponse;
+  }
+
+  /**
    * List of formatted column names that can be exposed by service.
    *
    * @returns {array}
@@ -196,7 +216,8 @@ class ChainModel extends ModelBase {
       'ipfs_object_id',
       'status',
       'created_at',
-      'updated_at'
+      'updated_at',
+      'total_whispers'
     ];
   }
 }

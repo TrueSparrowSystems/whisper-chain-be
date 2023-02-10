@@ -1,3 +1,5 @@
+const { totalWhispers } = require('../../../lib/globalConstant/chains');
+
 const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
@@ -88,7 +90,8 @@ class FetchChains extends ServiceBase {
           platform: platformConstants.platforms[chain.platform],
           platformChainId: chain.platformId,
           platformChainUrl: chain.platformUrl,
-          status: chainConstants.statuses[chain.status]
+          status: chainConstants.statuses[chain.status],
+          totalWhispers: chain.totalWhispers
         };
         oThis.chainsMap[chain.id] = chainObject;
         oThis.chainIds.push(chain.id);
