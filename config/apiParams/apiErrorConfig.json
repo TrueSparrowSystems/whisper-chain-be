@@ -109,9 +109,12 @@
     "code": "invalid_otp",
     "message": "Invalid OTP. Please try again."
   },
-  "invalid_prompts_detected":{
+  "invalid_prompts_detected": {
     "http_code": "200",
     "code": "BAD_REQUEST",
-    "message": "AI generation of images failed for the prompt provided. Please try entering a different prompt."
+    "message": "AI generation of images failed for the prompt provided. Please try to describe the image you want to generate using different wording for the prompt."
   }
 }
+
+
+
