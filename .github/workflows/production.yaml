@@ -35,6 +35,13 @@ jobs:
       with:
         ref: ${{ github.event.inputs.branch }}
 
+    - uses: actions/checkout@v2
+      with:
+        repository: "WhisperChain/dev.secrets"
+        ref: "master"
+        token: ${{ secrets.PAT }}
+        path: "secrets"
+        
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
