@@ -1,0 +1,68 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "whisper-chain-be"
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 5000
+
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    - hosts:
+      - whisperchain.xyz
+      secretName: whisperchain.xyz
+  hosts:
+    - host: whisperchain.xyz
+      paths:
+        - path: /api
+          pathType: Prefix
+
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+envSecrets:
+  - envName: AWS_ACCESS_KEY_ID
+    secretName: plg-user
+    secretKey: AWS_ACCESS_KEY_ID
+  - envName: AWS_SECRET_ACCESS_KEY
+    secretName: plg-user
+    secretKey: AWS_SECRET_ACCESS_KEY
+  - envName: NA_MAIN_DB_MYSQL_HOST
+    secretName: whisperchain-db-credentials
+    secretKey: host
+  - envName: NA_MAIN_DB_MYSQL_USER
+    secretName: whisperchain-db-credentials
+    secretKey: username
+  - envName: NA_MAIN_DB_MYSQL_PASSWORD
+    secretName: whisperchain-db-credentials
+    secretKey: password
