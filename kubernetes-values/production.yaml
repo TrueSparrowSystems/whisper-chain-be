@@ -53,27 +53,28 @@ autoscaling:
 cronJobs:
   # Lowercase with only hyphens
 - name: daily-post-publication-cron
-  command: ["/usr/src/app/dailyPostPublication.sh"]
-  # Timezone in UTC 
+  command: ["/usr/src/app/cron/dailyPostPublication.sh"]
+
+  # Timezone in UTC
   schedule: "0 0 * * *"
   cpu: 1
   memory: 2Gi
 
 - name: whisper-status-poll-cron
-  command: ["/usr/src/app/cronScripts/whisperStatusPollCron.sh"]
-  # Timezone in UTC 
+  command: ["/usr/src/app/cron/whisperStatusPollCron.sh"]
+  # Timezone in UTC
   schedule: "* * * * *" # every 3 hrs.
   cpu: 1
   memory: 2Gi
 
 - name: seed-image-cron
-  command: ["/usr/src/app/seedImageCron.sh]
-  args: ["updateCastCron"] 
-  # Timezone in UTC 
+  command: ["/usr/src/app/cron/seedImageCron.sh]
+  args: ["updateCastCron"]
+  # Timezone in UTC
   schedule: "* * * * *"
   cpu: 1
   memory: 2Gi
- 
+
 envSecrets:
   - envName: S3_ACCESS_KEY_ID
     secretName: plg-user
