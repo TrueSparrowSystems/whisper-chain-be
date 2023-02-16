@@ -1,0 +1,53 @@
+{{- range $cron := .Values.cronJobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $.Values.fullnameOverride }}-{{ $cron.name }}-{{ $.Release.Revision }}
+  labels:
+    app: {{ $.Values.fullnameOverride }}-{{ $cron.name }}
+spec:
+  schedule: {{ $cron.schedule | quote}}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata: 
+          labels:
+            app: {{ $.Values.fullnameOverride }}-{{ $cron.name }}
+        spec:
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 240
+          containers:
+          - name: {{ $.Values.fullnameOverride }}-{{ $cron.name }}
+            image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+            command:  {{ $cron.command }}
+            env:
+              {{- range $key, $value := $.Values.env }}
+              - name: {{ $key }}
+                value: {{ $value | quote }}
+              {{- end }}
+              {{- range $secret := $.Values.envSecrets }}
+              - name: {{ $secret.envName }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $secret.secretName }}
+                    key: {{ $secret.secretKey | quote }}
+              {{- end }}
+              {{- range $key, $value := $.Values.awsSecrets }}
+              {{- range $refs := $value }}
+              - name: {{ $refs }}
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $key }}
+                    key: {{ $refs | quote }}
+              {{- end }}
+              {{- end }}
+            resources: 
+              limits:
+                cpu:  {{ $cron.cpu }}
+                memory:  {{ $cron.memory }}
+              requests:
+                cpu:  {{ $cron.cpu }}
+                memory:  {{ $cron.memory }}
+---
+{{- end }}
