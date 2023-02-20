@@ -26,10 +26,10 @@ RUN apt-get update && apt-get install telnet && apt-get install -y cron supervis
 COPY . .
 EXPOSE 5000
 
-
-RUN crontab -l | { cat; echo "0 0 * * * root . /usr/src/app/.env; sh /usr/src/app/cron/dailyPostPublication.sh 2>&1"; } | crontab -
-RUN crontab -l | { cat; echo "* * * * * root . /usr/src/app/.env; sh /usr/src/app/cron/seedImageCron.sh 2>&1"; } | crontab -
-RUN crontab -l | { cat; echo "* * * * * root . /usr/src/app/.env; sh /usr/src/app/cron/whisperStatusPollCron.sh 2>&1"; } | crontab -
+RUN chmod +x /usr/src/app/cron/*.sh
+RUN crontab -l | { cat; echo "0 0 * * * . /usr/src/app/.env; sh /usr/src/app/cron/dailyPostPublication.sh"; } | crontab -
+RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/seedImageCron.sh"; } | crontab -
+RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/whisperStatusPollCron.sh"; } | crontab -
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["bash", "start.sh"]
