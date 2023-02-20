@@ -2,5 +2,5 @@
 source .env
 node db/seed.js
 node db/migrate.js
-nohup /usr/bin/supervisord -c /usr/src/app/supervisord.conf &
+nohup /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &
 npm start
