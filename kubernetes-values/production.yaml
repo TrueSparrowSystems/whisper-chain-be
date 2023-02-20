@@ -1,0 +1,96 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "whisper-chain-be"
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 5000
+
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    - hosts:
+      - whisperchain.xyz
+      secretName: whisperchain.xyz
+  hosts:
+    - host: whisperchain.xyz
+      paths:
+        - path: /api
+          pathType: Prefix
+
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+# cronJobs:
+#   # Lowercase with only hyphens
+# - name: daily-post-publication-cron
+#   command: ["/usr/src/app/cron/dailyPostPublication.sh"]
+
+#   # Timezone in UTC
+#   schedule: "0 0 * * *"
+#   cpu: 1
+#   memory: 2Gi
+
+# - name: whisper-status-poll-cron
+#   command: ["/usr/src/app/cron/whisperStatusPollCron.sh"]
+#   # Timezone in UTC
+#   schedule: "* * * * *" # every 3 hrs.
+#   cpu: 1
+#   memory: 2Gi
+
+# - name: seed-image-cron
+#   command: ["/usr/src/app/cron/seedImageCron.sh]
+#   args: ["updateCastCron"]
+#   # Timezone in UTC
+#   schedule: "* * * * *"
+#   cpu: 1
+#   memory: 2Gi
+
+envSecrets:
+  - envName: S3_ACCESS_KEY_ID
+    secretName: plg-user
+    secretKey: AWS_ACCESS_KEY_ID
+  - envName: S3_SECRET_ACCESS_KEY
+    secretName: plg-user
+    secretKey: AWS_SECRET_ACCESS_KEY
+  - envName: A_MAIN_DB_MYSQL_HOST
+    secretName: whisperchain-db-credentials
+    secretKey: host
+  - envName: A_MAIN_DB_MYSQL_USER
+    secretName: whisperchain-db-credentials
+    secretKey: username
+  - envName: A_MAIN_DB_MYSQL_PASSWORD
+    secretName: whisperchain-db-credentials
+    secretKey: password
+  - envName: NA_MEMCACHE_SERVERS
+    secretName: memcached-credentials
+    secretKey: endpoint
