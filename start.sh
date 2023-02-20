@@ -3,3 +3,4 @@ source .env
 node db/seed.js
 node db/migrate.js
 npm start
+/usr/local/bin/supervisord
