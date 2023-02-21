@@ -21,18 +21,17 @@ RUN npm install
 # RUN npm ci --only=production
 # Bundle app source
 RUN apt update && apt install -y awscli memcached 
-RUN apt-get update && apt-get install telnet
-
-
+RUN apt-get update && apt-get install telnet && apt-get install -y cron supervisor
 
 COPY . .
-
 EXPOSE 5000
-RUN printf '0 0 * * * . /usr/src/app/.env; sh /usr/src/app/cron/dailyPostPublication.sh' >> /root/crontab
-RUN printf '* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/seedImageCron.sh' >> /root/crontab
-RUN printf '* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/whisperStatusPollCron.sh' >> /root/crontab
-RUN touch /var/log/cron.log
-RUN crontab /root/crontab
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN chmod 600 /etc/crontab
+
+RUN chmod +x /usr/src/app/cron/*.sh
+RUN crontab -l | { cat; echo "0 0 * * * . /usr/src/app/.env; sh /usr/src/app/cron/dailyPostPublication.sh"; } | crontab -
+RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/seedImageCron.sh"; } | crontab -
+RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/whisperStatusPollCron.sh"; } | crontab -
+# Clearing all the log files once a day
+RUN crontab -l | { cat; echo "0 0 * * * truncate -s 0 /tmp/*.log"; } | crontab -
+
+RUN touch /tmp/dailyPostPublication.log /tmp/seedImage.log /tmp/whisperStatusPolling.log 
 CMD ["bash", "start.sh"]
