@@ -27,9 +27,11 @@ COPY . .
 EXPOSE 5000
 
 RUN chmod +x /usr/src/app/cron/*.sh
-RUN crontab -l | { cat; echo "0 0 * * * . /usr/src/app/.env; sh /usr/src/app/cron/dailyPostPublication.sh"; } | crontab -
-RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/seedImageCron.sh"; } | crontab -
+#RUN crontab -l | { cat; echo "0 0 * * * . /usr/src/app/.env; sh /usr/src/app/cron/dailyPostPublication.sh"; } | crontab -
+#RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/seedImageCron.sh"; } | crontab -
 RUN crontab -l | { cat; echo "* * * * * . /usr/src/app/.env; sh /usr/src/app/cron/whisperStatusPollCron.sh"; } | crontab -
+# Clearing all the log files once a day
+RUN crontab -l | { cat; echo "0 0 * * * truncate -s 0 /tmp/*.log"; } | crontab -
 
 RUN touch /tmp/dailyPostPublication.log /tmp/seedImage.log /tmp/whisperStatusPolling.log 
 CMD ["bash", "start.sh"]
