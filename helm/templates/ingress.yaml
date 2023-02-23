@@ -59,3 +59,30 @@ spec:
           {{- end }}
     {{- end }}
 {{- end }}
+
+---
+{{- if .Values.frontendProxy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{.Values.frontendProxy.service.name}}
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - {{.Values.frontendProxy.tls.host}}
+      secretName: {{ .Values.frontendProxy.tls.secretName}}
+  rules:
+    - host: {{.Values.frontendProxy.tls.host}}
+      http:
+        paths:
+          - pathType: Prefix
+            path: {{ .Values.frontendProxy.service.path}}
+            backend:
+              service:
+                name: {{ .Values.frontendProxy.service.name}}
+                port:
+                  number: 80
+{{- end }}
