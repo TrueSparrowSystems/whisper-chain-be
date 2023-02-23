@@ -160,6 +160,26 @@ class ImageModel extends ModelBase {
   safeFormattedColumnNames() {
     return ['id', 'url', 'ipfsObjectId', 'createdAt', 'updatedAt'];
   }
+
+  /**
+   * Update Image Url by id.
+   *
+   * @param {object} params
+   * @param {number} params.id
+   * @param {string} params.url
+   *
+   * @returns {Promise<Array>}
+   */
+  async updateImageUrlById(params) {
+    const oThis = this;
+
+    return oThis
+      .update({
+        url: params.url
+      })
+      .where({ id: params.id })
+      .fire();
+  }
 }
 
 module.exports = ImageModel;

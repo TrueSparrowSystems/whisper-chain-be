@@ -229,6 +229,10 @@ class CoreConstants {
     return process.env.A_S3_AWS_MASTER_FOLDER;
   }
 
+  get S3_BUCKET() {
+    return process.env.S3_BUCKET;
+  }
+
   get S3_USER_ASSETS_FOLDER() {
     const oThis = this;
 
