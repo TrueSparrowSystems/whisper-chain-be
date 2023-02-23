@@ -65,7 +65,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: thursday-freshworks-tracking
+  name: {{.Values.frontendProxy.service.name}}
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
