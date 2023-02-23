@@ -27,14 +27,13 @@ ingress:
   className: nginx
   tls:
     - hosts:
-      - whisperchain.xyz
+        - whisperchain.xyz
       secretName: whisperchain.xyz
   hosts:
     - host: whisperchain.xyz
       paths:
         - path: /api
           pathType: Prefix
-
 
 resources:
   limits:
@@ -50,30 +49,17 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
 
-# cronJobs:
-#   # Lowercase with only hyphens
-# - name: daily-post-publication-cron
-#   command: ["/usr/src/app/cron/dailyPostPublication.sh"]
-
-#   # Timezone in UTC
-#   schedule: "0 0 * * *"
-#   cpu: 1
-#   memory: 2Gi
-
-# - name: whisper-status-poll-cron
-#   command: ["/usr/src/app/cron/whisperStatusPollCron.sh"]
-#   # Timezone in UTC
-#   schedule: "* * * * *" # every 3 hrs.
-#   cpu: 1
-#   memory: 2Gi
-
-# - name: seed-image-cron
-#   command: ["/usr/src/app/cron/seedImageCron.sh]
-#   args: ["updateCastCron"]
-#   # Timezone in UTC
-#   schedule: "* * * * *"
-#   cpu: 1
-#   memory: 2Gi
+frontendProxy:
+  enabled: true
+  domainName: c.storage.googleapis.com
+  service:
+    name: whisperchain-frontend
+    path: "/"
+    pathType: Prefix
+    host: whisperchain.xyz
+  tls:
+      host: whisperchain.xyz
+      secretName: whisperchain.xyz
 
 envSecrets:
   - envName: S3_ACCESS_KEY_ID
