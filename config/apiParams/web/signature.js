@@ -26,6 +26,16 @@ const webSignature = {
         parameter: 's3_url',
         validatorMethods: [{ validateString: null }],
         type: 'string'
+      },
+      {
+        parameter: 'title',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
+      },
+      {
+        parameter: 'description',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
       }
     ],
     optional: []
