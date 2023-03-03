@@ -4,16 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: "Enter github branch name to be deployed"
+        description: 'Enter github branch name to be deployed'
         required: true
-        default: "main"
+        default: 'main'
       description:
-        description: "Enter description about deployment"
+        description: 'Enter description about deployment'
         required: true
-        default: "New feature release"
-  push:
-    branch:
-      - whisperchain-prod
+        default: 'New feature release'
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
