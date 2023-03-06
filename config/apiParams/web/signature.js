@@ -76,16 +76,6 @@ const webSignature = {
     ],
     optional: []
   },
-  [apiNameConstants.ipfsObjects]: {
-    mandatory: [
-      {
-        parameter: 's3_url',
-        validatorMethods: [{ validateString: null }],
-        type: 'string'
-      }
-    ],
-    optional: []
-  },
   [apiNameConstants.fetchChains]: {
     mandatory: [
       {

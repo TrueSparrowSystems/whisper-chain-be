@@ -20,6 +20,8 @@ class GetIPFSMetada extends ServiceBase {
    *
    * @param {object} params
    * @param {string} params.s3_url
+   * @param {string} params.title
+   * @param {string} params.description
    *
    * @constructor
    */
