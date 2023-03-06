@@ -28,11 +28,6 @@ const webSignature = {
         type: 'string'
       },
       {
-        parameter: 'title',
-        validatorMethods: [{ validateString: null }],
-        type: 'string'
-      },
-      {
         parameter: 'description',
         validatorMethods: [{ validateString: null }],
         type: 'string'

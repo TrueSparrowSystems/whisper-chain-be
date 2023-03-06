@@ -20,7 +20,6 @@ class GetIPFSMetada extends ServiceBase {
    *
    * @param {object} params
    * @param {string} params.s3_url
-   * @param {string} params.title
    * @param {string} params.description
    *
    * @constructor
@@ -31,7 +30,6 @@ class GetIPFSMetada extends ServiceBase {
     const oThis = this;
 
     oThis.s3Url = params.s3_url;
-    oThis.title = params.title;
     oThis.description = params.description;
 
     oThis.imageCid = null;
@@ -71,9 +69,6 @@ class GetIPFSMetada extends ServiceBase {
     const oThis = this;
 
     const paramErrors = [];
-    if (!CommonValidators.validateStringLength(oThis.title, 110)) {
-      paramErrors.push('invalid_image_title_length');
-    }
 
     if (!CommonValidators.validateStringLength(oThis.description, 400)) {
       paramErrors.push('invalid_image_description_length');
@@ -86,7 +81,6 @@ class GetIPFSMetada extends ServiceBase {
           api_error_identifier: 'invalid_api_params',
           params_error_identifiers: paramErrors,
           debug_options: {
-            title: oThis.title,
             description: oThis.description
           }
         })
