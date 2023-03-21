@@ -2,6 +2,7 @@ const rootPrefix = '../../..',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   FileIo = require(rootPrefix + '/lib/fileIo/FileIo'),
+  CommonValidators = require(rootPrefix + '/lib/validators/Common'),
   IpfsObjectsModel = require(rootPrefix + '/app/models/mysql/main/IpfsObject'),
   entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType'),
   ipfsObjectConstant = require(rootPrefix + '/lib/globalConstant/ipfsObject'),
@@ -19,6 +20,7 @@ class GetIPFSMetada extends ServiceBase {
    *
    * @param {object} params
    * @param {string} params.s3_url
+   * @param {string} params.description
    *
    * @constructor
    */
@@ -28,6 +30,7 @@ class GetIPFSMetada extends ServiceBase {
     const oThis = this;
 
     oThis.s3Url = params.s3_url;
+    oThis.description = params.description;
 
     oThis.imageCid = null;
     oThis.metadataCid = null;
@@ -46,6 +49,7 @@ class GetIPFSMetada extends ServiceBase {
    */
   async _asyncPerform() {
     const oThis = this;
+    await oThis._validateAndSanitize();
 
     await oThis.createIPFSObjectForImage();
 
@@ -54,6 +58,34 @@ class GetIPFSMetada extends ServiceBase {
     oThis._deleteLocalFile();
 
     return oThis._prepareResponse();
+  }
+
+  /**
+   * Validate params.
+   *
+   * @private
+   */
+  _validateAndSanitize() {
+    const oThis = this;
+
+    const paramErrors = [];
+
+    if (!CommonValidators.validateStringLength(oThis.description, 400)) {
+      paramErrors.push('invalid_image_description_length');
+    }
+
+    if (paramErrors.length > 0) {
+      return Promise.reject(
+        responseHelper.paramValidationError({
+          internal_error_identifier: 'a_s_l_gio_vas_1',
+          api_error_identifier: 'invalid_api_params',
+          params_error_identifiers: paramErrors,
+          debug_options: {
+            description: oThis.description
+          }
+        })
+      );
+    }
   }
 
   async createIPFSObjectForImage() {
@@ -118,7 +150,7 @@ class GetIPFSMetada extends ServiceBase {
     const oThis = this;
     try {
       console.log('* Upload meta data to IPFS');
-      oThis.metadataCid = await new Ipfs().uploadMetaData(oThis.fileName, oThis.imageCid);
+      oThis.metadataCid = await new Ipfs().uploadMetaData(oThis.fileName, oThis.imageCid, oThis.description);
       console.log('** Upload meta data to IPFS completed:', oThis.metadataCid);
 
       const insertData = {

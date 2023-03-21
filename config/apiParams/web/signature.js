@@ -26,6 +26,11 @@ const webSignature = {
         parameter: 's3_url',
         validatorMethods: [{ validateString: null }],
         type: 'string'
+      },
+      {
+        parameter: 'description',
+        validatorMethods: [{ validateString: null }],
+        type: 'string'
       }
     ],
     optional: []
@@ -58,16 +63,6 @@ const webSignature = {
         validatorMethods: [{ validateInteger: null }],
         type: 'number'
       },
-      {
-        parameter: 's3_url',
-        validatorMethods: [{ validateString: null }],
-        type: 'string'
-      }
-    ],
-    optional: []
-  },
-  [apiNameConstants.ipfsObjects]: {
-    mandatory: [
       {
         parameter: 's3_url',
         validatorMethods: [{ validateString: null }],
