@@ -1,0 +1,82 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: ""
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "whisper-chain-staging-be"
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: NodePort
+  port: 5000
+
+ingress:
+  enabled: true
+  className: nginx
+  tls:
+    - hosts:
+        - s.whisperchain.xyz
+      secretName: whisperchain.xyz
+  hosts:
+    - host: s.whisperchain.xyz
+      paths:
+        - path: /api
+          pathType: Prefix
+
+resources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 1
+    memory: 2Gi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+frontendProxy:
+  enabled: true
+  domainName: c.storage.googleapis.com
+  service:
+    name: whisperchain-frontend
+    path: "/"
+    pathType: Prefix
+    host: s.whisperchain.xyz
+  tls:
+      host: s.whisperchain.xyz
+      secretName: whisperchain.xyz
+
+envSecrets:
+  - envName: S3_ACCESS_KEY_ID
+    secretName: plg-user
+    secretKey: AWS_ACCESS_KEY_ID
+  - envName: S3_SECRET_ACCESS_KEY
+    secretName: plg-user
+    secretKey: AWS_SECRET_ACCESS_KEY
+  - envName: A_MAIN_DB_MYSQL_HOST
+    secretName: whisperchain-db-credentials
+    secretKey: host
+  - envName: A_MAIN_DB_MYSQL_USER
+    secretName: whisperchain-db-credentials
+    secretKey: username
+  - envName: A_MAIN_DB_MYSQL_PASSWORD
+    secretName: whisperchain-db-credentials
+    secretKey: password
+  - envName: NA_MEMCACHE_SERVERS
+    secretName: memcached-credentials
+    secretKey: endpoint
