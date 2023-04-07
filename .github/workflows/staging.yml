@@ -1,4 +1,4 @@
-name: WC New Staging Backend Deployment
+name: Deploy to Staging
 
 on:
   workflow_dispatch:
@@ -12,39 +12,65 @@ on:
         required: true
         default: 'New feature release'
 
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: us-west1
+  GKE_CLUSTER: plg
+  GKE_ZONE: us-west1
+  DEPLOYMENT_NAME: whisper-chain-be
+  REPOSITORY: plg-web3
+  IMAGE: whisper-chain-be
 
 jobs:
-  deployment:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
-
-      - name: Logging
-        run: |
-          echo "Deploying Branch : ${{ github.event.inputs.branch }}"
-          echo "Deployment Description: ${{ github.event.inputs.description }}"
-          echo "PWD: $(pwd)"
-
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.inputs.branch }}
-          path: whisper-chain-be
 
-      - name: Run Script
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
         with:
-          host: 18.222.48.228
-          username: ubuntu
-          key: ${{ secrets.WHISPER_CHAIN_NEW_STAGING_PRIVATE_KEY }}
-          port: ${{ secrets.WHISPER_CHAIN_SSH_PORT }}
-          script: |
-            cd whisper-chain-be/
-            git stash
-            git pull --rebase
-            git fetch
-            git checkout ${{ github.event.inputs.branch }}
-            npm install
-            source .env
-            node db/seed.js
-            node db/migrate.js
-            pm2 restart whisper --update-env
-            
+          repository: "WhisperChain/dev.secrets"
+          ref: "main"
+          token: ${{ secrets.PAT }}
+          path: "secrets"
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Build and push image
+        env:
+          ENV: "prod"
+          URL: "us-west1-docker.pkg.dev/plg-web3/whisperchain-staging/whisper-chain-be"
+          TAG: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |-
+          mv secrets/backend.staging.env .env 
+          docker build --tag "$URL:$TAG" --build-arg ENV="$ENV" .
+          gcloud auth configure-docker us-west1-docker.pkg.dev --quiet --project plg-web3
+          docker push "$URL:$TAG"
+
+      - name: Set up GKE credentials
+        run: |-
+          gcloud components install gke-gcloud-auth-plugin --quiet
+          gcloud container clusters get-credentials plg --region us-west1 --project plg-web3
+
+      - name: "Deploy to Kubernetes"
+        id: deploy-eks
+        env:
+          URL: "us-west1-docker.pkg.dev/plg-web3/whisperchain-staging/whisper-chain-be"
+          TAG: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |-
+          helm upgrade --install \
+          --set image.repository=${URL} \
+          --set image.tag=${TAG} \
+          --values ./kubernetes-values/staging.yaml \
+          whisper-chain-be ./helm
