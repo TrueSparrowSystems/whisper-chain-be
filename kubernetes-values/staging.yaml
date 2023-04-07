@@ -53,7 +53,7 @@ frontendProxy:
   enabled: true
   domainName: c.storage.googleapis.com
   service:
-    name: whisperchain-frontend
+    name: whisperchain-frontend-staging
     path: "/"
     pathType: Prefix
     host: s.whisperchain.xyz
