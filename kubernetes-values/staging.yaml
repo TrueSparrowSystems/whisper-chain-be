@@ -27,10 +27,10 @@ ingress:
   className: nginx
   tls:
     - hosts:
-        - s.whisperchain.xyz
+        - staging.whisperchain.xyz
       secretName: whisperchain.xyz
   hosts:
-    - host: s.whisperchain.xyz
+    - host: staging.whisperchain.xyz
       paths:
         - path: /api
           pathType: Prefix
@@ -56,9 +56,9 @@ frontendProxy:
     name: whisperchain-frontend-staging
     path: "/"
     pathType: Prefix
-    host: s.whisperchain.xyz
+    host: staging.whisperchain.xyz
   tls:
-      host: s.whisperchain.xyz
+      host: staging.whisperchain.xyz
       secretName: whisperchain.xyz
 
 envSecrets:
