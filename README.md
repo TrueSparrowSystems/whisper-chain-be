@@ -1,8 +1,24 @@
 # Whisper Chain Backend
-This repository has implementation of Whisper Chain backend APIs and cron processes, developed using Node.js.
+Node.js repository for Whisper Chain REST APIs and cron processes.
 
-## Pre-requisites for environment setup
+## Documentation
+### OpenAPI Specs
+Use the following command to re-generate the API specs.
+```sh
+ > npm run generate-openapi-docs
+```
 
+To see the specs in UI, visit <domain>/api-docs in browser.
+
+### DB Schema Doc
+See `docs/dbSchema.dbml` for a dbml doc for the DB schema. Use this [editor](https://dbdiagram.io/d) for viewing it graphically.
+
+### Sequence Diagrams
+See `docs/sequenceDiagrams` folder for various sequence diagrams to give an easy understanding of what are the different steps involved in various flows.
+
+## Environment Setup
+
+### Prerequisites
 * Install [Node.js](https://nodejs.org/en/download/) - currently the latest LTS version is 18 and we encourage installing the same.
 
 * Set proper values of env vars mentioned in ./env_vars.sample file
@@ -19,7 +35,7 @@ This repository has implementation of Whisper Chain backend APIs and cron proces
  > node db/seed.js
 ```
 
-## Start Server
+### Start Server
 * Install required NPM dependencies
 ```sh
  > rm -rf node_modules
@@ -37,20 +53,14 @@ This repository has implementation of Whisper Chain backend APIs and cron proces
 ```sh
  > npm start
 ```
-## Start Cron Processes
+### Start Cron Processes
 TODO
 
-## Documentation
+## Seeding Chain Images
+We have created a telegram bot to maintain a reserve of images for future postings.
+These images will be posted daily to lens through a cron job. This ensures that we always have a set of images ready to go.
 
-* Generate OpenAPI Specs
-```sh
- > npm run generate-openapi-docs
-```
-
-* Detailed documentation can be found at <domain>/api-docs route.
-
-## Telegram Bot for seeding chain images
-### How to setup?
+### Telegram Bot Setup
 1. Create Bot on Telegram side.
 2. Set following env variables:
    - TELEGRAM_BOT_TOKEN - Bot token
@@ -60,6 +70,6 @@ TODO
 > node lib/cron/seedImage.js
 ```
 
-### How to use?
+### Telegram Bot Usage
 1. Go to bot page.
 2. Upload photo. That's it.
