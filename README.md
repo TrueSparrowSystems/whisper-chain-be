@@ -3,18 +3,17 @@ Node.js repository for Whisper Chain REST APIs and cron processes.
 
 ## Documentation
 ### OpenAPI Specs
-We've used OpenAPI specifications to standardize our API documentation, and we've written a generator script to make it easy to create the documentation.
-To generate the docs, simply run this command:
+We use OpenAPI specifications to standardize our API documentation. To generate the documentation, use the following command:
 ```sh
  > npm run generate-openapi-docs
 ```
 
-To view the specs in a user-friendly UI, simply visit `<domain>/api-docs` in your browser.
+You can view the user-friendly UI of the specs by visiting `<domain>/api-docs` in your browser.
 
 ### DB Schema Doc
-We've used DBML to document the MySQL tables in our project. You can find the DB schema documentation in the `docs/dbSchema.dbml` file.
+We use DBML to document the MySQL tables in our project. You can find the DB schema documentation in the `docs/dbSchema.dbml` file.
 
-To view the schema diagram in a user-friendly graphical format, you can use the following [online editor](https://dbdiagram.io/d).
+To view the schema diagram in a user-friendly graphical format, use the [online editor](https://dbdiagram.io/d).
 
 ### Sequence Diagrams
 To provide an easy-to-understand overview of the different steps involved in various flows, we've created a number of sequence diagrams.
