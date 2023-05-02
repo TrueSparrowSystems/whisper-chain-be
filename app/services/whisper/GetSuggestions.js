@@ -1,8 +1,10 @@
 const rootPrefix = '../../../',
   ServiceBase = require(rootPrefix + '/app/services/Base'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  GenerateAndUploadImages = require(rootPrefix + '/lib/stabilityAi/GenerateAndUploadImages');
-(entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType')), ({ v4: uuidV4 } = require('uuid'));
+  GenerateAndUploadImages = require(rootPrefix + '/lib/stabilityAi/GenerateAndUploadImages'),
+  entityTypeConstants = require(rootPrefix + '/lib/globalConstant/entityType');
+
+const { v4: uuidV4 } = require('uuid');
 
 /**
  * Class to get suggestions.
@@ -39,6 +41,7 @@ class GetSuggestions extends ServiceBase {
    * @returns {Promise<*>}
    * @private
    */
+  // TODO: break this into smaller functions
   async _asyncPerform() {
     const oThis = this;
 

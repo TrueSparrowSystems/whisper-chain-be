@@ -17,15 +17,6 @@ const errorConfig = basicHelper.fetchErrorConfig(apiVersions.web);
  */
 class ServicesBase {
   /**
-   * Constructor for all services.
-   *
-   * @constructor
-   */
-  constructor() {
-    const oThis = this;
-  }
-
-  /**
    * Main performer for class.
    *
    * @returns {Promise<void | never>}

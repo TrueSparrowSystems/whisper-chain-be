@@ -1,6 +1,5 @@
 const rootPrefix = '../../..',
-  apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName'),
-  paginationConstants = require(rootPrefix + '/lib/globalConstant/pagination');
+  apiNameConstants = require(rootPrefix + '/lib/globalConstant/apiName');
 
 const webSignature = {
   [apiNameConstants.suggestions]: {

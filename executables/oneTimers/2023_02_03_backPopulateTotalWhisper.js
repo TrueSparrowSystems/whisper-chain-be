@@ -28,8 +28,6 @@ class UpdateTotalWhisper {
    * @private
    */
   async _addTotalWhispersInChain() {
-    const oThis = this;
-
     const whispers = [];
     const dbRows = await new WhispersModel()
       .select('count(*) as total_whispers, chain_id')
