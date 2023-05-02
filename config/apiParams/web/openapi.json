@@ -752,6 +752,14 @@
 							"schema": {
 								"type": "string"
 							}
+						},
+						{
+							"in": "request body",
+							"name": "description",
+							"required": true,
+							"schema": {
+								"type": "string"
+							}
 						}
 					],
 					"responses": {
