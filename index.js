@@ -1,4 +1,5 @@
-const rootPrefix = '.';
+const rootPrefix = '.',
+  serverless = require('serverless-http');
 
 const express = require('express'),
   createNamespace = require('continuation-local-storage').createNamespace,
@@ -284,10 +285,19 @@ app.use(async function(err, req, res, next) {
       debug_options: { err: err }
     });
 
-    logger.error(' In catch block of app.js', errorObject);
+    logger.error(' In catch block of index.js', errorObject);
   }
 
   return responseHelper.renderApiResponse(errorObject, res, errorConfig);
 });
 
-module.exports = app;
+// If running in development mode, start the server on port, else export handler for lambda
+if (coreConstants.environment === 'development') {
+  logger.log('Server running on localhost:', coreConstants.port);
+  module.exports = app;
+} else {
+  // Create an API Gateway proxy handler
+  const handler = serverless(app);
+  // Export the handler for Lambda
+  module.exports = { handler };
+}
