@@ -7,6 +7,7 @@ const http = require('http');
 
 const rootPrefix = '..',
   app = require(rootPrefix + '/index'),
+  coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   responseHelper = require(rootPrefix + '/lib/formatter/response');
 
@@ -34,7 +35,7 @@ function normalizePort(val) {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.A_PORT);
+var port = normalizePort(coreConstants.port);
 app.set('port', port);
 
 /**
