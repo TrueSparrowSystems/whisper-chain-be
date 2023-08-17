@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 const sanitizeHtml = require('sanitize-html');
 
 class SanitizeRecursively {
@@ -47,7 +46,10 @@ class SanitizeRecursively {
   _sanitizeString(str) {
     const sanitizedHtmlStr = sanitizeHtml(str, { allowedTags: [] });
 
-    return sanitizedHtmlStr.replace(/javascript:/g, '');
+    return sanitizedHtmlStr
+      .replace(/javascript:/g, '')
+      .replace(/data:/g, '')
+      .replace(/vbscript/g, '');
   }
 }
 
