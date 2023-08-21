@@ -161,27 +161,27 @@ process.title = 'Whisper Chain API';
 // Create express application instance.
 const app = express();
 
-app.use(
-  cors({
-    origin: ['https://main.d1dsvlc6cjrt6g.amplifyapp.com/']
-  })
-);
+// app.use(
+//   cors({
+//     origin: ['https://main.d1dsvlc6cjrt6g.amplifyapp.com/']
+//   })
+// );
 
 app.use(function(req, res, next) {
-  if (!basicHelper.isProduction()) {
-    res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
-    );
-    res.header('Access-Control-Allow-Origin', '*');
+  //if (!basicHelper.isProduction()) {
+  res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
+  );
+  res.header('Access-Control-Allow-Origin', '*');
 
-    res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Credentials', 'true');
 
-    if (req.method === 'OPTIONS') {
-      return res.status(200).json();
-    }
+  if (req.method === 'OPTIONS') {
+    return res.status(200).json();
   }
+  // }
   next();
 });
 
