@@ -165,7 +165,7 @@ app.use(function(req, res, next) {
     'Access-Control-Allow-Headers',
     'sentry-trace, host-header, authorization, Participant-Id, Origin, X-Requested-With, Accept, Content-Type, Referer, Cookie, Last-Modified, Cache-Control, Content-Language, Expires, Pragma, Content-Type, Authorization, Set-Cookie, Preparation-Time'
   );
-  res.header('Access-Control-Allow-Origin', 'https://main.d1dsvlc6cjrt6g.amplifyapp.com/');
+  res.header('Access-Control-Allow-Origin', 'https://main.d1dsvlc6cjrt6g.amplifyapp.com');
 
   res.header('Access-Control-Allow-Credentials', 'true');
 
