@@ -168,7 +168,8 @@ app.use(
 );
 
 app.use(function(req, res, next) {
-  //if (!basicHelper.isProduction()) {
+  console.log('req headers::::: ', req.headers);
+  // if (!basicHelper.isProduction()) {
   res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
   res.header(
     'Access-Control-Allow-Headers',
