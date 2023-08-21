@@ -168,7 +168,6 @@ app.use(
 );
 
 app.use(function(req, res, next) {
-  console.log('req headers::::: ', req.headers);
   // if (!basicHelper.isProduction()) {
   res.header('Access-Control-Allow-Methods', 'DELETE, GET, POST, PUT, OPTIONS, PATCH');
   res.header(
@@ -183,6 +182,9 @@ app.use(function(req, res, next) {
     return res.status(200).json();
   }
   // }
+
+  console.log('response  headers::::: ', res.headers);
+
   next();
 });
 
