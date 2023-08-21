@@ -274,6 +274,10 @@ class CoreConstants {
   get TELEGRAM_WHITELISTED_USER_IDS() {
     return process.env.WHITELISTED_USER_IDS;
   }
+
+  get FRONTEND_DOMAIN() {
+    return process.env.FRONTEND_DOMAIN;
+  }
 }
 
 module.exports = new CoreConstants();
