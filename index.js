@@ -26,7 +26,7 @@ const apiRoutes = require(rootPrefix + '/routes/api/index');
 const errorConfig = basicHelper.fetchErrorConfig(apiVersions.web);
 const apiHostName = new URL(coreConstants.API_DOMAIN).hostname;
 
-//const cors = require('cors');
+const cors = require('cors');
 
 morgan.token('id', function getId(req) {
   return req.id;
@@ -160,12 +160,12 @@ process.title = 'Whisper Chain API';
 
 // Create express application instance.
 const app = express();
-//
-// app.use(
-//   cors({
-//     origin: '*'
-//   })
-// );
+
+app.use(
+  cors({
+    origin: ['https://main.d1dsvlc6cjrt6g.amplifyapp.com/']
+  })
+);
 
 app.use(function(req, res, next) {
   if (!basicHelper.isProduction()) {
