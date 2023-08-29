@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
     };
   } catch (error) {
     // Handle any errors that occur during processing
-    logger.error(error);
+    console.error(error);
 
     return {
       statusCode: 500,
