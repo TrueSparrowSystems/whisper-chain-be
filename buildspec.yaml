@@ -1,0 +1,24 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm install -g aws-sdk
+  build:
+    commands:
+      - npm install --omit=dev
+      - aws secretsmanager get-secret-value --secret-id whisperchain-production-api --region us-east-1 --query SecretString --output text > env_vars.json
+      - jq -r 'to_entries[] | [.key, .value] | join("=")' env_vars.json > whisperchain.env
+      - . ./whisperchain.env
+      - aws lambda update-function-configuration --function-name whisperchain-production-lambda --region us-east-1 --environment "{\"Variables\":`cat env_vars.json`}"
+      - aws lambda update-function-configuration --function-name whisperchain-production-crons --region us-east-1 --environment "{\"Variables\":`cat env_vars.json`}"
+      - sleep 30
+      - echo "The current working directory is $(pwd)"
+      - zip -r deploy.zip ./* -x env_vars.json -x whisperchain.env
+      - node db/seed.js
+      - node db/migrate.js
+  post_build:
+    commands:
+      - aws lambda update-function-code --function-name=whisperchain-production-lambda --region us-east-1 --zip-file=fileb://deploy.zip
+      - aws lambda update-function-code --function-name=whisperchain-production-crons --region us-east-1 --zip-file=fileb://deploy.zip
