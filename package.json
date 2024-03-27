@@ -14,7 +14,7 @@
     "commander": "7.1.0",
     "continuation-local-storage": "3.2.1",
     "cookie-parser": "1.4.5",
-    "express": "4.17.1",
+    "express": "4.19.2",
     "helmet": "4.4.1",
     "html-entities": "2.1.0",
     "js-base64": "3.7.2",
